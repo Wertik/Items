@@ -1,0 +1,6 @@
+one:
+  console:
+    - 'say Woooohoo'
+  player:
+    - 'say OMG, this console is SO RETARDED.'
+  cooldown: 3600

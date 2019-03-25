@@ -1,0 +1,8 @@
+silent-give: true
+drop-naturally: true
+enable-cooldown-automatic: true
+# seconds
+cooldown-checker-loop-time: 1
+inform-on-cd: true
+debug: true
+show-tips-on-tab-complete: true
