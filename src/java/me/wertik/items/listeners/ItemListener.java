@@ -1,6 +1,7 @@
 package me.wertik.items.listeners;
 
 import me.wertik.items.Main;
+import me.wertik.items.handlers.ItemHandler;
 import me.wertik.items.objects.Attribute;
 import me.wertik.items.utils.NBTEditor;
 import me.wertik.items.utils.Utils;
@@ -26,6 +27,7 @@ public class ItemListener implements Listener {
             // Check for NBT
             Main.getInstance().cw.debug("Special item click");
             Main.getInstance().cw.debug(e.getAction().name());
+            Main.getInstance().cw.debug(NBTEditor.getNBTTags(item).toString());
             if (NBTEditor.hasNBTTag(item, e.getAction().name().toLowerCase())) {
                 Main.getInstance().cw.debug("Has attribute, proceed");
 

@@ -189,7 +189,7 @@ public class AttCommands implements CommandExecutor {
                     sender.sendMessage("§eAttributes:");
                     HashMap<String, String> attributes = itemHandler.getAttributes(item);
                     for (String key : itemHandler.getAttributes(item).keySet())
-                        if (plugin.getActionNames().contains(key))
+                        if (plugin.getActionNames().contains(key.toLowerCase()))
                             sender.sendMessage("§8- §7" + key + "§f:§7" + attributes.get(key));
                     break;
                 case "help":

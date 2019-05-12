@@ -92,23 +92,19 @@ public class AttTabCompleter implements TabCompleter {
             case "remove":
             case "r":
                 if (args.length == 2) {
-                    if (!attributeHandler.getAttributes().isEmpty()) {
-                        if (!args[1].equals("")) {
-                            for (String attributeName : attributeHandler.getAttributes().keySet())
+                    if (!args[1].equals("")) {
+                        if (!itemHandler.getAttributes(item).isEmpty())
+                            for (String attributeName : itemHandler.getAttributes(item).keySet()) {
                                 if (attributeName.toLowerCase().startsWith(args[1].toLowerCase()))
                                     tabComplete.add(attributeName);
-                            for (String a : plugin.getActionNames())
-                                if (a.toLowerCase().startsWith(args[1].toLowerCase()))
-                                    tabComplete.add(a);
-                        } else {
-                            for (String attributeName : attributeHandler.getAttributes().keySet())
-                                tabComplete.add(attributeName);
-                            for (String a : plugin.getActionNames())
-                                tabComplete.add(a);
-                        }
+                                if (itemHandler.getAttributes(item).get(attributeName).toLowerCase().startsWith(args[1].toLowerCase()))
+                                    tabComplete.add(itemHandler.getAttributes(item).get(attributeName));
+                            }
                     } else {
-                        if (Main.getInstance().getConfigLoader().getConfig().getBoolean("show-tips-on-tab-complete"))
-                            tabComplete.add("There are no attributes configured.");
+                        if (!itemHandler.getAttributes(item).isEmpty()) {
+                            tabComplete.addAll(itemHandler.getAttributes(item).keySet());
+                            tabComplete.addAll(itemHandler.getAttributes(item).values());
+                        }
                     }
 
                     Collections.sort(tabComplete);

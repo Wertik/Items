@@ -45,7 +45,7 @@ public class Main extends JavaPlugin {
         actionNames = new ArrayList<>();
 
         for (Action a : Action.values())
-            actionNames.add(a.name());
+            actionNames.add(a.name().toLowerCase());
 
         actionNames.forEach(name -> cw.debug(name));
 
