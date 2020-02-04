@@ -1,6 +1,6 @@
-name: Items
+name: PVPC_Items
 author: Wertik1206
-version: 1.0
+version: 1.1
 main: me.wertik.items.Main
 prefix: Items
 commands:

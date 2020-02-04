@@ -6,6 +6,7 @@ import me.wertik.items.objects.Cooldown;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,45 +17,70 @@ public class CooldownHandler {
 
     private Main plugin;
     private AttributeHandler attributeHandler;
-    private ItemHandler itemHandler;
-
-    // Todo add cooldown saving upon reload
 
     // uniqueID, (AttributeName, cooldownTime)
     private HashMap<String, List<Cooldown>> cooldowns;
 
+    private BukkitTask checker;
+
     public CooldownHandler() {
         plugin = Main.getInstance();
-        cooldowns = new HashMap<>();
-        attributeHandler = plugin.getAttributeHandler();
-        itemHandler = plugin.getItemHandler();
 
-        if (plugin.getConfigLoader().getConfig().getBoolean("enable-cooldown-automatic")) {
+        cooldowns = new HashMap<>();
+
+        attributeHandler = plugin.getAttributeHandler();
+
+        if (plugin.getConfig().getBoolean("enable-cooldown-automatic")) {
             startChecker();
-            plugin.cw.info("Cooldown checker started.");
+            plugin.cO.info("Cooldown checker started.");
+        }
+    }
+
+    public void reload() {
+        if (checker != null) {
+            checker.cancel();
+            checker = null;
+        }
+
+        cooldowns.clear();
+
+        if (plugin.getConfig().getBoolean("enable-cooldown-automatic")) {
+            startChecker();
+            plugin.cO.info("Cooldown checker started.");
         }
     }
 
     public void startChecker() {
-        new BukkitRunnable() {
+        checker = new BukkitRunnable() {
             @Override
             public void run() {
                 for (String uniqueID : cooldowns.keySet()) {
                     for (Cooldown cooldown : cooldowns.get(uniqueID)) {
+
                         if (cooldown.getTime() <= System.currentTimeMillis()) {
-                            Player player = Bukkit.getPlayer(UUID.fromString(uniqueID));
-                            if (player.isOnline()) {
-                                if (plugin.getConfigLoader().getConfig().getBoolean("inform-on-cd"))
-                                    player.sendMessage("§eYou can use " + cooldown.getAttributeName() + " again!");
-                                plugin.cw.debug("Removed from cooldown list " + uniqueID);
+
+                            if (Bukkit.getPlayer(UUID.fromString(uniqueID)) == null) {
+                                plugin.cO.debug("Removed offline player from cooldown list " + uniqueID);
                                 cooldowns.remove(uniqueID);
                                 continue;
                             }
+
+                            Player player = Bukkit.getPlayer(UUID.fromString(uniqueID));
+                            Attribute attribute = attributeHandler.getAttribute(cooldown.getAttributeName());
+
+                            if (!player.isOnline())
+                                continue;
+
+                            if (plugin.getConfig().getBoolean("inform-on-cd"))
+                                player.sendMessage(attribute.getCooldownExpireMessage().replace("%attributeName%", cooldown.getAttributeName()));
+
+                            plugin.cO.debug("Removed from cooldown list " + uniqueID);
+                            cooldowns.remove(uniqueID);
                         }
                     }
                 }
             }
-        }.runTaskTimer(plugin, 0, plugin.getConfigLoader().getConfig().getInt("cooldown-checker-loop-time") * 20);
+        }.runTaskTimerAsynchronously(plugin, 0, plugin.getConfig().getInt("cooldown-checker-loop-time") * 20);
     }
 
     public void addCooldown(String uniqueID, Attribute attribute) {
@@ -67,56 +93,52 @@ public class CooldownHandler {
                 playerCooldowns = cooldowns.get(uniqueID);
 
             playerCooldowns.add(cooldown);
+
             cooldowns.put(uniqueID, playerCooldowns);
-            plugin.cw.debug("Added to cooldown list " + uniqueID);
+            plugin.cO.debug("Added to cooldown list " + uniqueID);
 
             for (Cooldown cooldown1 : cooldowns.get(uniqueID))
-                plugin.cw.debug(cooldown1.getAttributeName() + " - " + cooldown1.getTime());
+                plugin.cO.debug(cooldown1.getAttributeName() + " - " + cooldown1.getTime());
         }
     }
 
     public Cooldown getCooldown(String uniqueID, String attributeName) {
-        if (cooldowns.containsKey(uniqueID)) {
-            List<Cooldown> playerCooldowns = cooldowns.get(uniqueID);
-            for (Cooldown cooldown : playerCooldowns) {
-                if (cooldown.getAttributeName().equals(attributeName)) {
-                    Main.getInstance().cw.debug("Return: " + cooldown.getAttributeName() + " - " + cooldown.getTime());
-                    return cooldown;
-                }
+        List<Cooldown> playerCooldowns = cooldowns.get(uniqueID);
+
+        for (Cooldown cooldown : playerCooldowns) {
+            if (cooldown.getAttributeName().equals(attributeName)) {
+                Main.getInstance().cO.debug("Return: " + cooldown.getAttributeName() + " - " + cooldown.getTime());
+                return cooldown;
             }
         }
+
         return null;
     }
 
     public double getCooldownTime(String uniqueID, String attributeName) {
         Cooldown cooldown = getCooldown(uniqueID, attributeName);
-        return (System.currentTimeMillis() - cooldown.getTime()) / -1000;
+        return (cooldown.getTime() - System.currentTimeMillis()) / 1000D;
     }
 
     public boolean isUsable(String uniqueID, String attributeName) {
         if (cooldowns.containsKey(uniqueID)) {
             Cooldown cooldown = getCooldown(uniqueID, attributeName);
-            if (System.currentTimeMillis() >= cooldown.getTime()) {
-                plugin.cw.debug("Removed from cooldown list on usage " + uniqueID);
+
+            if (cooldown == null)
+                return true;
+
+            if (cooldown.getTime() <= System.currentTimeMillis()) {
+                plugin.cO.debug("Removed from cooldown list on usage " + uniqueID);
                 cooldowns.remove(uniqueID);
-                Main.getInstance().cw.debug("Is usable.");
+                plugin.cO.debug("Is usable.");
                 return true;
             } else {
-                Main.getInstance().cw.debug("Is not usable.");
+                Main.getInstance().cO.debug("Is not usable.");
                 return false;
             }
         }
-        Main.getInstance().cw.debug("Is usable.");
+
+        Main.getInstance().cO.debug("Is usable.");
         return true;
-    }
-
-// Todo
-
-    public void saveCooldown(String uniqueID) {
-
-    }
-
-    public void loadCooldown(String uniqueID) {
-
     }
 }

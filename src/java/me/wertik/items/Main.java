@@ -5,7 +5,10 @@ import me.wertik.items.handlers.AttributeHandler;
 import me.wertik.items.handlers.CooldownHandler;
 import me.wertik.items.handlers.ItemHandler;
 import me.wertik.items.listeners.ItemListener;
-import me.wertik.items.utils.ConsoleWriter;
+import me.wertik.items.utils.Configuration;
+import me.wertik.items.utils.ConsoleOutput;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.block.Action;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,48 +19,68 @@ public class Main extends JavaPlugin {
 
     private static Main instance;
 
-    private List<String> actionNames;
-
-    public ConsoleWriter cw;
-
-    private ConfigLoader configLoader;
-    private ItemHandler itemHandler;
-    private AttributeHandler attributeHandler;
-    private CooldownHandler cooldownHandler;
-
     public static Main getInstance() {
         return instance;
     }
 
-    // Todo items.yml -->> data.yml + add cooldown saves
+    private List<String> actionNames;
+
+    public ConsoleOutput cO;
+
+    private ItemHandler itemHandler;
+    private AttributeHandler attributeHandler;
+    private CooldownHandler cooldownHandler;
+
+    private Configuration config;
 
     @Override
     public void onEnable() {
         instance = this;
 
-        cw = new ConsoleWriter();
+        cO = new ConsoleOutput(this);
 
-        configLoader = new ConfigLoader();
-        itemHandler = new ItemHandler();
-        attributeHandler = new AttributeHandler();
-        cooldownHandler = new CooldownHandler();
+        // Load configuration
+
+        config = new Configuration(this, "config");
+
+        cO.setDebug(getConfig().getBoolean("debug"));
+        cO.setPrefix(config.getColored("prefix"));
+
+        // Load actions
 
         actionNames = new ArrayList<>();
 
         for (Action a : Action.values())
             actionNames.add(a.name().toLowerCase());
 
-        actionNames.forEach(name -> cw.debug(name));
+        actionNames.forEach(name -> cO.debug(name));
 
-        cw.setDebug(configLoader.getConfig().getBoolean("debug"));
+        // Load attributes
 
-        cw.info("Classes loaded.");
+        attributeHandler = new AttributeHandler();
+        attributeHandler.loadAttributes();
+
+        // Load cooldowns
+
+        cooldownHandler = new CooldownHandler();
+
+        // Load items
+
+        itemHandler = new ItemHandler();
+        itemHandler.loadItems();
+
+        cO.info("Classes loaded.");
+
+        getServer().getPluginManager().registerEvents(new ItemListener(), this);
+
+        cO.info("Listeners enabled.");
 
         UtilCommands utilCommands = new UtilCommands();
         UtilTabCompleter utilTabCompleter = new UtilTabCompleter();
 
         getCommand("items").setExecutor(new ItemsCommand());
         getCommand("items").setTabCompleter(new ItemsTabCompleter());
+
         List<String> commands = new ArrayList<>(getDescription().getCommands().keySet());
 
         getCommand("attribute").setExecutor(new AttCommands());
@@ -68,11 +91,49 @@ public class Main extends JavaPlugin {
             getCommand(commands.get(i)).setTabCompleter(utilTabCompleter);
         }
 
-        cw.info("Commands loaded.");
+        cO.info("Commands loaded.");
+    }
 
-        getServer().getPluginManager().registerEvents(new ItemListener(), this);
+    public void reload(CommandSender sender) {
+        long start = System.currentTimeMillis();
 
-        cw.info("Listeners enabled.");
+        cO.info("Reloading..");
+        cO.setReloadSender(sender);
+
+        // Save
+        itemHandler.saveItems();
+
+        // Load again
+
+        config.reload();
+
+        cO.setDebug(getConfig().getBoolean("debug"));
+        cO.setPrefix(config.getColored("prefix"));
+
+        actionNames = new ArrayList<>();
+
+        for (Action a : Action.values())
+            actionNames.add(a.name().toLowerCase());
+
+        actionNames.forEach(name -> cO.debug(name));
+
+        cO.info("Actions loaded..");
+
+        attributeHandler.loadAttributes();
+
+        cO.info("Loaded " + attributeHandler.getAttributes().size() + " attribute(s)..");
+
+        cooldownHandler.reload();
+
+        itemHandler.loadItems();
+
+        cO.info("Loaded " + itemHandler.getItems().size() + " item(s)..");
+
+        long stop = System.currentTimeMillis();
+
+        cO.setReloadSender(null);
+
+        sender.sendMessage("§aDone.. reload took " + (stop - start) + "ms.");
     }
 
     @Override
@@ -88,8 +149,16 @@ public class Main extends JavaPlugin {
         return actionNames;
     }
 
-    public ConfigLoader getConfigLoader() {
-        return configLoader;
+    public void saveConfig() {
+        config.save();
+    }
+
+    public Configuration getCfg() {
+        return config;
+    }
+
+    public FileConfiguration getConfig() {
+        return config.getYaml();
     }
 
     public ItemHandler getItemHandler() {

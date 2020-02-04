@@ -1,16 +1,13 @@
 package me.wertik.items.objects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Reward {
 
-    private List<String> consoleCommands;
-    private List<String> playerCommands;
-
-    public Reward(List<String> consoleCommands, List<String> playerCommands) {
-        this.consoleCommands = consoleCommands;
-        this.playerCommands = playerCommands;
-    }
+    private List<String> consoleCommands = new ArrayList<>();
+    private List<String> playerCommands = new ArrayList<>();
+    private List<String> playerOPCommands = new ArrayList<>();
 
     public List<String> getConsoleCommands() {
         return consoleCommands;
@@ -26,5 +23,13 @@ public class Reward {
 
     public void setPlayerCommands(List<String> playerCommands) {
         this.playerCommands = playerCommands;
+    }
+
+    public List<String> getPlayerOPCommands() {
+        return playerOPCommands;
+    }
+
+    public void setPlayerOPCommands(List<String> playerOPCommands) {
+        this.playerOPCommands = playerOPCommands;
     }
 }

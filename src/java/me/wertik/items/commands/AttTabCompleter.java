@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class AttTabCompleter implements TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
-        Main.getInstance().cw.debug("Att Tab Complete request");
+        Main.getInstance().cO.debug("Att Tab Complete request");
 
         Player player = (Player) sender;
         ItemStack item = player.getItemInHand();
@@ -44,10 +45,9 @@ public class AttTabCompleter implements TabCompleter {
                 for (String sub : subs)
                     if (sub.toLowerCase().startsWith(args[0].toLowerCase()))
                         tabComplete.add(sub);
-            } else {
-                for (String sub : subs)
-                    tabComplete.add(sub);
-            }
+            } else
+                tabComplete.addAll(Arrays.asList(subs));
+
             Collections.sort(tabComplete);
 
             return tabComplete;
@@ -62,12 +62,11 @@ public class AttTabCompleter implements TabCompleter {
                             for (String attributeName : attributeHandler.getAttributes().keySet())
                                 if (attributeName.toLowerCase().startsWith(args[1].toLowerCase()))
                                     tabComplete.add(attributeName);
-                        } else {
-                            for (String attributeName : attributeHandler.getAttributes().keySet())
-                                tabComplete.add(attributeName);
-                        }
+                        } else
+                            tabComplete.addAll(attributeHandler.getAttributes().keySet());
+
                     } else {
-                        if (Main.getInstance().getConfigLoader().getConfig().getBoolean("show-tips-on-tab-complete"))
+                        if (plugin.getConfig().getBoolean("show-tips-on-tab-complete"))
                             tabComplete.add("There are no attributes configured.");
                     }
 
@@ -79,10 +78,9 @@ public class AttTabCompleter implements TabCompleter {
                         for (String actionName : plugin.getActionNames())
                             if (actionName.toLowerCase().startsWith(args[2].toLowerCase()))
                                 tabComplete.add(actionName);
-                    } else {
-                        for (String actionName : plugin.getActionNames())
-                            tabComplete.add(actionName);
-                    }
+                    } else
+                        tabComplete.addAll(plugin.getActionNames());
+
                     Collections.sort(tabComplete);
 
                     return tabComplete;

@@ -31,7 +31,7 @@ public class ItemsTabCompleter implements TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
-        Main.getInstance().cw.debug("Att Tab Complete request");
+        Main.getInstance().cO.debug("Att Tab Complete request");
 
         Player player = (Player) sender;
         ItemStack item = player.getItemInHand();

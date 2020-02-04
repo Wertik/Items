@@ -15,19 +15,6 @@ import java.util.ArrayList;
 
 public class ItemsCommand implements CommandExecutor {
 
-    /*Commands:
-     * /setname <coloredName>
-     * /addlore <coloredLine>
-     * /remlore <line>
-     * /detail (with NBT and values)
-     * /i add <name>
-     * /i get <name>
-     * /i remove <name>
-     * /i detail <name>
-     * /att add/rem/clear (attributeType) (clickType) (cooldown)
-     * /att list
-     * */
-
     private Main plugin;
 
     public ItemsCommand() {
@@ -120,12 +107,12 @@ public class ItemsCommand implements CommandExecutor {
                         return true;
                     }
 
-                    if (!plugin.getItemHandler().getItems().keySet().contains(args[1])) {
+                    if (!plugin.getItemHandler().getItems().containsKey(args[1])) {
                         sender.sendMessage("§cThsi item is not saved.");
                         return true;
                     }
 
-                    plugin.getItemHandler().remItem(args[1]);
+                    plugin.getItemHandler().removeItem(args[1]);
                     sender.sendMessage("§eRemoved!");
                     break;
                 case "detail":
@@ -167,19 +154,13 @@ public class ItemsCommand implements CommandExecutor {
                     // NBT!
                     if (NBTEditor.hasNBT(item)) {
                         sender.sendMessage("§eNBT:");
-                        NBTEditor.getNBTTags(item).forEach(tag -> sender.sendMessage("§8- §7" + tag + "§f:§7" + NBTEditor.getNBT(item, tag)));
+                        NBTEditor.getNBTKeys(item).forEach(tag -> sender.sendMessage("§8- §7" + tag + "§f:§7" + NBTEditor.getNBT(item, tag)));
                     }
                     break;
                 case "drop":
                     // /i drop <name> <worldName;x;y;z> (amount)
                     if (args.length < 3) {
                         sender.sendMessage("§cNot enough arguments.");
-                        sender.sendMessage("§cUsage: §7/i drop <name> <worldName;x;y;z> (amount)");
-                        return true;
-                    }
-
-                    if (args.length > 4) {
-                        sender.sendMessage("§cToo many arguments.");
                         sender.sendMessage("§cUsage: §7/i drop <name> <worldName;x;y;z> (amount)");
                         return true;
                     }
@@ -193,7 +174,7 @@ public class ItemsCommand implements CommandExecutor {
 
                     if (args.length == 4) {
                         try {
-                            amount = Integer.valueOf(args[3]);
+                            amount = Integer.parseInt(args[3]);
                         } catch (NumberFormatException e) {
                             sender.sendMessage("§cAmount should be a number.");
                             return true;
@@ -211,23 +192,22 @@ public class ItemsCommand implements CommandExecutor {
                         }
                     }
 
-                    for (int i = 0; i < amount; i++) {
-                        if (plugin.getConfigLoader().getConfig().getBoolean("drop-naturally"))
-                            plugin.getServer().getWorld(locationString[0]).dropItemNaturally(new Location(plugin.getServer().getWorld(locationString[0]), Integer.valueOf(locationString[1]), Integer.valueOf(locationString[2]), Integer.valueOf(locationString[3])), plugin.getItemHandler().getItem(args[1]));
-                        else
-                            plugin.getServer().getWorld(locationString[0]).dropItem(new Location(plugin.getServer().getWorld(locationString[0]), Integer.valueOf(locationString[1]), Integer.valueOf(locationString[2]), Integer.valueOf(locationString[3])), plugin.getItemHandler().getItem(args[1]));
-                    }
+                    item = plugin.getItemHandler().getItem(args[1]);
+
+                    item.setAmount(amount);
+
+                    if (plugin.getConfig().getBoolean("drop-naturally"))
+                        plugin.getServer().getWorld(locationString[0]).dropItemNaturally(new Location(plugin.getServer().getWorld(locationString[0]), Integer.parseInt(locationString[1]), Integer.parseInt(locationString[2]), Integer.parseInt(locationString[3])),
+                                item);
+                    else
+                        plugin.getServer().getWorld(locationString[0]).dropItem(
+                                new Location(plugin.getServer().getWorld(locationString[0]), Integer.parseInt(locationString[1]), Integer.parseInt(locationString[2]), Integer.parseInt(locationString[3])),
+                                item);
                     sender.sendMessage("§eItem spawned.");
                     break;
                 case "give":
                     if (args.length < 3) {
                         sender.sendMessage("§cNot enough arguments.");
-                        sender.sendMessage("§cUsage: §7/i give <name> <playerName> (amount)");
-                        return true;
-                    }
-
-                    if (args.length > 4) {
-                        sender.sendMessage("§cToo many arguments.");
                         sender.sendMessage("§cUsage: §7/i give <name> <playerName> (amount)");
                         return true;
                     }
@@ -243,7 +223,6 @@ public class ItemsCommand implements CommandExecutor {
                             return true;
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
                         sender.sendMessage("§cThat player is not online.");
                         return true;
 
@@ -255,7 +234,7 @@ public class ItemsCommand implements CommandExecutor {
 
                     if (args.length == 4) {
                         try {
-                            amount = Integer.valueOf(args[3]);
+                            amount = Integer.parseInt(args[3]);
                         } catch (NumberFormatException e) {
                             sender.sendMessage("§cThat is not a number.");
                             return true;
@@ -266,9 +245,12 @@ public class ItemsCommand implements CommandExecutor {
                         target.getInventory().addItem(plugin.getItemHandler().getItem(args[1]));
                     }
 
-                    if (!plugin.getConfigLoader().getConfig().getBoolean("silent-give"))
+                    if (!plugin.getConfig().getBoolean("silent-give"))
                         target.sendMessage("§eYou received an item.");
                     sender.sendMessage("§eItem given.");
+                    break;
+                case "reload":
+                    Main.getInstance().reload(sender);
                     break;
                 case "help":
                 case "h":

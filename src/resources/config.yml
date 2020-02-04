@@ -5,4 +5,8 @@ enable-cooldown-automatic: true
 cooldown-checker-loop-time: 1
 inform-on-cd: true
 debug: true
+prefix: '&eItems &3>> '
 show-tips-on-tab-complete: true
+Strings:
+  cooldown-message: '&cYou need to wait %seconds% more seconds before using that again.'
+  cooldown-expire-message: '&aYou can use this item again!'

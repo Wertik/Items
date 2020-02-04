@@ -67,7 +67,7 @@ public class UtilCommands implements CommandExecutor {
             // NBT!
             if (NBTEditor.hasNBT(item)) {
                 sender.sendMessage("§eNBT:");
-                NBTEditor.getNBTTags(item).forEach(tag -> sender.sendMessage("§8- §7" + tag + "§f:§7" + NBTEditor.getNBT(item, tag)));
+                NBTEditor.getNBTKeys(item).forEach(tag -> sender.sendMessage("§8- §7" + tag + "§f:§7" + NBTEditor.getNBT(item, tag)));
             }
         } else if (cmd.getName().equalsIgnoreCase("addlore")) {
             if (args.length < 1) {
@@ -155,20 +155,12 @@ public class UtilCommands implements CommandExecutor {
             player.setItemInHand(item);
         } else if (cmd.getName().equalsIgnoreCase("flags")) {
             ItemStack item = player.getItemInHand();
-            if (!item.getItemMeta().getItemFlags().isEmpty()) {
-                sender.sendMessage("§eFlags:");
-                item.getItemMeta().getItemFlags().forEach(flag -> sender.sendMessage("§8- §7" + flag.name()));
-            }
+            List<String> flags = new ArrayList<>();
+            item.getItemMeta().getItemFlags().forEach(flag -> flags.add(flag.name()));
+            sender.sendMessage("§eFlags: §f" + Utils.listToString(flags, "§7, §f", "§cNo flags."));
         } else if (cmd.getName().equalsIgnoreCase("lore")) {
             ItemStack item = player.getItemInHand();
-            if (item.getItemMeta().hasLore()) {
-                sender.sendMessage("§eLore:");
-                int i = 0;
-                for (String line : item.getItemMeta().getLore()) {
-                    sender.sendMessage("§f " + i + "§8- §r" + line);
-                    i++;
-                }
-            }
+            sender.sendMessage("§eLore: §f" + Utils.listToString(item.getItemMeta().getLore(), "§7, §f", "§cNo lore."));
         } else if (cmd.getName().equalsIgnoreCase("addench")) {
             ItemStack item = player.getItemInHand();
             if (args.length < 2) {
@@ -221,8 +213,9 @@ public class UtilCommands implements CommandExecutor {
             player.setItemInHand(item);
         } else if (cmd.getName().equalsIgnoreCase("enchs")) {
             ItemStack item = player.getItemInHand();
-            sender.sendMessage("§eEnchants: §f" + Utils.hashMapToString(item.getItemMeta().getEnchants(), "§7, §f", "§f:", "§cNo enchants."));
+            sender.sendMessage("§eEnchants: §f" + Utils.mapToString(item.getItemMeta().getEnchants(), "§7, §f", "§f:", "§cNo enchants."));
         }
+
         return false;
     }
 }

@@ -1,7 +1,5 @@
 package me.wertik.items.utils;
 
-import com.sun.istack.internal.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +11,7 @@ public class NBTUtils {
      * @param string String to parse.
      * @return Outcome. :"P
      */
-    public static String strip(@NotNull String string) {
+    public static String strip(String string) {
         StringBuffer buf;
         buf = new StringBuffer(string);
         if (buf.charAt(0) == '"') buf.setCharAt(0, ' ');
@@ -28,7 +26,7 @@ public class NBTUtils {
      * @param stringArray to parse
      * @return String Array parsed..
      */
-    public static List<String> strip(@NotNull String... stringArray) {
+    public static List<String> strip(String... stringArray) {
         List<String> editedArray = new ArrayList<>();
         for (String string : stringArray) {
             StringBuffer buf;

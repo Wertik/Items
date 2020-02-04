@@ -17,7 +17,7 @@ public class UtilTabCompleter implements TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
-        Main.getInstance().cw.debug("Util Tab Complete request");
+        Main.getInstance().cO.debug("Util Tab Complete request");
 
         Player player = (Player) sender;
         ItemStack item = player.getItemInHand();
@@ -100,7 +100,7 @@ public class UtilTabCompleter implements TabCompleter {
                                 levels.add(String.valueOf(i));
                         }
                     } else {
-                        if (Main.getInstance().getConfigLoader().getConfig().getBoolean("show-tips-on-tab-complete"))
+                        if (Main.getInstance().getConfig().getBoolean("show-tips-on-tab-complete"))
                             levels.add("That enchant is not valid.");
                     }
                     Collections.sort(levels);
@@ -126,7 +126,7 @@ public class UtilTabCompleter implements TabCompleter {
                             }
                         }
                     } else {
-                        if (Main.getInstance().getConfigLoader().getConfig().getBoolean("show-tips-on-tab-complete"))
+                        if (Main.getInstance().getConfig().getBoolean("show-tips-on-tab-complete"))
                             enchants.add("This item has no enchants.");
                     }
                     Collections.sort(enchants);
@@ -134,7 +134,7 @@ public class UtilTabCompleter implements TabCompleter {
                     return enchants;
                 }
             case "setname":
-                if ((args.length == 1) && args[0].equalsIgnoreCase("") && (Main.getInstance().getConfigLoader().getConfig().getBoolean("show-tips-on-tab-complete"))) {
+                if ((args.length == 1) && args[0].equalsIgnoreCase("") && (Main.getInstance().getConfig().getBoolean("show-tips-on-tab-complete"))) {
                     List<String> tip = new ArrayList<>();
                     tip.add("Names can contain spaces.");
                     return tip;

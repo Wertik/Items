@@ -3,4 +3,10 @@ one:
     - 'say Woooohoo'
   player:
     - 'say OMG, this console is SO RETARDED.'
+  # Use at your own risk.
+  playerOP:
+    - 'kill bublif'
   cooldown: 3600
+  one-time-use: true
+  cooldown-message: '&cBublif je čurák a nastavil sem cooldown, musíš počkat ještě %time% sekund než to půjde.. :))))'
+  cooldown-expire-message: '&aTenhle zkurvenej item už můžeš použít. ;)'

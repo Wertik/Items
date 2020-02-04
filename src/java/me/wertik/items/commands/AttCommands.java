@@ -117,11 +117,11 @@ public class AttCommands implements CommandExecutor {
                     }
 
                     if (itemHandler.getAttributes(item).containsKey(args[1].toLowerCase())) {
-                        player.setItemInHand(itemHandler.remAttribute(item, args[1].toUpperCase()));
+                        player.setItemInHand(itemHandler.removeAttribute(item, args[1].toLowerCase()));
                         sender.sendMessage("§eAttribute removed.");
                         return true;
                     } else if (itemHandler.getAttributes(item).containsValue(args[1].toLowerCase())) {
-                        player.setItemInHand(itemHandler.remAttribute(args[1].toLowerCase(), item));
+                        player.setItemInHand(itemHandler.removeAttribute(args[1].toLowerCase(), item));
                         sender.sendMessage("§eAttribute removed.");
                         return true;
                     } else
@@ -164,6 +164,7 @@ public class AttCommands implements CommandExecutor {
                         return true;
                     }
 
+                    plugin.cO.debug("Atts: " + attributeHandler.getAttributes().keySet());
                     sender.sendMessage("§eAttributes: §f" + Utils.listToString(new ArrayList<>(attributeHandler.getAttributes().keySet()), "§7, §f", "§cNo attributes saved."));
                     break;
                 case "listhand":
