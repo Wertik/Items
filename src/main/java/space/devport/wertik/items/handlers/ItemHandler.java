@@ -113,7 +113,10 @@ public class ItemHandler {
 
     // Get all attributes on an item
     public HashMap<String, String> getAttributes(ItemStack item) {
-        HashMap<String, String> actionMap = NBTEditor.getNBT(item);
+        HashMap<String, String> actionMap = new HashMap<>();
+
+        if (NBTEditor.hasNBT(item))
+            actionMap = NBTEditor.getNBT(item);
 
         // Remove unwanted NBT
         for (String next : actionMap.keySet())

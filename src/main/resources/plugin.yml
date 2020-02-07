@@ -1,6 +1,6 @@
 name: Items
 author: Wertik1206
-version: ${version}
+version: ${project.version}
 main: space.devport.wertik.items.Main
 commands:
   items:

@@ -6,10 +6,7 @@ import net.minecraft.server.v1_8_R3.NBTTagString;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class NBTEditor {
 
@@ -166,8 +163,16 @@ public class NBTEditor {
 
         NBTTagCompound nbtTagCompound = minecraftItemStack.hasTag() ? minecraftItemStack.getTag() : new NBTTagCompound();
 
-        nbtTagCompound.c().forEach(key -> nbt.put(key, nbtTagCompound.get(key.toLowerCase().trim()).toString()));
+        Set<String> keys = nbtTagCompound.c();
 
+        if (!keys.isEmpty())
+
+            for (String key : keys) {
+                try {
+                    nbt.put(key, nbtTagCompound.get(key.toLowerCase().trim()).toString());
+                } catch (NullPointerException ignored) {
+                }
+            }
         return nbt;
     }
 }

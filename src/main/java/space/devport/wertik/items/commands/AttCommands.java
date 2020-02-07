@@ -1,9 +1,5 @@
 package space.devport.wertik.items.commands;
 
-import space.devport.wertik.items.Main;
-import space.devport.wertik.items.handlers.AttributeHandler;
-import space.devport.wertik.items.handlers.ItemHandler;
-import space.devport.wertik.items.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,6 +7,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
+import space.devport.wertik.items.Main;
+import space.devport.wertik.items.handlers.AttributeHandler;
+import space.devport.wertik.items.handlers.ItemHandler;
+import space.devport.wertik.items.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -130,12 +130,6 @@ public class AttCommands implements CommandExecutor {
                     break;
                 case "clear":
                 case "c":
-                    if (args.length < 1) {
-                        sender.sendMessage("§cNot enough arguments.");
-                        sender.sendMessage("§cUsage: §7/att clear");
-                        return true;
-                    }
-
                     if (args.length > 1) {
                         sender.sendMessage("§cToo many arguments.");
                         sender.sendMessage("§cUsage: §7/att clear");
@@ -152,12 +146,6 @@ public class AttCommands implements CommandExecutor {
                     break;
                 case "list":
                 case "l":
-                    if (args.length < 1) {
-                        sender.sendMessage("§cNot enough arguments.");
-                        sender.sendMessage("§cUsage: §7/att list");
-                        return true;
-                    }
-
                     if (args.length > 1) {
                         sender.sendMessage("§cToo many arguments.");
                         sender.sendMessage("§cUsage: §7/att list");
@@ -170,14 +158,8 @@ public class AttCommands implements CommandExecutor {
                 case "listhand":
                 case "lh":
                 case "listh":
-                    if (args.length < 1) {
-                        sender.sendMessage("§cNot enough arguments.");
-                        sender.sendMessage("§cUsage: §7/att listHand");
-                        return true;
-                    }
-
                     if (item.getType().equals(Material.AIR)) {
-                        player.sendMessage("§cCannot help you with AIR.");
+                        player.sendMessage(Main.inst.cO.getPrefix() + "§cCannot help you with AIR.");
                         return true;
                     }
 
@@ -203,9 +185,9 @@ public class AttCommands implements CommandExecutor {
     }
 
     private void help(CommandSender sender) {
-        sender.sendMessage("§8§m----§r §eAttributes §8§m----" +
-                "\n§e/att add <name> <clicktype> §8- §7Add attribute to an item." +
-                "\n§e/att rem <name/clickType> §8- §7Remove attribute based on clickType/Name." +
+        sender.sendMessage("§8§m--------§r §eAttributes §8§m--------" +
+                "\n§e/att add <name> <action> §8- §7Add attribute to an item." +
+                "\n§e/att rem <name/action> §8- §7Remove attribute based on clickType/Name." +
                 "\n§e/att clear §8- §7Clears attributes." +
                 "\n§e/att list §8- §7Lists attributes from config." +
                 "\n§e/att listHand §8- §7List attributes on item in your hand.");
