@@ -1,8 +1,5 @@
-package me.wertik.items.commands;
+package space.devport.wertik.items.commands;
 
-import me.wertik.items.Main;
-import me.wertik.items.utils.NBTEditor;
-import me.wertik.items.utils.Utils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -10,6 +7,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import space.devport.wertik.items.Main;
+import space.devport.wertik.items.utils.NBTEditor;
+import space.devport.wertik.items.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -18,7 +18,7 @@ public class ItemsCommand implements CommandExecutor {
     private Main plugin;
 
     public ItemsCommand() {
-        plugin = Main.getInstance();
+        plugin = Main.inst;
     }
 
     @Override
@@ -50,47 +50,59 @@ public class ItemsCommand implements CommandExecutor {
                     }
 
                     if (!(sender instanceof Player)) {
-                        sender.sendMessage("§cYou have to be a player.");
+                        sender.sendMessage(Main.inst.cO.getPrefix() + "§cYou have to be a player.");
                         return true;
                     }
 
                     Player player = (Player) sender;
 
                     if (player.getItemInHand().getType().equals(Material.AIR)) {
-                        sender.sendMessage("§cCannot add air.");
+                        sender.sendMessage(Main.inst.cO.getPrefix() + "§cCannot add air.");
                         return true;
                     }
 
                     plugin.getItemHandler().addItem(args[1], player.getItemInHand());
-                    sender.sendMessage("§eAdded!");
+                    sender.sendMessage(Main.inst.cO.getPrefix() + "§eAdded item under name §f" + args[1]);
                     break;
                 case "get":
                     if (args.length < 2) {
                         sender.sendMessage("§cNot enough arguments.");
-                        sender.sendMessage("§cUsage: §7/i get <name>");
+                        sender.sendMessage("§cUsage: §7/i get <name> [amount]");
                         return true;
                     }
 
-                    if (args.length > 2) {
+                    if (args.length > 3) {
                         sender.sendMessage("§cToo many arguments.");
-                        sender.sendMessage("§cUsage: §7/i get <name>");
+                        sender.sendMessage("§cUsage: §7/i get <name> [amount]");
                         return true;
                     }
 
                     if (!plugin.getItemHandler().getItems().containsKey(args[1])) {
-                        sender.sendMessage("§cThat item is not saved.");
+                        sender.sendMessage(Main.inst.cO.getPrefix() + "§cThat item is not saved.");
                         return true;
                     }
 
                     if (!(sender instanceof Player)) {
-                        sender.sendMessage("§cYou have to be a player.");
+                        sender.sendMessage(Main.inst.cO.getPrefix() + "§cYou have to be a player.");
                         return true;
                     }
 
+                    int amount = 1;
+
+                    if (args.length > 2)
+                        try {
+                            amount = Integer.parseInt(args[2]);
+                        } catch (NumberFormatException e) {
+                            sender.sendMessage(Main.inst.cO.getPrefix() + "§cAmount has to be a number.");
+                        }
+
                     player = (Player) sender;
 
-                    player.getInventory().addItem(plugin.getItemHandler().getItem(args[1]));
-                    sender.sendMessage("§eGiven!");
+                    ItemStack item = plugin.getItemHandler().getItem(args[1]);
+                    item.setAmount(amount);
+                    player.getInventory().addItem(item);
+
+                    sender.sendMessage(Main.inst.cO.getPrefix() + "§eItem §f" + args[1] + "§7x" + amount + " §eadded to your inventory.");
                     break;
                 case "remove":
                 case "rem":
@@ -108,12 +120,12 @@ public class ItemsCommand implements CommandExecutor {
                     }
 
                     if (!plugin.getItemHandler().getItems().containsKey(args[1])) {
-                        sender.sendMessage("§cThsi item is not saved.");
+                        sender.sendMessage(Main.inst.cO.getPrefix() + "§cThsi item is not saved.");
                         return true;
                     }
 
                     plugin.getItemHandler().removeItem(args[1]);
-                    sender.sendMessage("§eRemoved!");
+                    sender.sendMessage(Main.inst.cO.getPrefix() + "§eRemoved item §f" + args[1]);
                     break;
                 case "detail":
                 case "d":
@@ -130,11 +142,11 @@ public class ItemsCommand implements CommandExecutor {
                     }
 
                     if (!plugin.getItemHandler().getItems().containsKey(args[1])) {
-                        sender.sendMessage("§cThat item is not saved.");
+                        sender.sendMessage(Main.inst.cO.getPrefix() + "§cThat item is not saved.");
                         return true;
                     }
 
-                    ItemStack item = plugin.getItemHandler().getItem(args[1]);
+                    item = plugin.getItemHandler().getItem(args[1]);
 
                     sender.sendMessage("§eName: §f" + item.getItemMeta().getDisplayName());
                     sender.sendMessage("§eMaterial: §f" + item.getType().toString());
@@ -161,22 +173,22 @@ public class ItemsCommand implements CommandExecutor {
                     // /i drop <name> <worldName;x;y;z> (amount)
                     if (args.length < 3) {
                         sender.sendMessage("§cNot enough arguments.");
-                        sender.sendMessage("§cUsage: §7/i drop <name> <worldName;x;y;z> (amount)");
+                        sender.sendMessage("§cUsage: §7/i drop <name> <worldName;x;y;z> [amount]");
                         return true;
                     }
 
                     if (!plugin.getItemHandler().getItems().containsKey(args[1])) {
-                        sender.sendMessage("§cThat item is not saved.");
+                        sender.sendMessage(Main.inst.cO.getPrefix() + "§cThat item is not saved.");
                         return true;
                     }
 
-                    int amount = 1;
+                    amount = 1;
 
                     if (args.length == 4) {
                         try {
                             amount = Integer.parseInt(args[3]);
                         } catch (NumberFormatException e) {
-                            sender.sendMessage("§cAmount should be a number.");
+                            sender.sendMessage(Main.inst.cO.getPrefix() + "§cAmount should be a number.");
                             return true;
                         }
                     }
@@ -187,7 +199,7 @@ public class ItemsCommand implements CommandExecutor {
                         try {
                             Integer.valueOf(locationString[i]);
                         } catch (NumberFormatException e) {
-                            sender.sendMessage("§cCoordinates have to be provided in integers.");
+                            sender.sendMessage(Main.inst.cO.getPrefix() + "§cCoordinates have to be provided in integers.");
                             return true;
                         }
                     }
@@ -196,14 +208,13 @@ public class ItemsCommand implements CommandExecutor {
 
                     item.setAmount(amount);
 
+                    Location location = new Location(plugin.getServer().getWorld(locationString[0]), Integer.parseInt(locationString[1]), Integer.parseInt(locationString[2]), Integer.parseInt(locationString[3]));
+
                     if (plugin.getConfig().getBoolean("drop-naturally"))
-                        plugin.getServer().getWorld(locationString[0]).dropItemNaturally(new Location(plugin.getServer().getWorld(locationString[0]), Integer.parseInt(locationString[1]), Integer.parseInt(locationString[2]), Integer.parseInt(locationString[3])),
-                                item);
+                        plugin.getServer().getWorld(locationString[0]).dropItemNaturally(location, item);
                     else
-                        plugin.getServer().getWorld(locationString[0]).dropItem(
-                                new Location(plugin.getServer().getWorld(locationString[0]), Integer.parseInt(locationString[1]), Integer.parseInt(locationString[2]), Integer.parseInt(locationString[3])),
-                                item);
-                    sender.sendMessage("§eItem spawned.");
+                        plugin.getServer().getWorld(locationString[0]).dropItem(location, item);
+                    sender.sendMessage(Main.inst.cO.getPrefix() + "§eItem §f" + args[1] + "§7x" + amount + " §espawned §8@§7" + Utils.locationToString(location));
                     break;
                 case "give":
                     if (args.length < 3) {
@@ -232,25 +243,22 @@ public class ItemsCommand implements CommandExecutor {
 
                     amount = 1;
 
-                    if (args.length == 4) {
+                    if (args.length == 4)
                         try {
                             amount = Integer.parseInt(args[3]);
                         } catch (NumberFormatException e) {
                             sender.sendMessage("§cThat is not a number.");
                             return true;
                         }
-                    }
 
                     for (int i = 0; i < amount; i++) {
                         target.getInventory().addItem(plugin.getItemHandler().getItem(args[1]));
                     }
 
-                    if (!plugin.getConfig().getBoolean("silent-give"))
-                        target.sendMessage("§eYou received an item.");
-                    sender.sendMessage("§eItem given.");
+                    sender.sendMessage(Main.inst.cO.getPrefix() + "§eGave player §f" + target.getName() + " item §f" + args[1] + "§7x" + amount);
                     break;
                 case "reload":
-                    Main.getInstance().reload(sender);
+                    Main.inst.reload(sender);
                     break;
                 case "help":
                 case "h":
@@ -262,14 +270,14 @@ public class ItemsCommand implements CommandExecutor {
     }
 
     private void help(CommandSender sender) {
-        sender.sendMessage("§8§m----§e Items §8§m----" +
-                "\n§e/i add <name> §8- §7Saves item in hand." +
-                "\n§e/i remove <name> §8- §7Removes item." +
+        sender.sendMessage("§8§m--------§e Items §8§m--------" +
+                "\n§e/i add <name> §8- §7Saves item in hand to db under given name." +
+                "\n§e/i remove <name> §8- §7Removes item by name." +
                 "\n§e/i list §8- §7Lists saved items." +
-                "\n§e/i get <name> §8- §7Gets you saved item." +
-                "\n§e/i detail <name> §8- §7Displays info about saved item." +
-                "\n§e/i drop <name> <worldName;x;y;z> (amount) §8- §7Drop item somewhere in the world." +
-                "\n§e/i give <name> <playerName> §8- §7Give player an item." +
+                "\n§e/i get <name> [amount] §8- §7Adds a saved item into your inventory." +
+                "\n§e/i detail <name> §8- §7Displays info about an item in the db." +
+                "\n§e/i drop <name> <worldName;x;y;z> (amount) §8- §7Drops item on a given location." +
+                "\n§e/i give <name> <playerName> [amount] §8- §7Give player an item." +
                 "\n§e/att help §8- §7Help page regarding attributes." + "" +
                 "\n§e/setname <name> §8- §7Set display name of an item." +
                 "\n§e/lore §8- §7List item lore." +

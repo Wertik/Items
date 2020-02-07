@@ -1,6 +1,5 @@
-package me.wertik.items.commands;
+package space.devport.wertik.items.commands;
 
-import me.wertik.items.Main;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -17,8 +16,6 @@ public class UtilTabCompleter implements TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
-        Main.getInstance().cO.debug("Util Tab Complete request");
-
         Player player = (Player) sender;
         ItemStack item = player.getItemInHand();
 
@@ -99,10 +96,9 @@ public class UtilTabCompleter implements TabCompleter {
                             for (int i = 1; i <= Enchantment.getByName(args[0]).getMaxLevel(); i++)
                                 levels.add(String.valueOf(i));
                         }
-                    } else {
-                        if (Main.getInstance().getConfig().getBoolean("show-tips-on-tab-complete"))
-                            levels.add("That enchant is not valid.");
-                    }
+                    } else
+                        levels.add("That enchant is not valid.");
+
                     Collections.sort(levels);
 
                     return levels;
@@ -125,16 +121,15 @@ public class UtilTabCompleter implements TabCompleter {
                                 enchants.add(enchantment.getName());
                             }
                         }
-                    } else {
-                        if (Main.getInstance().getConfig().getBoolean("show-tips-on-tab-complete"))
-                            enchants.add("This item has no enchants.");
-                    }
+                    } else
+                        enchants.add("This item has no enchants.");
+
                     Collections.sort(enchants);
 
                     return enchants;
                 }
             case "setname":
-                if ((args.length == 1) && args[0].equalsIgnoreCase("") && (Main.getInstance().getConfig().getBoolean("show-tips-on-tab-complete"))) {
+                if ((args.length == 1) && args[0].equalsIgnoreCase("")) {
                     List<String> tip = new ArrayList<>();
                     tip.add("Names can contain spaces.");
                     return tip;
@@ -143,4 +138,3 @@ public class UtilTabCompleter implements TabCompleter {
         return null;
     }
 }
-

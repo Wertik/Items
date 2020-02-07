@@ -1,9 +1,9 @@
-package me.wertik.items.commands;
+package space.devport.wertik.items.commands;
 
-import me.wertik.items.Main;
-import me.wertik.items.handlers.AttributeHandler;
-import me.wertik.items.handlers.ItemHandler;
-import me.wertik.items.utils.Utils;
+import space.devport.wertik.items.Main;
+import space.devport.wertik.items.handlers.AttributeHandler;
+import space.devport.wertik.items.handlers.ItemHandler;
+import space.devport.wertik.items.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,7 +29,7 @@ public class AttCommands implements CommandExecutor {
     private ItemHandler itemHandler;
 
     public AttCommands() {
-        plugin = Main.getInstance();
+        plugin = Main.inst;
         attributeHandler = plugin.getAttributeHandler();
         itemHandler = plugin.getItemHandler();
     }
@@ -69,9 +69,9 @@ public class AttCommands implements CommandExecutor {
                         return true;
                     }
 
-                    if (!attributeHandler.getAttributes().containsKey(args[1])) {
+                    if (!attributeHandler.getAttributeCache().containsKey(args[1])) {
                         sender.sendMessage("§cThat attribute is not valid.");
-                        sender.sendMessage("§cValids: §f" + Utils.listToString(new ArrayList<>(attributeHandler.getAttributes().keySet()), "§7, §f", "§cNo attributes configured."));
+                        sender.sendMessage("§cValids: §f" + Utils.listToString(new ArrayList<>(attributeHandler.getAttributeCache().keySet()), "§7, §f", "§cNo attributes configured."));
                         return true;
                     }
 
@@ -121,7 +121,7 @@ public class AttCommands implements CommandExecutor {
                         sender.sendMessage("§eAttribute removed.");
                         return true;
                     } else if (itemHandler.getAttributes(item).containsValue(args[1].toLowerCase())) {
-                        player.setItemInHand(itemHandler.removeAttribute(args[1].toLowerCase(), item));
+                        player.setItemInHand(itemHandler.removeAttribute(item, args[1].toLowerCase()));
                         sender.sendMessage("§eAttribute removed.");
                         return true;
                     } else
@@ -164,8 +164,8 @@ public class AttCommands implements CommandExecutor {
                         return true;
                     }
 
-                    plugin.cO.debug("Atts: " + attributeHandler.getAttributes().keySet());
-                    sender.sendMessage("§eAttributes: §f" + Utils.listToString(new ArrayList<>(attributeHandler.getAttributes().keySet()), "§7, §f", "§cNo attributes saved."));
+                    plugin.cO.debug("Atts: " + attributeHandler.getAttributeCache().keySet());
+                    sender.sendMessage("§eAttributes: §f" + Utils.listToString(new ArrayList<>(attributeHandler.getAttributeCache().keySet()), "§7, §f", "§cNo attributes saved."));
                     break;
                 case "listhand":
                 case "lh":

@@ -1,12 +1,18 @@
-one:
-  console:
-    - 'say Woooohoo'
-  player:
-    - 'say OMG, this console is SO RETARDED.'
-  # Use at your own risk.
-  playerOP:
-    - 'kill bublif'
+# Attribute Configuration for Items made by Wertík from The Port
+
+# Attribute name
+attribute-one:
+  # Commands to run on *click*
+  # Commands with prefix "p!" are run for player
+  # op! - player given OP permissions
+  commands:
+    - 'say Woooohoo!'
+    - 'p! say Woooohooo! indeed.'
+    - 'op! pl'
+  # Item cooldown
   cooldown: 3600
+  # Remove after use?
   one-time-use: true
-  cooldown-message: '&cBublif je čurák a nastavil sem cooldown, musíš počkat ještě %time% sekund než to půjde.. :))))'
-  cooldown-expire-message: '&aTenhle zkurvenej item už můžeš použít. ;)'
+  # Cooldown messages, uses defaults in config.yml if not specified.
+  cooldown-message: '&cThere is a cooldown on this item, wait &7%time%s &ato use it again.'
+  cooldown-expire-message: '&aYou can use that item again!'

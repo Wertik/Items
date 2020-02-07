@@ -1,12 +1,17 @@
-silent-give: true
+# Configuration for Items made by Wertík from The Port
+
+debug-enabled: true
+plugin-prefix: '&eItems &8>> '
+
 drop-naturally: true
-enable-cooldown-automatic: true
-# seconds
-cooldown-checker-loop-time: 1
+
+# Inform the player when cooldown on an attribute expires?
 inform-on-cd: true
-debug: true
-prefix: '&eItems &3>> '
+
+# Enables Tab Completer
 show-tips-on-tab-complete: true
+
+# Default messages
 Strings:
-  cooldown-message: '&cYou need to wait %seconds% more seconds before using that again.'
-  cooldown-expire-message: '&aYou can use this item again!'
+  cooldown-message: '&cYou need to wait %time% more seconds before using that again.'
+  cooldown-expire-message: '&aYou can use that item again!'

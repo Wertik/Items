@@ -1,8 +1,8 @@
-package me.wertik.items.commands;
+package space.devport.wertik.items.commands;
 
-import me.wertik.items.Main;
-import me.wertik.items.handlers.AttributeHandler;
-import me.wertik.items.handlers.ItemHandler;
+import space.devport.wertik.items.Main;
+import space.devport.wertik.items.handlers.AttributeHandler;
+import space.devport.wertik.items.handlers.ItemHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -24,7 +24,7 @@ public class AttTabCompleter implements TabCompleter {
     private ItemHandler itemHandler;
 
     public AttTabCompleter() {
-        plugin = Main.getInstance();
+        plugin = Main.inst;
 
         attributeHandler = plugin.getAttributeHandler();
         itemHandler = plugin.getItemHandler();
@@ -32,7 +32,7 @@ public class AttTabCompleter implements TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
-        Main.getInstance().cO.debug("Att Tab Complete request");
+        Main.inst.cO.debug("Att Tab Complete request");
 
         Player player = (Player) sender;
         ItemStack item = player.getItemInHand();
@@ -57,17 +57,16 @@ public class AttTabCompleter implements TabCompleter {
             case "add":
             case "a":
                 if (args.length == 2) {
-                    if (!attributeHandler.getAttributes().isEmpty()) {
+                    if (!attributeHandler.getAttributeCache().isEmpty()) {
                         if (!args[1].equals("")) {
-                            for (String attributeName : attributeHandler.getAttributes().keySet())
+                            for (String attributeName : attributeHandler.getAttributeCache().keySet())
                                 if (attributeName.toLowerCase().startsWith(args[1].toLowerCase()))
                                     tabComplete.add(attributeName);
                         } else
-                            tabComplete.addAll(attributeHandler.getAttributes().keySet());
+                            tabComplete.addAll(attributeHandler.getAttributeCache().keySet());
 
                     } else {
-                        if (plugin.getConfig().getBoolean("show-tips-on-tab-complete"))
-                            tabComplete.add("There are no attributes configured.");
+                        tabComplete.add("There are no attributes configured.");
                     }
 
                     Collections.sort(tabComplete);

@@ -1,8 +1,7 @@
-name: PVPC_Items
+name: Items
 author: Wertik1206
-version: 1.1
-main: me.wertik.items.Main
-prefix: Items
+version: ${version}
+main: space.devport.wertik.items.Main
 commands:
   items:
     aliases: [i]
@@ -31,3 +30,4 @@ commands:
   remench:
     description: Remove enchant from your item.
   enchs:
+    description: Display enchants on your item

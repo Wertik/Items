@@ -1,4 +1,4 @@
-package me.wertik.items.utils;
+package space.devport.wertik.items.utils;
 
 import net.minecraft.server.v1_8_R3.NBTBase;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;

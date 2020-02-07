@@ -1,4 +1,4 @@
-package me.wertik.items.utils;
+package space.devport.wertik.items.utils;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
