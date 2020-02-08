@@ -2,9 +2,9 @@ package space.devport.wertik.items.objects;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.entity.Player;
 import space.devport.wertik.items.Main;
 import space.devport.wertik.items.utils.Utils;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public class Reward {
                 switch (cmd.split("!")[0].toLowerCase().trim()) {
                     case "op":
                         executeOp(cmd, player);
-                    case "player":
+                    case "p":
                         executePlayer(cmd, player);
                         break;
                     default:
@@ -51,7 +51,15 @@ public class Reward {
         }
 
         // Messages
-        List<String> msg = informMessage.stream().map(line -> Utils.parse(line, player)).collect(Collectors.toList());
+        if (!informMessage.isEmpty()) {
+            String inform = Utils.listToMessage(informMessage.stream().map(line -> Utils.parse(line, player)).collect(Collectors.toList()));
+            player.sendMessage(Utils.color(inform));
+        }
+
+        if (!broadcastMessage.isEmpty()) {
+            String broadcast = Utils.listToMessage(broadcastMessage.stream().map(line -> Utils.parse(line, player)).collect(Collectors.toList()));
+            player.sendMessage(Utils.color(broadcast));
+        }
     }
 
     // Execute command as console
