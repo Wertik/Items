@@ -43,7 +43,7 @@ public class AttributeHandler {
 
             // Cooldown and one time use
             attribute.setOneTime(section.getBoolean("one-time-use", false));
-            attribute.setCooldown(section.getLong("cooldown", 0) * 1000L);
+            attribute.setCooldown(section.getLong("cooldown", 0));
 
             // Load attribute reward
             Reward reward = new Reward();

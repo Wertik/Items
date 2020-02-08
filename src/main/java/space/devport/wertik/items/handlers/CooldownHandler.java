@@ -31,7 +31,7 @@ public class CooldownHandler {
         List<Cooldown> cooldowns = cooldownCache.containsKey(uniqueID.toString()) ? cooldownCache.get(uniqueID.toString()) : new ArrayList<>();
 
         // Add a new cooldown to the list, so we can pull the time later.
-        cooldowns.add(new Cooldown(attribute.getName(), System.currentTimeMillis() + attribute.getCooldown()));
+        cooldowns.add(new Cooldown(attribute.getName(), System.currentTimeMillis() + (attribute.getCooldown() * 1000)));
         cooldownCache.put(uniqueID.toString(), cooldowns);
 
         // Start a runnable to remove it
@@ -40,7 +40,7 @@ public class CooldownHandler {
             public void run() {
                 removeCooldown(uniqueID, attribute.getName());
             }
-        }.runTaskLaterAsynchronously(Main.inst, attribute.getCooldown());
+        }.runTaskLaterAsynchronously(Main.inst, attribute.getCooldown() * 20);
     }
 
     // Remove cooldown from a player

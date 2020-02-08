@@ -40,12 +40,12 @@ public class Reward {
             if (cmd.contains("!")) {
                 switch (cmd.split("!")[0].toLowerCase().trim()) {
                     case "op":
-                        executeOp(cmd, player);
+                        executeOp(cmd.split("!")[1].trim(), player);
                     case "p":
-                        executePlayer(cmd, player);
+                        executePlayer(cmd.split("!")[1].trim(), player);
                         break;
                     default:
-                        executeConsole(cmd);
+                        executeConsole(cmd.split("!")[1].trim());
                 }
             } else executeConsole(cmd);
         }
