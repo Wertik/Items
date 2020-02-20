@@ -31,3 +31,6 @@ commands:
     description: Remove enchant from your item.
   enchs:
     description: Display enchants on your item
+permissions:
+  items.control:
+    description: Allows commands

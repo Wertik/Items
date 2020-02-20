@@ -42,6 +42,11 @@ public class AttCommands implements CommandExecutor {
             return true;
         }
 
+        if (!sender.hasPermission("items.control")) {
+            sender.sendMessage("&cYou don't have permission to do this.");
+            return true;
+        }
+
         Player player = (Player) sender;
         ItemStack item = player.getItemInHand();
 

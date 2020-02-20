@@ -52,8 +52,9 @@ public class CooldownHandler {
 
         List<Cooldown> cooldowns = cooldownCache.get(uniqueID.toString());
 
-        // If there is only one cooldown, remove altogether.
-        if (cooldowns.isEmpty()) {
+        // If there is only one cooldown or none, remove altogether.
+        if (cooldowns.size() == 1 || cooldowns.isEmpty()) {
+            Main.inst.cO.debug("Removing " + uniqueID.toString() + " from cooldowns");
             cooldownCache.remove(uniqueID.toString());
             return;
         }
@@ -66,11 +67,13 @@ public class CooldownHandler {
 
         // If there is only one cooldown, remove altogether.
         if (cooldowns.isEmpty()) {
+            Main.inst.cO.debug("Removing " + uniqueID.toString() + " from cooldowns");
             cooldownCache.remove(uniqueID.toString());
             return;
         }
 
         cooldownCache.put(uniqueID.toString(), cooldowns);
+        Main.inst.cO.debug("Updated " + uniqueID.toString() + " to cooldown size " + cooldowns.size());
 
         // Message the player
         OfflinePlayer player = Main.inst.getServer().getOfflinePlayer(uniqueID);

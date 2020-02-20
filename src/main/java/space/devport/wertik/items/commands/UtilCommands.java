@@ -23,6 +23,11 @@ public class UtilCommands implements CommandExecutor {
             return true;
         }
 
+        if (!sender.hasPermission("items.control")) {
+            sender.sendMessage("&cYou don't have permission to do this.");
+            return true;
+        }
+
         Player player = (Player) sender;
 
         if (player.getInventory().getItemInHand().getType().equals(Material.AIR)) {

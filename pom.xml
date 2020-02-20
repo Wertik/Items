@@ -6,7 +6,7 @@
 
     <groupId>space.devport.wertik.items</groupId>
     <artifactId>Items</artifactId>
-    <version>2.0</version>
+    <version>2.0.1</version>
 
     <build>
         <finalName>Items-${project.version}</finalName>
@@ -22,6 +22,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
+                    <compilerVersion>1.8</compilerVersion>
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>

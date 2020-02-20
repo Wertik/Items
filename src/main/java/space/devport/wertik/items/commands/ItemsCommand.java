@@ -23,6 +23,12 @@ public class ItemsCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+
+        if (!sender.hasPermission("items.control")) {
+            sender.sendMessage("&cYou don't have permission to do this.");
+            return true;
+        }
+
         if (args.length < 1) {
             help(sender);
             return true;
