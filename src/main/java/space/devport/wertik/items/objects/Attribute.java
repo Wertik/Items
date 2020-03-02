@@ -9,7 +9,7 @@ public class Attribute {
 
     // Name of the attribute
     @Getter
-    private String name;
+    private final String name;
 
     // Attribute reward - commands and messages
     @Getter
@@ -44,16 +44,14 @@ public class Attribute {
     // Returns parsed and colored cooldown message
     // If it's absent, uses default
     public String getCooldownMessage(double time) {
-
-        return Utils.color((cooldownMessage != null ? cooldownMessage : Main.inst.getCfg().getYaml().getString("Strings.cooldown-message"))
+        return Utils.color((cooldownMessage != null ? cooldownMessage : Main.inst.getCfg().getFileConfiguration().getString("Strings.cooldown-message"))
                 .replace("%time%", String.valueOf(Utils.round(time, 1))));
     }
 
     // Returns parsed and colored cooldown expire message
     // If it's absent, uses default
     public String getCooldownExpireMessage() {
-
-        return Utils.color((cooldownExpireMessage != null ? cooldownExpireMessage : Main.inst.getCfg().getYaml().getString("Strings.cooldown-expire-message"))
+        return Utils.color((cooldownExpireMessage != null ? cooldownExpireMessage : Main.inst.getCfg().getFileConfiguration().getString("Strings.cooldown-expire-message"))
                 .replace("%attributeName%", name));
     }
 

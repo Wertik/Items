@@ -7,12 +7,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import space.devport.utils.itemutil.ItemNBTEditor;
 import space.devport.wertik.items.Main;
 import space.devport.wertik.items.handlers.CooldownHandler;
 import space.devport.wertik.items.handlers.ItemHandler;
 import space.devport.wertik.items.objects.Attribute;
 import space.devport.wertik.items.objects.Reward;
-import space.devport.wertik.items.utils.NBTEditor;
 
 public class ItemListener implements Listener {
 
@@ -46,7 +46,7 @@ public class ItemListener implements Listener {
         Main.inst.cO.debug("Special item clicked");
 
         // Returns if there are no attributes set for this action
-        if (!NBTEditor.hasNBTTag(item, e.getAction().name().toLowerCase()))
+        if (!ItemNBTEditor.hasNBTKey(item, e.getAction().name().toLowerCase()))
             return;
 
         Main.inst.cO.debug("Has attribute with this action");

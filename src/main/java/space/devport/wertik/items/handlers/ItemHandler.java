@@ -3,10 +3,10 @@ package space.devport.wertik.items.handlers;
 import lombok.Getter;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
+import space.devport.utils.configutil.Configuration;
+import space.devport.utils.itemutil.ItemNBTEditor;
 import space.devport.wertik.items.Main;
 import space.devport.wertik.items.objects.Attribute;
-import space.devport.wertik.items.utils.Configuration;
-import space.devport.wertik.items.utils.NBTEditor;
 import space.devport.wertik.items.utils.Utils;
 
 import java.util.HashMap;
@@ -18,7 +18,7 @@ public class ItemHandler {
 
     // System name, item
     @Getter
-    private HashMap<String, ItemStack> items = new HashMap<>();
+    private final HashMap<String, ItemStack> items = new HashMap<>();
 
     public ItemHandler() {
         storage = new Configuration(Main.inst, "items");
@@ -27,7 +27,7 @@ public class ItemHandler {
     // Check if an item has attributes attached
     public boolean isSpecial(ItemStack item) {
         for (Action action : Action.values())
-            if (NBTEditor.hasNBTTag(item, action.name().toLowerCase()))
+            if (ItemNBTEditor.hasNBTKey(item, action.name().toLowerCase()))
                 return true;
         return false;
     }
@@ -37,10 +37,10 @@ public class ItemHandler {
         items.clear();
         storage.reload();
 
-        for (String name : storage.getYaml().getKeys(false)) {
+        for (String name : storage.getFileConfiguration().getKeys(false)) {
 
             // Parse from base64
-            String base64 = storage.getYaml().getString(name);
+            String base64 = storage.getFileConfiguration().getString(name);
             ItemStack item = Utils.itemStackFromBase64(base64);
 
             // No 0 amount items please.
@@ -56,18 +56,18 @@ public class ItemHandler {
     // Save all items
     public void saveItems() {
         storage.clear();
-        items.keySet().forEach(name -> storage.getYaml().set(name, Utils.itemStackToBase64(items.get(name))));
+        items.keySet().forEach(name -> storage.getFileConfiguration().set(name, Utils.itemStackToBase64(items.get(name))));
         storage.save();
     }
 
     // Add attribute to an item
     public ItemStack setAttribute(ItemStack item, String attributeName, String action) {
-        return NBTEditor.writeNBT(item, action, attributeName);
+        return ItemNBTEditor.writeNBT(item, action, attributeName);
     }
 
     // Remove attribute by action
     public ItemStack removeAction(ItemStack item, String action) {
-        return NBTEditor.hasNBTTag(item, action) ? NBTEditor.removeNBT(item, action) : item;
+        return ItemNBTEditor.hasNBTKey(item, action) ? ItemNBTEditor.removeNBT(item, action) : item;
     }
 
     // Remove attribute from all actions
@@ -76,7 +76,7 @@ public class ItemHandler {
 
         for (String key : nbt.keySet())
             if (nbt.get(key).equalsIgnoreCase(attributeName))
-                item = NBTEditor.removeNBT(item, key);
+                item = ItemNBTEditor.removeNBT(item, key);
 
         return item;
     }
@@ -90,9 +90,9 @@ public class ItemHandler {
 
     // Get attribute by action type
     public Attribute getAttribute(ItemStack item, String clickType) {
-        for (String key : NBTEditor.getNBTKeys(item))
+        for (String key : ItemNBTEditor.getNBTTagMap(item).keySet())
             if (key.equalsIgnoreCase(clickType))
-                return Main.inst.getAttributeHandler().get(NBTEditor.getNBT(item, key));
+                return Main.inst.getAttributeHandler().get(ItemNBTEditor.getNBT(item, key));
         return null;
     }
 
@@ -115,8 +115,8 @@ public class ItemHandler {
     public HashMap<String, String> getAttributes(ItemStack item) {
         HashMap<String, String> actionMap = new HashMap<>();
 
-        if (NBTEditor.hasNBT(item))
-            actionMap = NBTEditor.getNBT(item);
+        if (ItemNBTEditor.hasNBT(item))
+            actionMap = new HashMap<>(ItemNBTEditor.getNBTTagMap(item));
 
         // Remove unwanted NBT
         for (String next : actionMap.keySet())

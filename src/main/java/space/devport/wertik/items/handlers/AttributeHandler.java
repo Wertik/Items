@@ -3,21 +3,21 @@ package space.devport.wertik.items.handlers;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import space.devport.utils.configutil.Configuration;
 import space.devport.wertik.items.Main;
 import space.devport.wertik.items.objects.Attribute;
 import space.devport.wertik.items.objects.Reward;
-import space.devport.wertik.items.utils.Configuration;
 
 import java.util.HashMap;
 
 public class AttributeHandler {
 
     // attributes.yml
-    private Configuration storage;
+    private final Configuration storage;
 
     // Attribute cache keyed by name
     @Getter
-    private HashMap<String, Attribute> attributeCache = new HashMap<>();
+    private final HashMap<String, Attribute> attributeCache = new HashMap<>();
 
     public AttributeHandler() {
         storage = new Configuration(Main.inst, "attributes");
@@ -34,7 +34,7 @@ public class AttributeHandler {
         attributeCache.clear();
         storage.reload();
 
-        FileConfiguration attYaml = storage.getYaml();
+        FileConfiguration attYaml = storage.getFileConfiguration();
 
         for (String name : attYaml.getKeys(false)) {
             ConfigurationSection section = attYaml.getConfigurationSection(name);

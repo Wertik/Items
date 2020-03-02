@@ -5,13 +5,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.block.Action;
 import org.bukkit.plugin.java.JavaPlugin;
+import space.devport.utils.configutil.Configuration;
+import space.devport.utils.ConsoleOutput;
 import space.devport.wertik.items.commands.*;
 import space.devport.wertik.items.handlers.AttributeHandler;
 import space.devport.wertik.items.handlers.CooldownHandler;
 import space.devport.wertik.items.handlers.ItemHandler;
 import space.devport.wertik.items.listeners.ItemListener;
-import space.devport.wertik.items.utils.Configuration;
-import space.devport.wertik.items.utils.ConsoleOutput;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,7 +51,7 @@ public class Main extends JavaPlugin {
         inst = this;
 
         // Setup ConsoleOutput
-        cO = new ConsoleOutput(this);
+        cO = new ConsoleOutput(true);
 
         // Load actions
         Arrays.stream(Action.values()).forEach(a -> actionNames.add(a.name()));
@@ -99,7 +99,7 @@ public class Main extends JavaPlugin {
     public void reload(CommandSender sender) {
         long start = System.currentTimeMillis();
 
-        cO.setReloadSender(sender);
+        cO.setCmdSender(sender);
         cO.info("Reloading..");
 
         // Save
@@ -117,7 +117,7 @@ public class Main extends JavaPlugin {
         itemHandler.load();
         cO.info("Loaded " + itemHandler.getItems().size() + " item(s)..");
 
-        cO.setReloadSender(null);
+        cO.setCmdSender(null);
 
         sender.sendMessage(cO.getPrefix() + "§aDone.. reload took " + (System.currentTimeMillis() - start) + "ms.");
     }
@@ -134,6 +134,6 @@ public class Main extends JavaPlugin {
 
     @Override
     public FileConfiguration getConfig() {
-        return cfg.getYaml();
+        return cfg.getFileConfiguration();
     }
 }

@@ -1,6 +1,7 @@
 package space.devport.wertik.items.objects;
 
 import lombok.Getter;
+import lombok.Setter;
 
 public class Cooldown {
 
@@ -8,10 +9,11 @@ public class Cooldown {
     
     // Attribute the cooldown is on.
     @Getter
-    private String attributeName;
+    private final String attributeName;
 
     // Cd expire time
     @Getter
+    @Setter
     private long time;
 
     public Cooldown(String attributeName, long time) {

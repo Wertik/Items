@@ -18,10 +18,9 @@ import java.util.List;
 
 public class AttTabCompleter implements TabCompleter {
 
-    private Main plugin;
-
-    private AttributeHandler attributeHandler;
-    private ItemHandler itemHandler;
+    private final Main plugin;
+    private final AttributeHandler attributeHandler;
+    private final ItemHandler itemHandler;
 
     public AttTabCompleter() {
         plugin = Main.inst;
@@ -32,8 +31,6 @@ public class AttTabCompleter implements TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
-        Main.inst.cO.debug("Att Tab Complete request");
-
         Player player = (Player) sender;
         ItemStack item = player.getItemInHand();
 
