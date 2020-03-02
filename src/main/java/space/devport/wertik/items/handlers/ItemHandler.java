@@ -9,7 +9,10 @@ import space.devport.wertik.items.Main;
 import space.devport.wertik.items.objects.Attribute;
 import space.devport.wertik.items.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ItemHandler {
 
@@ -72,7 +75,7 @@ public class ItemHandler {
 
     // Remove attribute from all actions
     public ItemStack removeAttribute(ItemStack item, String attributeName) {
-        HashMap<String, String> nbt = getAttributes(item);
+        Map<String, String> nbt = getAttributes(item);
 
         for (String key : nbt.keySet())
             if (nbt.get(key).equalsIgnoreCase(attributeName))
@@ -112,16 +115,16 @@ public class ItemHandler {
     }
 
     // Get all attributes on an item
-    public HashMap<String, String> getAttributes(ItemStack item) {
-        HashMap<String, String> actionMap = new HashMap<>();
+    public Map<String, String> getAttributes(ItemStack item) {
+        Map<String, String> actionMap = new HashMap<>();
 
         if (ItemNBTEditor.hasNBT(item))
-            actionMap = new HashMap<>(ItemNBTEditor.getNBTTagMap(item));
+            actionMap = ItemNBTEditor.getNBTTagMap(item);
 
         // Remove unwanted NBT
-        for (String next : actionMap.keySet())
-            if (!Main.inst.getActionNames().contains(next))
-                actionMap.remove(next);
+        for (String key : new ArrayList<>(actionMap.keySet()))
+            if (!Main.inst.getActionNames().contains(key.toUpperCase()))
+                actionMap.remove(key);
 
         return actionMap;
     }

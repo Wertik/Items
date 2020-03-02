@@ -14,7 +14,7 @@ import space.devport.wertik.items.handlers.ItemHandler;
 import space.devport.wertik.items.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 public class AttCommands implements CommandExecutor {
 
@@ -176,10 +176,10 @@ public class AttCommands implements CommandExecutor {
                     }
 
                     sender.sendMessage(StringUtil.color("&eAttributes:"));
-                    HashMap<String, String> attributes = itemHandler.getAttributes(item);
+                    Map<String, String> attributes = itemHandler.getAttributes(item);
+
                     for (String key : itemHandler.getAttributes(item).keySet())
-                        if (plugin.getActionNames().contains(key.toLowerCase()))
-                            sender.sendMessage(StringUtil.color("&8- &7" + key + "&f:&7" + attributes.get(key)));
+                        sender.sendMessage(StringUtil.color("&8- &7" + key + "&f:&7" + attributes.get(key)));
                     break;
                 case "help":
                 case "h":
@@ -191,7 +191,7 @@ public class AttCommands implements CommandExecutor {
     }
 
     private void help(CommandSender sender) {
-            sender.sendMessage(StringUtil.color("&8&m--------&r &eAttributes &8&m--------" +
+        sender.sendMessage(StringUtil.color("&8&m--------&r &eAttributes &8&m--------" +
                 "\n&e/att add <name> <action> &8- &7Add attribute to an item." +
                 "\n&e/att rem <name/action> &8- &7Remove attribute based on clickType/Name." +
                 "\n&e/att clear &8- &7Clears attributes." +

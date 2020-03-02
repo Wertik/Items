@@ -24,7 +24,7 @@ public class Main extends JavaPlugin {
 
     // Loaded action names
     @Getter
-    private List<String> actionNames = new ArrayList<>();
+    private final List<String> actionNames = new ArrayList<>();
 
     public ConsoleOutput cO;
 
