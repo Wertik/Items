@@ -35,7 +35,7 @@
                     <relocations>
                         <relocation>
                             <pattern>space.devport.utils</pattern>
-                            <shadedPattern>space.devport.killassists.devportutils</shadedPattern>
+                            <shadedPattern>space.devport.wertik.items.utils</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

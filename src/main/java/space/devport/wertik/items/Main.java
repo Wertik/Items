@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.block.Action;
 import org.bukkit.plugin.java.JavaPlugin;
+import space.devport.utils.DevportUtils;
 import space.devport.utils.configutil.Configuration;
 import space.devport.utils.ConsoleOutput;
 import space.devport.wertik.items.commands.*;
@@ -51,7 +52,8 @@ public class Main extends JavaPlugin {
         inst = this;
 
         // Setup ConsoleOutput
-        cO = new ConsoleOutput(true);
+        DevportUtils utils = new DevportUtils(this, true);
+        cO = utils.getConsoleOutput();
 
         // Load actions
         Arrays.stream(Action.values()).forEach(a -> actionNames.add(a.name()));
