@@ -41,6 +41,7 @@ public class Reward {
                 switch (cmd.split("!")[0].toLowerCase().trim()) {
                     case "op":
                         executeOp(cmd.split("!")[1].trim(), player);
+                        break;
                     case "p":
                         executePlayer(cmd.split("!")[1].trim(), player);
                         break;

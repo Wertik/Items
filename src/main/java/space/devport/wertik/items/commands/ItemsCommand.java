@@ -25,7 +25,7 @@ public class ItemsCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
         if (!sender.hasPermission("items.control")) {
-            sender.sendMessage("&cYou don't have permission to do this.");
+            sender.sendMessage(Utils.color("&cYou don't have permission to do this."));
             return true;
         }
 
