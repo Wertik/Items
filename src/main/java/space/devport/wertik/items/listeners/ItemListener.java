@@ -16,8 +16,8 @@ import space.devport.wertik.items.objects.Reward;
 
 public class ItemListener implements Listener {
 
-    private CooldownHandler cooldownHandler;
-    private ItemHandler itemHandler;
+    private final CooldownHandler cooldownHandler;
+    private final ItemHandler itemHandler;
 
     public ItemListener() {
         cooldownHandler = Main.inst.getCooldownHandler();
@@ -46,13 +46,13 @@ public class ItemListener implements Listener {
         Main.inst.cO.debug("Special item clicked");
 
         // Returns if there are no attributes set for this action
-        if (!ItemNBTEditor.hasNBTKey(item, e.getAction().name().toLowerCase()))
+        if (!ItemNBTEditor.hasNBTKey(item, e.getAction().name().toUpperCase()))
             return;
 
         Main.inst.cO.debug("Has attribute with this action");
 
         // Get attribute from item
-        Attribute attribute = Main.inst.getItemHandler().getAttribute(item, action.toString().toLowerCase());
+        Attribute attribute = Main.inst.getItemHandler().getAttribute(item, action.toString().toUpperCase());
 
         // Attribute might be invalid
         if (attribute == null)

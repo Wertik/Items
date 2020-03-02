@@ -11,13 +11,12 @@ import space.devport.wertik.items.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ItemHandler {
 
     // items.yml
-    private Configuration storage;
+    private final Configuration storage;
 
     // System name, item
     @Getter
@@ -29,10 +28,7 @@ public class ItemHandler {
 
     // Check if an item has attributes attached
     public boolean isSpecial(ItemStack item) {
-        for (Action action : Action.values())
-            if (ItemNBTEditor.hasNBTKey(item, action.name().toLowerCase()))
-                return true;
-        return false;
+        return Main.inst.getActionNames().stream().anyMatch(a -> ItemNBTEditor.hasNBTKey(item, a.toUpperCase()));
     }
 
     // Load items from yaml

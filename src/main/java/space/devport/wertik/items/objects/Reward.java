@@ -29,27 +29,20 @@ public class Reward {
 
     // Reward a player
     public void reward(Player player) {
+        if (!commands.isEmpty())
+            for (String cmd : commands) {
 
-        // Loop through commands and find prefixes
-        for (String cmd : commands) {
+                // Parse placeholders
+                cmd = Utils.parse(cmd, player);
 
-            // Parse command to fill in placeholders
-            cmd = Utils.parse(cmd, player);
-
-            // Execute based on prefix
-            if (cmd.contains("!")) {
-                switch (cmd.split("!")[0].toLowerCase().trim()) {
-                    case "op":
-                        executeOp(cmd.split("!")[1].trim(), player);
-                        break;
-                    case "p":
-                        executePlayer(cmd.split("!")[1].trim(), player);
-                        break;
-                    default:
-                        executeConsole(cmd.split("!")[1].trim());
-                }
-            } else executeConsole(cmd);
-        }
+                // Execute only once
+                if (cmd.startsWith("op!"))
+                    executeOp(cmd.replace("op!", ""), player);
+                else if (cmd.startsWith("p!"))
+                    executePlayer(cmd.replace("p!", ""), player);
+                else
+                    executeConsole(cmd);
+            }
 
         // Messages
         if (!informMessage.isEmpty()) {
