@@ -5,9 +5,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.block.Action;
 import org.bukkit.plugin.java.JavaPlugin;
+import space.devport.utils.ConsoleOutput;
 import space.devport.utils.DevportUtils;
 import space.devport.utils.configutil.Configuration;
-import space.devport.utils.ConsoleOutput;
+import space.devport.utils.messageutil.StringUtil;
 import space.devport.wertik.items.commands.*;
 import space.devport.wertik.items.handlers.AttributeHandler;
 import space.devport.wertik.items.handlers.CooldownHandler;
@@ -17,6 +18,7 @@ import space.devport.wertik.items.listeners.ItemListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class Main extends JavaPlugin {
 
@@ -42,6 +44,9 @@ public class Main extends JavaPlugin {
     @Getter
     private Configuration cfg;
 
+    @Getter
+    private Random random;
+
     private void loadOptions() {
         cO.setDebug(getConfig().getBoolean("debug-enabled"));
         cO.setPrefix(cfg.getColored("plugin-prefix"));
@@ -50,6 +55,8 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         inst = this;
+
+        random = new Random();
 
         // Setup ConsoleOutput
         DevportUtils utils = new DevportUtils(this, true);
@@ -121,7 +128,7 @@ public class Main extends JavaPlugin {
 
         cO.setCmdSender(null);
 
-        sender.sendMessage(cO.getPrefix() + "§aDone.. reload took " + (System.currentTimeMillis() - start) + "ms.");
+        sender.sendMessage(cO.getPrefix() + StringUtil.color("&aDone.. reload took " + (System.currentTimeMillis() - start) + "ms."));
     }
 
     @Override

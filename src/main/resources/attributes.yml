@@ -5,8 +5,11 @@ attribute-one:
   # Commands to run on *click*
   # Commands with prefix "p!" are run for player
   # op! - player given OP permissions
+  # random! - picks a random command from marked, you can use above modifiers. (random has to be the first one.)
   commands:
-    - 'say Woooohoo!'
+    - 'random! say Woooohoo!'
+    - 'random! say No Wooohoo for u. ._.'
+    - 'random! p! me I say. Wooohoo! '
     - 'p! say Woooohooo! indeed.'
     - 'op! pl'
   # Item cooldown
@@ -14,5 +17,5 @@ attribute-one:
   # Remove after use?
   one-time-use: true
   # Cooldown messages, uses defaults in config.yml if not specified.
-  cooldown-message: '&cThere is a cooldown on this item, wait &7%time%s &ato use it again.'
+  cooldown-message: '&cThere is a cooldown on this item, wait &7%time%s &cto use it again.'
   cooldown-expire-message: '&aYou can use that item again!'
