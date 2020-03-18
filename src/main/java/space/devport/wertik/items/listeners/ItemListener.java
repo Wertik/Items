@@ -8,84 +8,60 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import space.devport.utils.itemutil.ItemNBTEditor;
-import space.devport.wertik.items.Main;
-import space.devport.wertik.items.handlers.CooldownHandler;
-import space.devport.wertik.items.handlers.ItemHandler;
+import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.objects.Attribute;
-import space.devport.wertik.items.objects.Reward;
+import space.devport.wertik.items.utils.Messages;
 
 public class ItemListener implements Listener {
 
-    private final CooldownHandler cooldownHandler;
-    private final ItemHandler itemHandler;
-
-    public ItemListener() {
-        cooldownHandler = Main.inst.getCooldownHandler();
-        itemHandler = Main.inst.getItemHandler();
-    }
-
     @EventHandler
-    public void onUse(PlayerInteractEvent e) {
+    public void onUse(PlayerInteractEvent event) {
 
-        // ignore physical action
-        if (e.getAction().equals(Action.PHYSICAL))
+        // ignore physical action == button/plate interaction
+        if (event.getAction().equals(Action.PHYSICAL)) {
             return;
+        }
 
-        Action action = e.getAction();
-        Player player = e.getPlayer();
+        String action = event.getAction().toString().toLowerCase();
+        Player player = event.getPlayer();
 
+        // TODO: Update DevportUtils to allow per-version methods
         ItemStack item = player.getInventory().getItemInHand();
 
-        if (item == null)
-            return;
-
         // Ignore air and non-special items
-        if (item.getType().equals(Material.AIR) || !itemHandler.isSpecial(item))
+        if (item.getType().equals(Material.AIR) || !ItemsPlugin.getInstance().getItemHandler().hasAttribute(item)) {
             return;
-
-        Main.inst.cO.debug("Special item clicked");
+        }
 
         // Returns if there are no attributes set for this action
-        if (!ItemNBTEditor.hasNBTKey(item, e.getAction().name().toUpperCase()))
+        if (!ItemNBTEditor.hasNBTKey(item, action)) {
             return;
-
-        Main.inst.cO.debug("Has attribute with this action");
+        }
 
         // Get attribute from item
-        Attribute attribute = Main.inst.getItemHandler().getAttribute(item, action.toString().toUpperCase());
+        Attribute attribute = ItemsPlugin.getInstance().getAttributeHandler().getAttribute(item, action);
 
         // Attribute might be invalid
-        if (attribute == null)
+        if (attribute == null) {
             return;
-
-        Main.inst.cO.debug("Attribute: " + attribute.getName());
-
-        // Cooldown check
-        if (attribute.hasCooldown()) {
-            if (!cooldownHandler.isUsable(player.getUniqueId().toString(), attribute.getName())) {
-
-                // If the item is not usable, send a message and return
-                double cooldownTime = cooldownHandler.getCooldownTime(player.getUniqueId().toString(), attribute.getName());
-
-                player.sendMessage(attribute.getCooldownMessage(cooldownTime));
-                return;
-            }
         }
 
-        // One time use remove one item
-        if (attribute.isOneTime()) {
-            if (player.getInventory().getItemInHand().getAmount() == 1)
-                player.setItemInHand(null);
-            else
-                player.getItemInHand().setAmount(player.getItemInHand().getAmount() - 1);
-            Main.inst.cO.debug("One time use removed");
+        // If the item is not usable, send a message and return
+        if (!ItemsPlugin.getInstance().getCooldownHandler().isUsable(player, attribute.getName())) {
+
+            double cooldownTime = ItemsPlugin.getInstance().getCooldownHandler().getTimeRemaining(player, attribute.getName());
+
+            Messages.ITEM_ON_COOLDOWN.getPrefixed()
+                    .fill("%time%", String.valueOf(cooldownTime))
+                    .send(player);
+            return;
         }
+
+        // TODO: Use limit implementation
 
         // Reward the player
-        Reward reward = attribute.getReward();
-        reward.reward(e.getPlayer());
+        attribute.getReward().give(event.getPlayer());
 
-        // Add to cooldowns, start a runnable
-        cooldownHandler.addCooldown(player.getUniqueId(), attribute);
+        ItemsPlugin.getInstance().getCooldownHandler().addCooldown(player, attribute);
     }
 }

@@ -14,33 +14,32 @@ import space.devport.wertik.items.handlers.AttributeHandler;
 import space.devport.wertik.items.handlers.CooldownHandler;
 import space.devport.wertik.items.handlers.ItemHandler;
 import space.devport.wertik.items.listeners.ItemListener;
+import space.devport.wertik.items.utils.Messages;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-public class Main extends JavaPlugin {
+public class ItemsPlugin extends JavaPlugin {
 
-    public static Main inst;
+    @Getter
+    private static ItemsPlugin instance;
 
-    // Loaded action names
+    // Possible actions in lower case
     @Getter
     private final List<String> actionNames = new ArrayList<>();
 
-    public ConsoleOutput cO;
+    @Getter
+    public ConsoleOutput consoleOutput;
 
-    // Handlers
     @Getter
     private ItemHandler itemHandler;
-
     @Getter
     private AttributeHandler attributeHandler;
-
     @Getter
     private CooldownHandler cooldownHandler;
 
-    // config.yml
     @Getter
     private Configuration cfg;
 
@@ -48,31 +47,33 @@ public class Main extends JavaPlugin {
     private Random random;
 
     private void loadOptions() {
-        cO.setDebug(getConfig().getBoolean("debug-enabled"));
-        cO.setPrefix(cfg.getColored("plugin-prefix"));
+        consoleOutput.setDebug(getConfig().getBoolean("debug-enabled"));
+        consoleOutput.setPrefix(cfg.getColoredString("plugin-prefix", ""));
     }
 
     @Override
     public void onEnable() {
-        inst = this;
+        instance = this;
 
         random = new Random();
 
         // Setup ConsoleOutput
-        DevportUtils utils = new DevportUtils(this, true);
-        cO = utils.getConsoleOutput();
+        DevportUtils utils = new DevportUtils(this);
+        consoleOutput = utils.getConsoleOutput();
 
         // Load actions
-        Arrays.stream(Action.values()).forEach(a -> actionNames.add(a.name()));
+        Arrays.stream(Action.values()).forEach(a -> actionNames.add(a.name().toLowerCase()));
 
         // Load configuration and basic options
         cfg = new Configuration(this, "config");
         loadOptions();
 
+        Messages.load();
+
         // Load attributes
         attributeHandler = new AttributeHandler();
         attributeHandler.load();
-        cO.info("Loaded " + attributeHandler.getAttributeCache().size() + " attribute(s)..");
+        consoleOutput.info("Loaded " + attributeHandler.getAttributeCache().size() + " attribute(s)..");
 
         // Initialize a cooldown handler
         cooldownHandler = new CooldownHandler();
@@ -80,7 +81,7 @@ public class Main extends JavaPlugin {
         // Load items
         itemHandler = new ItemHandler();
         itemHandler.load();
-        cO.info("Loaded " + itemHandler.getItems().size() + " item(s)..");
+        consoleOutput.info("Loaded " + itemHandler.getItems().size() + " item(s)..");
 
         getServer().getPluginManager().registerEvents(new ItemListener(), this);
 
@@ -101,15 +102,15 @@ public class Main extends JavaPlugin {
             getCommand(commands.get(i)).setTabCompleter(utilTabCompleter);
         }
 
-        cO.info("Commands and Tab Completers initialized..");
-        cO.info("Done.");
+        consoleOutput.info("Commands and Tab Completers initialized..");
+        consoleOutput.info("Done.");
     }
 
     public void reload(CommandSender sender) {
         long start = System.currentTimeMillis();
 
-        cO.setCmdSender(sender);
-        cO.info("Reloading..");
+        consoleOutput.addListener(sender);
+        consoleOutput.info("Reloading..");
 
         // Save
         itemHandler.saveItems();
@@ -119,16 +120,16 @@ public class Main extends JavaPlugin {
         loadOptions();
 
         attributeHandler.load();
-        cO.info("Loaded " + attributeHandler.getAttributeCache().size() + " attribute(s)..");
+        consoleOutput.info("Loaded " + attributeHandler.getAttributeCache().size() + " attribute(s)..");
 
-        cooldownHandler.reload();
+        cooldownHandler.getCooldownCache().clear();
 
         itemHandler.load();
-        cO.info("Loaded " + itemHandler.getItems().size() + " item(s)..");
+        consoleOutput.info("Loaded " + itemHandler.getItems().size() + " item(s)..");
 
-        cO.setCmdSender(null);
+        consoleOutput.addListener(sender);
 
-        sender.sendMessage(cO.getPrefix() + StringUtil.color("&aDone.. reload took " + (System.currentTimeMillis() - start) + "ms."));
+        sender.sendMessage(consoleOutput.getPrefix() + StringUtil.color("&aDone.. reload took " + (System.currentTimeMillis() - start) + "ms."));
     }
 
     @Override

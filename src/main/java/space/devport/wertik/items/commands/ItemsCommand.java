@@ -1,32 +1,31 @@
 package space.devport.wertik.items.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import space.devport.utils.itemutil.ItemNBTEditor;
 import space.devport.utils.messageutil.StringUtil;
-import space.devport.wertik.items.Main;
+import space.devport.utils.regionutil.LocationUtil;
+import space.devport.wertik.items.ItemsPlugin;
+import space.devport.wertik.items.utils.Messages;
 import space.devport.wertik.items.utils.Utils;
 
 import java.util.ArrayList;
 
 public class ItemsCommand implements CommandExecutor {
 
-    private Main plugin;
-
-    public ItemsCommand() {
-        plugin = Main.inst;
-    }
-
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
 
         if (!sender.hasPermission("items.control")) {
-            sender.sendMessage(StringUtil.color("&cYou don't have permission to do this."));
+            Messages.NO_PERMS.getPrefixed().send(sender);
             return true;
         }
 
@@ -40,7 +39,8 @@ public class ItemsCommand implements CommandExecutor {
             switch (args[0].toLowerCase()) {
                 case "list":
                 case "l":
-                    sender.sendMessage(StringUtil.color("&eItems: &f" + Utils.listToString(new ArrayList<>(plugin.getItemHandler().getItems().keySet()), "&7, &f", "&cNo items saved.")));
+                    sender.sendMessage(StringUtil.color("&eItems: &f" +
+                            Utils.listToString(new ArrayList<>(ItemsPlugin.getInstance().getItemHandler().getItems().keySet()), "&7, &f", "&cNo items saved.")));
                     break;
                 case "add":
                 case "a":
@@ -57,19 +57,19 @@ public class ItemsCommand implements CommandExecutor {
                     }
 
                     if (!(sender instanceof Player)) {
-                        sender.sendMessage(Main.inst.cO.getPrefix() + StringUtil.color("&cYou have to be a player."));
+                        sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cYou have to be a player."));
                         return true;
                     }
 
                     Player player = (Player) sender;
 
-                    if (player.getItemInHand().getType().equals(Material.AIR)) {
-                        sender.sendMessage(Main.inst.cO.getPrefix() + StringUtil.color("&cCannot add air."));
+                    if (player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
+                        sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cCannot add air."));
                         return true;
                     }
 
-                    plugin.getItemHandler().addItem(args[1], player.getItemInHand());
-                    sender.sendMessage(Main.inst.cO.getPrefix() + StringUtil.color("&eAdded item under name &f" + args[1]));
+                    ItemsPlugin.getInstance().getItemHandler().addItem(args[1], player.getInventory().getItemInMainHand());
+                    sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&eAdded item under name &f" + args[1]));
                     break;
                 case "get":
                     if (args.length < 2) {
@@ -84,13 +84,13 @@ public class ItemsCommand implements CommandExecutor {
                         return true;
                     }
 
-                    if (!plugin.getItemHandler().getItems().containsKey(args[1])) {
-                        sender.sendMessage(Main.inst.cO.getPrefix() + StringUtil.color("&cThat item is not saved."));
+                    if (!ItemsPlugin.getInstance().getItemHandler().getItems().containsKey(args[1])) {
+                        sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cThat item is not saved."));
                         return true;
                     }
 
                     if (!(sender instanceof Player)) {
-                        sender.sendMessage(Main.inst.cO.getPrefix() + StringUtil.color("&cYou have to be a player."));
+                        sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cYou have to be a player."));
                         return true;
                     }
 
@@ -100,16 +100,17 @@ public class ItemsCommand implements CommandExecutor {
                         try {
                             amount = Integer.parseInt(args[2]);
                         } catch (NumberFormatException e) {
-                            sender.sendMessage(Main.inst.cO.getPrefix() + StringUtil.color("&cAmount has to be a number."));
+                            sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cAmount has to be a number."));
                         }
 
                     player = (Player) sender;
 
-                    ItemStack item = plugin.getItemHandler().getItem(args[1]);
+                    ItemStack item = ItemsPlugin.getInstance().getItemHandler().getItem(args[1]).build();
+
                     item.setAmount(amount);
                     player.getInventory().addItem(item);
 
-                    sender.sendMessage(Main.inst.cO.getPrefix() + StringUtil.color("&eItem &f" + args[1] + "&7x" + amount + " &eadded to your inventory."));
+                    sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&eItem &f" + args[1] + "&7x" + amount + " &eadded to your inventory."));
                     break;
                 case "remove":
                 case "rem":
@@ -126,13 +127,13 @@ public class ItemsCommand implements CommandExecutor {
                         return true;
                     }
 
-                    if (!plugin.getItemHandler().getItems().containsKey(args[1])) {
-                        sender.sendMessage(Main.inst.cO.getPrefix() + StringUtil.color("&cThsi item is not saved."));
+                    if (!ItemsPlugin.getInstance().getItemHandler().getItems().containsKey(args[1])) {
+                        sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cThsi item is not saved."));
                         return true;
                     }
 
-                    plugin.getItemHandler().removeItem(args[1]);
-                    sender.sendMessage(Main.inst.cO.getPrefix() + StringUtil.color("&eRemoved item &f" + args[1]));
+                    ItemsPlugin.getInstance().getItemHandler().removeItem(args[1]);
+                    sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&eRemoved item &f" + args[1]));
                     break;
                 case "detail":
                 case "d":
@@ -148,29 +149,33 @@ public class ItemsCommand implements CommandExecutor {
                         return true;
                     }
 
-                    if (!plugin.getItemHandler().getItems().containsKey(args[1])) {
-                        sender.sendMessage(Main.inst.cO.getPrefix() + StringUtil.color("&cThat item is not saved."));
+                    if (!ItemsPlugin.getInstance().getItemHandler().getItems().containsKey(args[1])) {
+                        sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cThat item is not saved."));
                         return true;
                     }
 
-                    item = plugin.getItemHandler().getItem(args[1]);
+                    item = ItemsPlugin.getInstance().getItemHandler().getItem(args[1]).build();
 
                     sender.sendMessage(StringUtil.color("&eName: &f" + item.getItemMeta().getDisplayName()));
                     sender.sendMessage(StringUtil.color("&eMaterial: &f" + item.getType().toString()));
                     sender.sendMessage(StringUtil.color("&eAmount: &f" + item.getAmount()));
+
                     if (item.getItemMeta().hasLore()) {
                         sender.sendMessage(StringUtil.color("&eLore:"));
                         item.getItemMeta().getLore().forEach(line -> sender.sendMessage(StringUtil.color("&8- &r" + line)));
                     }
+
                     if (item.getItemMeta().hasEnchants()) {
                         sender.sendMessage(StringUtil.color("&eEnchants:"));
                         item.getEnchantments().keySet().forEach(ench -> sender.sendMessage(StringUtil.color("&8- &7" + ench.getName() + "&f;&7" + item.getItemMeta().getEnchantLevel(ench))));
                     }
+
                     if (!item.getItemMeta().getItemFlags().isEmpty()) {
                         sender.sendMessage(StringUtil.color("&eFlags:"));
                         item.getItemMeta().getItemFlags().forEach(flag -> sender.sendMessage(StringUtil.color("&8- &7" + flag.name())));
                     }
-                    // NBT!
+
+                    // NBT
                     if (ItemNBTEditor.hasNBT(item)) {
                         sender.sendMessage(StringUtil.color("&eNBT:"));
                         ItemNBTEditor.getNBTTagMap(item).keySet().forEach(tag -> sender.sendMessage(StringUtil.color("&8- &7" + tag + "&f:&7" + ItemNBTEditor.getNBT(item, tag))));
@@ -184,8 +189,8 @@ public class ItemsCommand implements CommandExecutor {
                         return true;
                     }
 
-                    if (!plugin.getItemHandler().getItems().containsKey(args[1])) {
-                        sender.sendMessage(Main.inst.cO.getPrefix() + StringUtil.color("&cThat item is not saved."));
+                    if (!ItemsPlugin.getInstance().getItemHandler().getItems().containsKey(args[1])) {
+                        sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cThat item is not saved."));
                         return true;
                     }
 
@@ -195,7 +200,7 @@ public class ItemsCommand implements CommandExecutor {
                         try {
                             amount = Integer.parseInt(args[3]);
                         } catch (NumberFormatException e) {
-                            sender.sendMessage(Main.inst.cO.getPrefix() + StringUtil.color("&cAmount should be a number."));
+                            sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cAmount should be a number."));
                             return true;
                         }
                     }
@@ -206,22 +211,31 @@ public class ItemsCommand implements CommandExecutor {
                         try {
                             Integer.valueOf(locationString[i]);
                         } catch (NumberFormatException e) {
-                            sender.sendMessage(Main.inst.cO.getPrefix() + StringUtil.color("&cCoordinates have to be provided in integers."));
+                            sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cCoordinates have to be provided in integers."));
                             return true;
                         }
                     }
 
-                    item = plugin.getItemHandler().getItem(args[1]);
+                    item = ItemsPlugin.getInstance().getItemHandler().getItem(args[1]).build();
 
                     item.setAmount(amount);
 
-                    Location location = new Location(plugin.getServer().getWorld(locationString[0]), Integer.parseInt(locationString[1]), Integer.parseInt(locationString[2]), Integer.parseInt(locationString[3]));
+                    Location location = new Location(ItemsPlugin.getInstance().getServer().getWorld(locationString[0]),
+                            Integer.parseInt(locationString[1]),
+                            Integer.parseInt(locationString[2]),
+                            Integer.parseInt(locationString[3]));
 
-                    if (plugin.getConfig().getBoolean("drop-naturally"))
-                        plugin.getServer().getWorld(locationString[0]).dropItemNaturally(location, item);
-                    else
-                        plugin.getServer().getWorld(locationString[0]).dropItem(location, item);
-                    sender.sendMessage(Main.inst.cO.getPrefix() + StringUtil.color("&eItem &f" + args[1] + "&7x" + amount + " &espawned &8@&7" + Utils.locationToString(location)));
+                    if (location.getWorld() == null) {
+                        return true;
+                    }
+
+                    location.getWorld().dropItemNaturally(location, item);
+
+                    Messages.SPAWNED_AT.getPrefixed()
+                            .fill("%item%", args[1])
+                            .fill("%amount%", String.valueOf(amount))
+                            .fill("%location%", LocationUtil.locationToString(location, ", "))
+                            .send(sender);
                     break;
                 case "give":
                     if (args.length < 3) {
@@ -230,23 +244,19 @@ public class ItemsCommand implements CommandExecutor {
                         return true;
                     }
 
-                    if (!plugin.getItemHandler().getItems().containsKey(args[1])) {
+                    if (!ItemsPlugin.getInstance().getItemHandler().getItems().containsKey(args[1])) {
                         sender.sendMessage(StringUtil.color("&cThat item is not saved."));
                         return true;
                     }
 
-                    try {
-                        if (!plugin.getServer().getPlayerExact(args[2]).isOnline()) {
-                            sender.sendMessage(StringUtil.color("&cThat player is not online."));
-                            return true;
-                        }
-                    } catch (Exception e) {
-                        sender.sendMessage(StringUtil.color("&cThat player is not online."));
-                        return true;
+                    OfflinePlayer offlineTarget = Bukkit.getPlayer(args[2]);
 
+                    if (offlineTarget == null || !offlineTarget.isOnline() || offlineTarget.getPlayer() == null) {
+                        Messages.PLAYER_OFFLINE.getPrefixed().send(sender);
+                        return true;
                     }
 
-                    Player target = plugin.getServer().getPlayerExact(args[2]);
+                    Player target = offlineTarget.getPlayer();
 
                     amount = 1;
 
@@ -259,13 +269,13 @@ public class ItemsCommand implements CommandExecutor {
                         }
 
                     for (int i = 0; i < amount; i++) {
-                        target.getInventory().addItem(plugin.getItemHandler().getItem(args[1]));
+                        target.getInventory().addItem(ItemsPlugin.getInstance().getItemHandler().getItem(args[1]).build());
                     }
 
-                    sender.sendMessage(Main.inst.cO.getPrefix() + StringUtil.color("&eGave player &f" + target.getName() + " item &f" + args[1] + "&7x" + amount));
+                    sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&eGave player &f" + target.getName() + " item &f" + args[1] + "&7x" + amount));
                     break;
                 case "reload":
-                    Main.inst.reload(sender);
+                    ItemsPlugin.getInstance().reload(sender);
                     break;
                 case "help":
                 case "h":

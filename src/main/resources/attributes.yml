@@ -1,4 +1,6 @@
-# Attribute Configuration for Items made by Wertík from The Port
+# Attribute Configuration for ${project.name}
+#
+# Version: ${project.version}
 
 # Attribute name
 attribute-one:

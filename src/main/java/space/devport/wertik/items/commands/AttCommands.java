@@ -7,10 +7,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import space.devport.utils.messageutil.StringUtil;
-import space.devport.wertik.items.Main;
+import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.handlers.AttributeHandler;
-import space.devport.wertik.items.handlers.ItemHandler;
+import space.devport.wertik.items.utils.Messages;
 import space.devport.wertik.items.utils.Utils;
 
 import java.util.ArrayList;
@@ -25,31 +26,30 @@ public class AttCommands implements CommandExecutor {
      * /att clear
      * */
 
-    private final Main plugin;
+    private final ItemsPlugin plugin;
     private final AttributeHandler attributeHandler;
-    private final ItemHandler itemHandler;
 
     public AttCommands() {
-        plugin = Main.inst;
+        plugin = ItemsPlugin.getInstance();
         attributeHandler = plugin.getAttributeHandler();
-        itemHandler = plugin.getItemHandler();
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage(StringUtil.color("&cOnly players."));
+            Messages.ONLY_PLAYERS.getPrefixed().send(sender);
             return true;
         }
 
         if (!sender.hasPermission("items.control")) {
-            sender.sendMessage(StringUtil.color("&cYou don't have permission to do this."));
+            Messages.NO_PERMS.getPrefixed().send(sender);
             return true;
         }
 
         Player player = (Player) sender;
-        ItemStack item = player.getItemInHand();
+        // TODO: Multiversion support
+        ItemStack item = player.getInventory().getItemInMainHand();
 
         if (args.length == 0) {
             help(sender);
@@ -77,7 +77,7 @@ public class AttCommands implements CommandExecutor {
 
                     if (!attributeHandler.getAttributeCache().containsKey(args[1])) {
                         sender.sendMessage(StringUtil.color("&cThat attribute is not valid."));
-                        sender.sendMessage(StringUtil.color("&cValids: &f" + Utils.listToString(new ArrayList<>(attributeHandler.getAttributeCache().keySet()), "&7, &f", "&cNo attributes configured.")));
+                        sender.sendMessage(StringUtil.color("&cValid ones: &f" + Utils.listToString(new ArrayList<>(attributeHandler.getAttributeCache().keySet()), "&7, &f", "&cNo attributes configured.")));
                         return true;
                     }
 
@@ -93,7 +93,7 @@ public class AttCommands implements CommandExecutor {
                         return true;
                     }
 
-                    player.setItemInHand(itemHandler.setAttribute(item, args[1], args[2].toUpperCase()));
+                    player.getInventory().setItemInMainHand(attributeHandler.setAttribute(item, args[1], args[2].toUpperCase()));
                     sender.sendMessage(StringUtil.color("&eShould be added."));
                     break;
                 case "rem":
@@ -116,18 +116,22 @@ public class AttCommands implements CommandExecutor {
                         return true;
                     }
 
-                    if (!itemHandler.getAttributes(item).containsKey(args[1].toLowerCase()) && !itemHandler.getAttributes(item).containsValue(args[1].toLowerCase())) {
+                    if (!attributeHandler.getAttributes(item).containsKey(args[1].toLowerCase()) &&
+                            !attributeHandler.getAttributes(item).containsValue(args[1].toLowerCase())) {
+
                         sender.sendMessage(StringUtil.color("&cThis does not have any of this set."));
                         sender.sendMessage(StringUtil.color("&cUsage: &7/att rem <name/clickType>"));
                         return true;
                     }
 
-                    if (itemHandler.getAttributes(item).containsKey(args[1].toLowerCase())) {
-                        player.setItemInHand(itemHandler.removeAttribute(item, args[1].toLowerCase()));
-                        sender.sendMessage(StringUtil.color("&eAttribute removed."));
+                    String param = args[1].toLowerCase();
+
+                    if (attributeHandler.getAttributes(item).containsKey(param)) {
+                        player.getInventory().setItemInMainHand(attributeHandler.removeAttribute(item, param));
+                        sender.sendMessage(StringUtil.color("&Action removed."));
                         return true;
-                    } else if (itemHandler.getAttributes(item).containsValue(args[1].toLowerCase())) {
-                        player.setItemInHand(itemHandler.removeAttribute(item, args[1].toLowerCase()));
+                    } else if (attributeHandler.getAttributes(item).containsValue(param)) {
+                        player.setItemInHand(attributeHandler.removeAttribute(item, param));
                         sender.sendMessage(StringUtil.color("&eAttribute removed."));
                         return true;
                     } else
@@ -147,7 +151,7 @@ public class AttCommands implements CommandExecutor {
                         return true;
                     }
 
-                    player.setItemInHand(itemHandler.clearAttributes(item));
+                    player.getInventory().setItemInMainHand(attributeHandler.clearAttributes(item));
                     sender.sendMessage(StringUtil.color("&eAttributes cleared."));
                     break;
                 case "list":
@@ -158,14 +162,14 @@ public class AttCommands implements CommandExecutor {
                         return true;
                     }
 
-                    plugin.cO.debug("Atts: " + attributeHandler.getAttributeCache().keySet());
+                    plugin.consoleOutput.debug("Atts: " + attributeHandler.getAttributeCache().keySet());
                     sender.sendMessage(StringUtil.color("&eAttributes: &f" + Utils.listToString(new ArrayList<>(attributeHandler.getAttributeCache().keySet()), "&7, &f", "&cNo attributes saved.")));
                     break;
                 case "listhand":
                 case "lh":
                 case "listh":
                     if (item.getType().equals(Material.AIR)) {
-                        player.sendMessage(Main.inst.cO.getPrefix() + StringUtil.color("&cCannot help you with AIR."));
+                        player.sendMessage(ItemsPlugin.getInstance().consoleOutput.getPrefix() + StringUtil.color("&cCannot help you with AIR."));
                         return true;
                     }
 
@@ -176,9 +180,9 @@ public class AttCommands implements CommandExecutor {
                     }
 
                     sender.sendMessage(StringUtil.color("&eAttributes:"));
-                    Map<String, String> attributes = itemHandler.getAttributes(item);
+                    Map<String, String> attributes = attributeHandler.getAttributes(item);
 
-                    for (String key : itemHandler.getAttributes(item).keySet())
+                    for (String key : attributeHandler.getAttributes(item).keySet())
                         sender.sendMessage(StringUtil.color("&8- &7" + key + "&f:&7" + attributes.get(key)));
                     break;
                 case "help":
