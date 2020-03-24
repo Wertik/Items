@@ -24,7 +24,7 @@ public class ItemHandler {
     }
 
     // Load items from yaml
-    public void load() {
+    public void loadItems() {
         Configuration storage = new Configuration(ItemsPlugin.getInstance(), "items");
 
         items.clear();
@@ -43,7 +43,17 @@ public class ItemHandler {
 
     // Save all items
     public void saveItems() {
-        // TODO: DevportUtils Configuration.saveItemBuilder();
+        Configuration storage = new Configuration(ItemsPlugin.getInstance(), "items");
+
+        storage.clear();
+
+        for (String itemName : this.items.keySet()) {
+            ItemBuilder item = this.items.get(itemName);
+
+            storage.setItemBuilder(itemName, item);
+        }
+        storage.save();
+        this.items.clear();
     }
 
     // Get item from cache

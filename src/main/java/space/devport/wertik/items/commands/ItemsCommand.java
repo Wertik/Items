@@ -277,6 +277,14 @@ public class ItemsCommand implements CommandExecutor {
                 case "reload":
                     ItemsPlugin.getInstance().reload(sender);
                     break;
+                case "load":
+                    ItemsPlugin.getInstance().getItemHandler().loadItems();
+                    sender.sendMessage("&aItems loaded from storage.");
+                    break;
+                case "save":
+                    ItemsPlugin.getInstance().getItemHandler().saveItems();
+                    sender.sendMessage("&aItems saved to storage.");
+                    break;
                 case "help":
                 case "h":
                 default:

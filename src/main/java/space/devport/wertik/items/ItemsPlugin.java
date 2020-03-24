@@ -80,7 +80,7 @@ public class ItemsPlugin extends JavaPlugin {
 
         // Load items
         itemHandler = new ItemHandler();
-        itemHandler.load();
+        itemHandler.loadItems();
         consoleOutput.info("Loaded " + itemHandler.getItems().size() + " item(s)..");
 
         getServer().getPluginManager().registerEvents(new ItemListener(), this);
@@ -124,7 +124,7 @@ public class ItemsPlugin extends JavaPlugin {
 
         cooldownHandler.getCooldownCache().clear();
 
-        itemHandler.load();
+        itemHandler.loadItems();
         consoleOutput.info("Loaded " + itemHandler.getItems().size() + " item(s)..");
 
         consoleOutput.addListener(sender);

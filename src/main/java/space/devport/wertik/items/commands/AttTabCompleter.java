@@ -1,8 +1,5 @@
 package space.devport.wertik.items.commands;
 
-import space.devport.wertik.items.ItemsPlugin;
-import space.devport.wertik.items.handlers.AttributeHandler;
-import space.devport.wertik.items.handlers.ItemHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -10,6 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import space.devport.wertik.items.ItemsPlugin;
+import space.devport.wertik.items.handlers.AttributeHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,13 +19,11 @@ public class AttTabCompleter implements TabCompleter {
 
     private final ItemsPlugin plugin;
     private final AttributeHandler attributeHandler;
-    private final ItemHandler itemHandler;
 
     public AttTabCompleter() {
         plugin = ItemsPlugin.getInstance();
 
         attributeHandler = plugin.getAttributeHandler();
-        itemHandler = plugin.getItemHandler();
     }
 
     @Override
