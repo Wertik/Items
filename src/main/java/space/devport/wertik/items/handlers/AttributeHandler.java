@@ -81,7 +81,7 @@ public class AttributeHandler {
     }
 
     public ItemStack setAttribute(ItemStack item, String action, String attribute) {
-        return ItemNBTEditor.writeNBT(item, action, attribute);
+        return ItemNBTEditor.writeNBT(item, action.toLowerCase(), attribute.toLowerCase());
     }
 
     // Remove attribute by action

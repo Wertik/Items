@@ -89,7 +89,7 @@ public class AttCommands implements CommandExecutor {
                         return true;
                     }
 
-                    player.getInventory().setItemInMainHand(attributeHandler.setAttribute(item, args[1], args[2].toUpperCase()));
+                    player.getInventory().setItemInMainHand(attributeHandler.setAttribute(item, args[1], args[2]));
                     sender.sendMessage(StringUtil.color("&eShould be added."));
                     break;
                 case "rem":

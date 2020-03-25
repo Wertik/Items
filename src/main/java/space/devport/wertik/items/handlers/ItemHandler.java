@@ -1,19 +1,18 @@
 package space.devport.wertik.items.handlers;
 
-import lombok.Getter;
 import org.bukkit.inventory.ItemStack;
 import space.devport.utils.configutil.Configuration;
 import space.devport.utils.itemutil.ItemBuilder;
 import space.devport.utils.itemutil.ItemNBTEditor;
 import space.devport.wertik.items.ItemsPlugin;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ItemHandler {
 
     // System name, item
-    @Getter
     private final Map<String, ItemBuilder> items = new HashMap<>();
 
     // Check if an item has attributes attached
@@ -60,10 +59,6 @@ public class ItemHandler {
         return this.items.get(name);
     }
 
-    public boolean isValid(String name) {
-        return this.items.containsKey(name);
-    }
-
     // Add a new item to cache
     public void addItem(String name, ItemStack item) {
         this.items.put(name, new ItemBuilder(item));
@@ -72,5 +67,9 @@ public class ItemHandler {
     // Remove an item from cache
     public void removeItem(String name) {
         this.items.remove(name);
+    }
+
+    public Map<String, ItemBuilder> getItems() {
+        return Collections.unmodifiableMap(this.items);
     }
 }
