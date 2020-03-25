@@ -20,7 +20,7 @@ public class ItemHandler {
     public boolean hasAttribute(ItemStack item) {
         return ItemsPlugin.getInstance().getActionNames()
                 .stream()
-                .anyMatch(action -> ItemNBTEditor.hasNBTKey(item, action));
+                .anyMatch(action -> ItemNBTEditor.hasNBTKey(item, action.toLowerCase()));
     }
 
     // Load items from yaml
@@ -28,16 +28,14 @@ public class ItemHandler {
         Configuration storage = new Configuration(ItemsPlugin.getInstance(), "items");
 
         items.clear();
-        storage.reload();
 
         for (String name : storage.getFileConfiguration().getKeys(false)) {
 
-            ItemStack item = storage.loadItemBuilder(name)
-                    .build();
+            ItemBuilder item = storage.loadItemBuilder(name);
 
             // Filter 0 amount items
             if (item.getAmount() > 0)
-                addItem(name, item);
+                this.items.put(name, item);
         }
     }
 
@@ -52,6 +50,7 @@ public class ItemHandler {
 
             storage.setItemBuilder(itemName, item);
         }
+
         storage.save();
         this.items.clear();
     }

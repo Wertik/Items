@@ -48,7 +48,6 @@ public class AttCommands implements CommandExecutor {
         }
 
         Player player = (Player) sender;
-        // TODO: Multiversion support
         ItemStack item = player.getInventory().getItemInMainHand();
 
         if (args.length == 0) {
@@ -86,10 +85,7 @@ public class AttCommands implements CommandExecutor {
                     } catch (Exception e) {
                         e.printStackTrace();
                         sender.sendMessage(StringUtil.color("&cThat click type is not valid."));
-                        sender.sendMessage(StringUtil.color("&cValids: &f"));
-                        for (Action a : Action.values()) {
-                            sender.sendMessage(a.name());
-                        }
+                        sender.sendMessage(StringUtil.color("&cValid ones: &f" + String.join(", ", ItemsPlugin.getInstance().getActionNames())));
                         return true;
                     }
 

@@ -70,7 +70,7 @@ public class AttTabCompleter implements TabCompleter {
                     if (!args[2].equals("")) {
                         for (String actionName : plugin.getActionNames())
                             if (actionName.toLowerCase().startsWith(args[2].toLowerCase()))
-                                tabComplete.add(actionName);
+                                tabComplete.add(actionName.toLowerCase());
                     } else
                         tabComplete.addAll(plugin.getActionNames());
 

@@ -30,10 +30,10 @@ public class ItemsCommand implements CommandExecutor {
         }
 
         if (args.length < 1) {
-            help(sender);
+            help(sender, label);
             return true;
         } else if (args.length > 4) {
-            help(sender);
+            help(sender, label);
             return true;
         } else {
             switch (args[0].toLowerCase()) {
@@ -178,7 +178,7 @@ public class ItemsCommand implements CommandExecutor {
                     // NBT
                     if (ItemNBTEditor.hasNBT(item)) {
                         sender.sendMessage(StringUtil.color("&eNBT:"));
-                        ItemNBTEditor.getNBTTagMap(item).keySet().forEach(tag -> sender.sendMessage(StringUtil.color("&8- &7" + tag + "&f:&7" + ItemNBTEditor.getNBT(item, tag))));
+                        ItemNBTEditor.getNBTTagMap(item).forEach((k, v) -> sender.sendMessage(StringUtil.color("&8- &7" + k + "&f:&7" + v)));
                     }
                     break;
                 case "drop":
@@ -279,30 +279,30 @@ public class ItemsCommand implements CommandExecutor {
                     break;
                 case "load":
                     ItemsPlugin.getInstance().getItemHandler().loadItems();
-                    sender.sendMessage("&aItems loaded from storage.");
+                    Messages.ITEMS_LOADED.getPrefixed().send(sender);
                     break;
                 case "save":
                     ItemsPlugin.getInstance().getItemHandler().saveItems();
-                    sender.sendMessage("&aItems saved to storage.");
+                    Messages.ITEMS_SAVED.getPrefixed().send(sender);
                     break;
                 case "help":
                 case "h":
                 default:
-                    help(sender);
+                    help(sender, label);
             }
         }
         return false;
     }
 
-    private void help(CommandSender sender) {
+    private void help(CommandSender sender, String label) {
         sender.sendMessage(StringUtil.color("&8&m--------&e Items &8&m--------" +
-                "\n&e/i add <name> &8- &7Saves item in hand to db under given name." +
-                "\n&e/i remove <name> &8- &7Removes item by name." +
-                "\n&e/i list &8- &7Lists saved items." +
-                "\n&e/i get <name> [amount] &8- &7Adds a saved item into your inventory." +
-                "\n&e/i detail <name> &8- &7Displays info about an item in the db." +
-                "\n&e/i drop <name> <worldName;x;y;z> (amount) &8- &7Drops item on a given location." +
-                "\n&e/i give <name> <playerName> [amount] &8- &7Give player an item." +
+                "\n&e/" + label + " add <name> &8- &7Saves item in hand to db under given name." +
+                "\n&e/" + label + " remove <name> &8- &7Removes item by name." +
+                "\n&e/" + label + " list &8- &7Lists saved items." +
+                "\n&e/" + label + " get <name> [amount] &8- &7Adds a saved item into your inventory." +
+                "\n&e/" + label + " detail <name> &8- &7Displays info about an item in the db." +
+                "\n&e/" + label + " drop <name> <worldName;x;y;z> (amount) &8- &7Drops item on a given location." +
+                "\n&e/" + label + " give <name> <playerName> [amount] &8- &7Give player an item." +
                 "\n&e/att help &8- &7Help page regarding attributes." + "" +
                 "\n&e/setname <name> &8- &7Set display name of an item." +
                 "\n&e/lore &8- &7List item lore." +
