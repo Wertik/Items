@@ -11,7 +11,7 @@ public enum Messages {
 
     /**
      * GENERAL
-     * */
+     */
 
     NO_PERMS("No-Permissions", "&cYou don't have permission to do this."),
     ONLY_PLAYERS("Only-Players", "&cAction has to be done in-game."),
@@ -19,7 +19,7 @@ public enum Messages {
 
     /**
      * UTIL COMMANDS
-     * */
+     */
 
     LINE_ADDED("Line-Added", "&7Line added to item lore."),
     LINE_REMOVED("Line-Removed", "&7Line removed from item lore."),
@@ -32,7 +32,7 @@ public enum Messages {
 
     /**
      * ITEM COMMANDS
-     * */
+     */
 
     SPAWNED_AT("Spawned-At", "&eItem &f%item%&7x%amount%&e spawned &8@ &7%location%"),
     ITEMS_SAVED("Items-Saved", "&eItems saved to storage."),
@@ -40,10 +40,15 @@ public enum Messages {
 
     /**
      * COOLDOWNS
-     * */
+     */
 
     COOLDOWN_EXPIRED("Cooldown-Expired", "&7Cooldown on attribute %attribute% has expired."),
-    ITEM_ON_COOLDOWN("Item-Cooldown", "&7Item is still on cooldown, wait &f%time%&7.");
+    ITEM_ON_COOLDOWN("Item-Cooldown", "&7Item is still on cooldown, wait &f%time%&7."),
+
+    /**
+     * LIMIT USE
+     */
+    ITEM_USE_LIMIT("Item-Use-Limit", "&7You have reached this items maximum amount of uses.");
 
     @Getter
     private final String path;
