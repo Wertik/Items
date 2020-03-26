@@ -1,6 +1,10 @@
 package space.devport.wertik.items.utils;
 
 import lombok.experimental.UtilityClass;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
+import space.devport.utils.SpigotHelper;
 
 import java.util.List;
 import java.util.Map;
@@ -32,5 +36,16 @@ public class Utils {
                     stringList.insert(0, list.get(i) + splitter);
             }
         return stringList.toString();
+    }
+
+    public void setItem(Player player, EquipmentSlot hand, ItemStack item) {
+        if (SpigotHelper.getVersion().contains("1.7") || SpigotHelper.getVersion().contains("1.8"))
+            player.setItemInHand(item);
+        else {
+            if (hand == EquipmentSlot.HAND)
+                player.getInventory().setItemInMainHand(item);
+            else
+                player.getInventory().setItemInOffHand(item);
+        }
     }
 }

@@ -77,7 +77,6 @@ public enum Messages {
         return new MessageBuilder(this.value);
     }
 
-    // TODO: Improve MessageBuilder in DevportUtils to allow easy implementation of message prefixing
     public MessageBuilder getPrefixed() {
         MessageBuilder builder = new MessageBuilder(ItemsPlugin.getInstance().getConsoleOutput().getPrefix());
         get().getMessage().forEach(builder::addLine);

@@ -11,6 +11,7 @@ import space.devport.utils.itemutil.ItemNBTEditor;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.objects.Attribute;
 import space.devport.wertik.items.utils.Messages;
+import space.devport.wertik.items.utils.Utils;
 
 public class ItemListener implements Listener {
 
@@ -25,8 +26,10 @@ public class ItemListener implements Listener {
         String action = event.getAction().toString().toLowerCase();
         Player player = event.getPlayer();
 
-        // TODO: Update DevportUtils to allow per-version methods
-        ItemStack item = player.getInventory().getItemInHand();
+        ItemStack item = event.getItem();
+
+        if (item == null)
+            return;
 
         // Ignore air and non-special items
         if (item.getType().equals(Material.AIR) || !ItemsPlugin.getInstance().getItemHandler().hasAttribute(item)) {
@@ -57,7 +60,14 @@ public class ItemListener implements Listener {
             return;
         }
 
-        // TODO: Use limit implementation
+        // 0 == unlimited
+        if (attribute.getUseLimit() > 0) {
+            // Consume if above
+            if ((ItemsPlugin.getInstance().getAttributeHandler().getUses(item, attribute) + 1) > attribute.getUseLimit()) {
+                Utils.setItem(player, event.getHand(), null);
+            } else
+                Utils.setItem(player, event.getHand(), ItemsPlugin.getInstance().getAttributeHandler().addUse(item, attribute));
+        }
 
         // Reward the player
         attribute.getReward().give(event.getPlayer());
