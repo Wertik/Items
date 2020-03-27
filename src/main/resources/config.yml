@@ -2,5 +2,5 @@
 #
 # Version: ${project.version}
 
-debug-enabled: true
+debug-enabled: false
 plugin-prefix: '&eItems &8>> '

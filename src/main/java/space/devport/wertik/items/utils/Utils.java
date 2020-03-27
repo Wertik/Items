@@ -38,6 +38,15 @@ public class Utils {
         return stringList.toString();
     }
 
+    public void consumeItem(Player player, EquipmentSlot hand, ItemStack item) {
+        if (item.getAmount() == 1)
+            setItem(player, hand, null);
+        else {
+            item.setAmount(item.getAmount() - 1);
+            setItem(player, hand, item);
+        }
+    }
+
     public void setItem(Player player, EquipmentSlot hand, ItemStack item) {
         if (SpigotHelper.getVersion().contains("1.7") || SpigotHelper.getVersion().contains("1.8"))
             player.setItemInHand(item);

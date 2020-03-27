@@ -28,6 +28,8 @@ public class ItemsPlugin extends JavaPlugin {
     // TODO: Add sneak click
     // TODO: Placeholders for use limit, cooldown n shit in rewards
     // TODO: Full permissions
+    // TODO: Optional "transaction" logger
+    // TODO: Add support for WorldGuard - disable specific items
 
     @Getter
     private static ItemsPlugin instance;
@@ -69,6 +71,7 @@ public class ItemsPlugin extends JavaPlugin {
         // Setup ConsoleOutput
         DevportUtils utils = new DevportUtils(this);
         consoleOutput = utils.getConsoleOutput();
+        consoleOutput.setUseBukkit(true);
 
         // Load configuration and basic options
         cfg = new Configuration(this, "config");

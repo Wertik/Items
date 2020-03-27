@@ -23,7 +23,7 @@ public class ItemHandler {
     // Load items from yaml
     public void loadItems() {
         storage.reload();
-        items.clear();
+        this.items.clear();
 
         for (String name : storage.getFileConfiguration().getKeys(false)) {
 

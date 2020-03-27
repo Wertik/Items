@@ -6,6 +6,8 @@ import space.devport.utils.configutil.Configuration;
 import space.devport.utils.messageutil.MessageBuilder;
 import space.devport.wertik.items.ItemsPlugin;
 
+import java.util.List;
+
 public enum Language {
 
     /**
@@ -19,12 +21,6 @@ public enum Language {
     RELOAD("Reload-Done", "&7Done... reload took &f%time%&7ms.", "Reload does not manipulate with item storage, to load/save them, do '/items load/save'."),
     TOO_MANY_ARGUMENTS("Too-Many-Arguments", "&cToo many arguments.", "&cUsage: &7%usage%"),
     NOT_ENOUGH_ARGUMENTS("Not-Enough-Arguments", "&cNot enough arguments.", "&cUsage: &7%usage%"),
-
-    /**
-     * USAGE
-     */
-
-    USAGE_SAVE("Usage.Items-Save", "/%label% save (name)"),
 
     /**
      * UTIL COMMANDS
@@ -59,8 +55,17 @@ public enum Language {
      * ATTRIBUTES
      */
 
+    ATTRIBUTES_HELP("Attributes-Help",
+            "&8&m        &r &eAttributes &8&m        &r",
+            "&e/att add <name> <action> &8- &7Add attribute to an item.",
+            "&e/att rem <name/action> &8- &7Remove attribute based on clickType/Name.",
+            "&e/att clear &8- &7Clears attributes.",
+            "&e/att list (hand/h) &8- &7Lists attributes from config or on item in hand."),
     ATTRIBUTE_ADDED("Attribute-Added", "&7Attribute &f%attribute% &7added to item."),
     ATTRIBUTE_REMOVED("Attribute-Removed", "&7Attribute &f%attribute% &7removed from item."),
+    ATTRIBUTE_INVALID("Attribute-Invalid", "&cAttribute &f%attribute% &cis not valid.", "&7Valid attributes: %valid%"),
+    ATTRIBUTES_CLEARED("Attributes-Cleared", "&7Attributes cleared."),
+    CLICK_TYPE_INVALID("Click-Type-Invalid", "&cAction &f%action% &cis not valid.", "&cValid actions: &7%valid%"),
 
     /**
      * COOLDOWNS
@@ -81,11 +86,6 @@ public enum Language {
     @Getter
     private MessageBuilder value;
 
-    Language(String path, MessageBuilder value) {
-        this.path = path;
-        this.value = value;
-    }
-
     Language(String path, String... value) {
         this.path = path;
         this.value = new MessageBuilder(value);
@@ -93,10 +93,6 @@ public enum Language {
 
     public void setValue(MessageBuilder value) {
         this.value = value;
-    }
-
-    public void setValue(String... value) {
-        setValue(new MessageBuilder(value));
     }
 
     public static void load() {
@@ -134,7 +130,11 @@ public enum Language {
             return new MessageBuilder();
 
         MessageBuilder message = new MessageBuilder(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + get().getWorkingMessage().get(0));
-        get().getWorkingMessage().subList(0, get().getWorkingMessage().size() - 1).forEach(message::addLine);
+        List<String> subList = get().getWorkingMessage().subList(1, get().getWorkingMessage().size());
+
+        if (!subList.isEmpty())
+            subList.forEach(message::addLine);
+
         return message;
     }
 }

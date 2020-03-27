@@ -28,5 +28,5 @@ the-second-attribute:
     inform: '&7You used an item with the Second Attribute! gj!'
     # Broadcasted to the server.
     broadcast:
-      - '&e&m--------&8 Item used'
-      - '&7--> &8Attribute fired'
+      - '&8&m        &e Item used'
+      - '&7&m  &r&e> &8Attribute fired'

@@ -62,9 +62,9 @@ public class ItemListener implements Listener {
             // Consume if above
             if ((ItemsPlugin.getInstance().getAttributeHandler().getUses(item, attribute) + 1) > attribute.getUseLimit()) {
                 Language.ITEM_USE_LIMIT.getPrefixed().send(player);
-                Utils.setItem(player, event.getHand(), null);
+                Utils.consumeItem(player, event.getHand(), item);
             } else
-                Utils.setItem(player, event.getHand(), ItemsPlugin.getInstance().getAttributeHandler().addUse(item, attribute));
+                Utils.consumeItem(player, event.getHand(), ItemsPlugin.getInstance().getAttributeHandler().addUse(item, attribute));
         }
 
         // Reward the player
