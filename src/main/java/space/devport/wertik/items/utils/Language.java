@@ -45,7 +45,8 @@ public enum Language {
      * ITEM COMMANDS
      */
 
-    ITEMS_HELP("&8&m        &e Items &8&m        &r",
+    ITEMS_HELP("Items-Help",
+            "&8&m        &e Items &8&m        &r",
             "&e/%label% list &8- &7Lists saved items.",
             "&e/%label% save (name) &8- &7Save all loaded items, or save item in hand under a name.",
             "&e/%label% load (name) &8- &7Load all items, or by name.",
