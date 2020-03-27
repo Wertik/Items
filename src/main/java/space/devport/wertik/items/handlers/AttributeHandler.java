@@ -1,6 +1,7 @@
 package space.devport.wertik.items.handlers;
 
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -53,7 +54,7 @@ public class AttributeHandler {
             Reward reward = new Reward();
 
             // Commands
-            storage.getStringList(name + ".commands", new ArrayList<>());
+            reward.setCommands(storage.getStringList(name + ".commands", new ArrayList<>()));
 
             // Messages
             reward.setBroadcast(storage.loadMessageBuilder(name + ".broadcast", new MessageBuilder()));

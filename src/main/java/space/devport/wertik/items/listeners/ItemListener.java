@@ -1,6 +1,5 @@
 package space.devport.wertik.items.listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -8,7 +7,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import space.devport.utils.itemutil.ItemNBTEditor;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.objects.Attribute;
 import space.devport.wertik.items.utils.Language;
@@ -30,37 +28,24 @@ public class ItemListener implements Listener {
             }
         }
 
-        if (action == null) {
-            Bukkit.getLogger().info("Found no action");
-            return;
-        }
+        if (action == null) return;
 
         Player player = event.getPlayer();
 
         ItemStack item = event.getItem();
 
-        if (item == null) {
-            Bukkit.getLogger().info("Found no item");
-            return;
-        }
+        if (item == null) return;
 
         // Ignore air and non-special items
-        if (item.getType() == Material.AIR)
-            return;
+        if (item.getType() == Material.AIR) return;
 
         // Get attribute from item
         Attribute attribute = ItemsPlugin.getInstance().getAttributeHandler().getAttribute(item, action);
 
-        // Attribute might be invalid
-        if (attribute == null) {
-            Bukkit.getLogger().info("Found no attribute in cache");
-            return;
-        }
+        if (attribute == null) return;
 
         // If the item is not usable, send a message and return
         if (!ItemsPlugin.getInstance().getCooldownHandler().isUsable(player, attribute.getName())) {
-
-            Bukkit.getLogger().info("Not usable");
 
             double cooldownTime = ItemsPlugin.getInstance().getCooldownHandler().getTimeRemaining(player, attribute.getName()) / 1000D;
 

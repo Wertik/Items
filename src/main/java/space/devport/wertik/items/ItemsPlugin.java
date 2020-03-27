@@ -29,6 +29,7 @@ public class ItemsPlugin extends JavaPlugin {
     // TODO: Test everything properly
     // TODO: Add PlaceholderAPI support
     // TODO: Figure out syncing item cache w file (prob save to cache & to file when updated in-game)
+    // TODO: Add sneak click
 
     @Getter
     private static ItemsPlugin instance;

@@ -16,7 +16,7 @@ import java.util.List;
 public class Reward {
 
     // Commands executed
-    private final List<String> commands = new ArrayList<>();
+    private List<String> commands = new ArrayList<>();
 
     // Message brodcasted to server
     private MessageBuilder broadcast = new MessageBuilder();
@@ -62,13 +62,13 @@ public class Reward {
         format.fill("%player%", player.getName());
 
         // Parse placeholders
-        cmd = format.parse(cmd);
+        cmd = format.parse(cmd).trim();
 
         // Execute only once
         if (cmd.startsWith("op!"))
-            executeOp(cmd.replace("op!", ""), player);
+            executeOp(cmd.replace("op!", "").trim(), player);
         else if (cmd.startsWith("p!"))
-            executePlayer(cmd.replace("p!", ""), player);
+            executePlayer(cmd.replace("p!", "").trim(), player);
         else
             executeConsole(cmd);
     }
