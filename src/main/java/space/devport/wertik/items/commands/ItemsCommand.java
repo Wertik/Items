@@ -248,10 +248,31 @@ public class ItemsCommand implements CommandExecutor {
                     ItemsPlugin.getInstance().reload(sender);
                     break;
                 case "load":
+                    if (args.length > 1) {
+                        if (ItemsPlugin.getInstance().getItemHandler().getItem(args[1]) == null) {
+                            Language.ITEM_NOT_VALID.getPrefixed().fill("%item%", args[1]).send(sender);
+                            return true;
+                        }
+
+                        ItemsPlugin.getInstance().getItemHandler().loadItem(args[1]);
+                        Language.ITEM_LOADED.getPrefixed().fill("%item%", args[1]).send(sender);
+                        return true;
+                    }
+
                     ItemsPlugin.getInstance().getItemHandler().loadItems();
                     Language.ITEMS_LOADED.getPrefixed().send(sender);
                     break;
                 case "save":
+                    if (args.length > 1) {
+                        if (ItemsPlugin.getInstance().getItemHandler().getItem(args[1]) == null) {
+                            Language.ITEM_NOT_VALID.getPrefixed().fill("%item%", args[1]).send(sender);
+                            return true;
+                        }
+
+                        ItemsPlugin.getInstance().getItemHandler().saveItem(args[1]);
+                        Language.ITEM_SAVED.getPrefixed().fill("%item%", args[1]).send(sender);
+                        return true;
+                    }
                     ItemsPlugin.getInstance().getItemHandler().saveItems();
                     Language.ITEMS_SAVED.getPrefixed().send(sender);
                     break;
@@ -266,6 +287,8 @@ public class ItemsCommand implements CommandExecutor {
 
     private void help(CommandSender sender, String label) {
         sender.sendMessage(StringUtil.color("&8&m--------&e Items &8&m--------" +
+                "\n&e/" + label + " save [item] &8- &7Save all items, or by name." +
+                "\n&e/" + label + " load [item] &8- &7Load all items, or by name." +
                 "\n&e/" + label + " add <name> &8- &7Saves item in hand to db under given name." +
                 "\n&e/" + label + " remove <name> &8- &7Removes item by name." +
                 "\n&e/" + label + " list &8- &7Lists saved items." +

@@ -38,6 +38,9 @@ public enum Language {
     SPAWNED_AT("Spawned-At", "&eItem &f%item%&7x%amount%&e spawned &8@ &7%location%"),
     ITEMS_SAVED("Items-Saved", "&eItems saved to storage."),
     ITEMS_LOADED("Items-Loaded", "&eItems loaded from storage."),
+    ITEM_SAVED("Item-Saved", "&eItem &f%item% &esaved to storage."),
+    ITEM_LOADED("Item-Loaded", "&eItem &f%item% &eloaded from storage."),
+    ITEM_NOT_VALID("Item-Not-Valid", "&eItem &f%item% &edoes not exist."),
 
     /**
      * COOLDOWNS
