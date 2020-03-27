@@ -43,6 +43,7 @@ public enum Language {
     ITEM_SAVED("Item-Saved", "&7Item &f%item% &7saved to storage."),
     ITEM_LOADED("Item-Loaded", "&7Item &f%item% &7loaded from storage."),
     ITEM_NOT_VALID("Item-Not-Valid", "&7Item &f%item% &7does not exist."),
+    ITEM_GIVEN("Item-Given", "&7Gave player &f%player% &7item &e%item%&7x&f%amount%"),
 
     /**
      * ATTRIBUTES

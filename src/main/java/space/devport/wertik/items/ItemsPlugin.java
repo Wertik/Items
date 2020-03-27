@@ -25,11 +25,11 @@ public class ItemsPlugin extends JavaPlugin {
     /* Global TO-DO */
     // TODO: Allow saving items to different files and folders (like BossShopPro)
     // TODO: Add all remaining strings to language
-    // TODO: Test everything properly
     // TODO: Add PlaceholderAPI support
     // TODO: Figure out syncing item cache w file (prob save to cache & to file when updated in-game)
     // TODO: Add sneak click
     // TODO: Placeholders for use limit, cooldown n shit in rewards
+    // TODO: Full permissions
 
     @Getter
     private static ItemsPlugin instance;
@@ -120,24 +120,21 @@ public class ItemsPlugin extends JavaPlugin {
         consoleOutput.addListener(sender);
         consoleOutput.info("Reloading..");
 
-        // Save
-        itemHandler.saveItems();
-
         // Load again
         cfg.reload();
         loadOptions();
+
+        Language.load();
 
         attributeHandler.load();
         consoleOutput.info("Loaded " + attributeHandler.getAttributeCache().size() + " attribute(s)..");
 
         cooldownHandler.getCooldownCache().clear();
 
-        itemHandler.loadItems();
-        consoleOutput.info("Loaded " + itemHandler.getItems().size() + " item(s)..");
-
         consoleOutput.addListener(sender);
 
-        sender.sendMessage(consoleOutput.getPrefix() + StringUtil.color("&aDone.. reload took " + (System.currentTimeMillis() - start) + "ms."));
+        sender.sendMessage(consoleOutput.getPrefix() + StringUtil.color("&7Done.. reload took &f" + (System.currentTimeMillis() - start) + "&7ms."));
+        sender.sendMessage("&7&oNote: Reload does not manipulate with item storage, to load/save them, do '/items load/save'.");
     }
 
     @Override

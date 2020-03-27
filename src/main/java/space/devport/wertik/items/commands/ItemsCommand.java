@@ -174,7 +174,7 @@ public class ItemsCommand implements CommandExecutor {
                         try {
                             Double.parseDouble(locationString[i]);
                         } catch (NumberFormatException e) {
-                            sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cCoordinates have to be provided in integers."));
+                            sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cCoordinates have to be provided in numbers."));
                             return true;
                         }
                     }
@@ -209,7 +209,7 @@ public class ItemsCommand implements CommandExecutor {
                     }
 
                     if (!ItemsPlugin.getInstance().getItemHandler().getItems().containsKey(args[1])) {
-                        sender.sendMessage(StringUtil.color("&cThat item is not saved."));
+                        Language.ITEM_NOT_VALID.getPrefixed().fill("%item%", args[1]).send(sender);
                         return true;
                     }
 
@@ -246,7 +246,11 @@ public class ItemsCommand implements CommandExecutor {
                         target.getInventory().addItem(ItemsPlugin.getInstance().getItemHandler().getItem(args[1]).build());
                     }
 
-                    sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&eGave player &f" + target.getName() + " item &f" + args[1] + "&7x" + amount));
+                    Language.ITEM_GIVEN.getPrefixed()
+                            .fill("%item%", args[1])
+                            .fill("%player%", target.getName())
+                            .fill("%amount%", "" + amount)
+                            .send(sender);
                     break;
                 case "reload":
                     ItemsPlugin.getInstance().reload(sender);
