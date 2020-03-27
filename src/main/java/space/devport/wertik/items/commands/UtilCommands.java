@@ -11,7 +11,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import space.devport.utils.itemutil.ItemBuilder;
-import space.devport.utils.itemutil.ItemNBTEditor;
 import space.devport.utils.messageutil.StringUtil;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.utils.Language;
@@ -38,6 +37,7 @@ public class UtilCommands implements CommandExecutor {
         Player player = (Player) sender;
 
         final ItemStack item = player.getInventory().getItemInMainHand();
+        final ItemBuilder builder = new ItemBuilder(item);
 
         if (item.getType() == Material.AIR) {
             Language.CANNOT_HELP_WITH_AIR.sendPrefixed(sender);
@@ -46,8 +46,6 @@ public class UtilCommands implements CommandExecutor {
 
         switch (cmd.getName().toLowerCase()) {
             case "setname":
-                ItemBuilder builder = new ItemBuilder(item);
-
                 builder.displayName(StringUtil.color(String.join(" ", args)));
 
                 player.getInventory().setItemInMainHand(builder.build());
@@ -55,38 +53,54 @@ public class UtilCommands implements CommandExecutor {
                 Language.ITEM_RENAMED.sendPrefixed(sender);
                 break;
             case "detail":
-                sender.sendMessage(StringUtil.color("&eName: &f" + item.getItemMeta().getDisplayName()));
-                sender.sendMessage(StringUtil.color("&eMaterial: &f" + item.getType().toString()));
-                sender.sendMessage(StringUtil.color("&eAmount: &f" + item.getAmount()));
+                sender.sendMessage(StringUtil.color("&eName: &f" + (builder.getDisplayName().isEmpty() ? item.getType().toString() : builder.getDisplayName().toString())));
+                sender.sendMessage(StringUtil.color("&eMaterial: &f" + builder.getMaterial().name()));
+                sender.sendMessage(StringUtil.color("&eAmount: &f" + builder.getAmount()));
 
-                if (item.getItemMeta().hasLore()) {
+                // Lore
+                if (!builder.getLore().getMessage().isEmpty()) {
                     sender.sendMessage(StringUtil.color("&eLore:"));
                     int i = 0;
-                    for (String line : item.getItemMeta().getLore()) {
-                        sender.sendMessage(StringUtil.color("&f " + i + "&8- &r" + line));
+                    for (String line : builder.getLore().getMessage()) {
+                        sender.sendMessage(StringUtil.color("&f " + i + " &8- &r" + line));
                         i++;
                     }
                 }
 
-                if (item.getItemMeta().hasEnchants()) {
+                // Enchants
+                if (!builder.getEnchants().isEmpty()) {
                     sender.sendMessage(StringUtil.color("&eEnchants:"));
-                    item.getEnchantments().keySet().forEach(ench -> sender.sendMessage(StringUtil.color("&8- &7" + ench.getName() + "&f;&7" + item.getItemMeta().getEnchantLevel(ench))));
+                    builder.getEnchants().forEach((enchantment, level) -> sender.sendMessage(StringUtil.color(" &8- &7" + enchantment.toString() + "&f;&7" + level)));
                 }
 
-                if (!item.getItemMeta().getItemFlags().isEmpty()) {
+                // Flags
+                if (!builder.getFlags().isEmpty()) {
                     sender.sendMessage(StringUtil.color("&eFlags:"));
-                    item.getItemMeta().getItemFlags().forEach(flag -> sender.sendMessage(StringUtil.color("&8- &7" + flag.name())));
+                    builder.getFlags().forEach(flag -> sender.sendMessage(StringUtil.color(" &8- &7" + flag.toString())));
                 }
 
                 // NBT
-                if (ItemNBTEditor.hasNBT(item)) {
+                if (!builder.getNBT().isEmpty()) {
                     sender.sendMessage(StringUtil.color("&eNBT:"));
-                    for (String tag : ItemNBTEditor.getNBTTagMap(item).keySet()) {
-                        if (!ItemsPlugin.getInstance().getFilteredNBT().contains(tag))
-                            sender.sendMessage(StringUtil.color("&8- &7" + tag + "&f:&7" + ItemNBTEditor.getNBT(item, tag)));
+
+                    for (String key : builder.getNBT().keySet()) {
+                        if (!ItemsPlugin.getInstance().getFilteredNBT().contains(key))
+                            sender.sendMessage(StringUtil.color(" &8- &7" + key + "&f:&7" + builder.getNBT().get(key)));
                     }
                 }
+                break;
+            case "lore":
+                if (builder.getLore().getMessage().isEmpty()) {
+                    sender.sendMessage("&eLore: &cNo lore.");
+                    return true;
+                }
 
+                sender.sendMessage(StringUtil.color("&eLore:"));
+                int i = 0;
+                for (String line : builder.getLore().getMessage()) {
+                    sender.sendMessage(StringUtil.color("&f " + i + " &8- &r" + line));
+                    i++;
+                }
                 break;
             case "addlore":
                 if (args.length < 1) {
@@ -94,8 +108,6 @@ public class UtilCommands implements CommandExecutor {
                     sender.sendMessage(StringUtil.color("&cUsage: &7/addlore <line>"));
                     return true;
                 }
-
-                builder = new ItemBuilder(item);
 
                 builder.addLine(String.join(" ", args));
 
@@ -134,6 +146,10 @@ public class UtilCommands implements CommandExecutor {
                 player.getInventory().setItemInMainHand(item);
                 Language.LINE_REMOVED.getPrefixed().send(sender);
                 break;
+            case "flags":
+                List<String> flags = builder.getFlags().stream().map(ItemFlag::name).collect(Collectors.toList());
+                sender.sendMessage(StringUtil.color("&eFlags: &f" + Utils.listToString(flags, "&7, &f", "&cNo flags.")));
+                break;
             case "addflag":
                 if (args.length < 1) {
                     sender.sendMessage(StringUtil.color("&cNot enough arguments."));
@@ -149,8 +165,6 @@ public class UtilCommands implements CommandExecutor {
                     sender.sendMessage(StringUtil.color("&cFlag is invalid."));
                     return true;
                 }
-
-                builder = new ItemBuilder(player.getInventory().getItemInMainHand());
 
                 builder.addFlag(flag);
 
@@ -172,8 +186,6 @@ public class UtilCommands implements CommandExecutor {
                     return true;
                 }
 
-                builder = new ItemBuilder(player.getInventory().getItemInMainHand());
-
                 if (!builder.getFlags().contains(flag)) {
                     Language.NO_FLAG.getPrefixed().send(sender);
                     return true;
@@ -183,20 +195,8 @@ public class UtilCommands implements CommandExecutor {
 
                 player.getInventory().setItemInMainHand(builder.build());
                 break;
-            case "flags":
-                builder = new ItemBuilder(item);
-                List<String> flags = builder.getFlags().stream().map(ItemFlag::name).collect(Collectors.toList());
-                sender.sendMessage(StringUtil.color("&eFlags: &f" + Utils.listToString(flags, "&7, &f", "&cNo flags.")));
-                break;
-            case "lore":
-                builder = new ItemBuilder(item);
-
-                sender.sendMessage(StringUtil.color("&eLore:"));
-                int i = 0;
-                for (String line : builder.getLore().getMessage()) {
-                    sender.sendMessage(StringUtil.color("&f " + i + " &8- &r" + line));
-                    i++;
-                }
+            case "enchs":
+                sender.sendMessage(StringUtil.color("&eEnchants: &f" + Utils.mapToString(builder.getEnchants(), "&7, &f", "&f:", "&cNo enchants.")));
                 break;
             case "addench":
                 if (args.length < 2) {
@@ -224,8 +224,7 @@ public class UtilCommands implements CommandExecutor {
                     return true;
                 }
 
-                builder = new ItemBuilder(player.getInventory().getItemInMainHand())
-                        .addEnchant(enchantment, level);
+                builder.addEnchant(enchantment, level);
 
                 player.getInventory().setItemInMainHand(builder.build());
                 Language.ENCHANT_ADDED.getPrefixed().send(sender);
@@ -249,16 +248,12 @@ public class UtilCommands implements CommandExecutor {
                     return true;
                 }
 
-                builder = new ItemBuilder(player.getInventory().getItemInMainHand())
-                        .removeEnchant(enchantment);
+                builder.removeEnchant(enchantment);
 
                 player.getInventory().setItemInMainHand(builder.build());
                 Language.ENCHANT_REMOVED.getPrefixed().send(sender);
                 break;
-            case "enchs":
-                builder = new ItemBuilder(player.getInventory().getItemInMainHand());
-                sender.sendMessage(StringUtil.color("&eEnchants: &f" + Utils.mapToString(builder.getEnchants(), "&7, &f", "&f:", "&cNo enchants.")));
-                break;
+            default:
         }
         return false;
     }

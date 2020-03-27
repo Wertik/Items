@@ -294,7 +294,7 @@ public class ItemsCommand implements CommandExecutor {
     }
 
     private void help(CommandSender sender, String label) {
-        sender.sendMessage(StringUtil.color("&8&m--------&e Items &8&m--------" +
+        sender.sendMessage(StringUtil.color("&8&m        &e Items &8&m        &r" +
                 "\n&e/" + label + " save [item] &8- &7Save all items, or by name." +
                 "\n&e/" + label + " load [item] &8- &7Load all items, or by name." +
                 "\n&e/" + label + " add <name> &8- &7Saves item in hand to db under given name." +
