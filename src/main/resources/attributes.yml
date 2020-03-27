@@ -5,19 +5,19 @@
 # Attribute name
 attribute-one:
   # Commands to run on *click*
-  # Commands with prefix "p!" are run for player
-  # op! - player given OP permissions
+  # p! - commands ran as player
+  # op! - executed as player with OP
   # random! - picks a random command from marked, you can use above modifiers. (random has to be the first one.)
   commands:
     - 'random! say Woooohoo!'
-    - 'random! say No Wooohoo for u. ._.'
-    - 'random! p! me I say. Wooohoo! '
+    - 'random! say No Wooohoo for u.'
+    - 'random! p! me I say. Wooohoo!'
     - 'p! say Woooohooo! indeed.'
     - 'op! pl'
-  # Item cooldown
+  # Item cooldown in seconds
   cooldown: 3600
-  # Remove after use?
-  one-time-use: true
-  # Cooldown messages, uses defaults in config.yml if not specified.
-  cooldown-message: '&cThere is a cooldown on this item, wait &7%time%s &cto use it again.'
-  cooldown-expire-message: '&aYou can use that item again!'
+  # How many times can this item be used before being consumed.
+  use-limit: 1
+attribute-two:
+  commands:
+    - 'give %player% diamond 1'

@@ -14,7 +14,7 @@ import space.devport.utils.itemutil.ItemNBTEditor;
 import space.devport.utils.messageutil.StringUtil;
 import space.devport.utils.regionutil.LocationUtil;
 import space.devport.wertik.items.ItemsPlugin;
-import space.devport.wertik.items.utils.Messages;
+import space.devport.wertik.items.utils.Language;
 import space.devport.wertik.items.utils.Utils;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class ItemsCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
 
         if (!sender.hasPermission("items.control")) {
-            Messages.NO_PERMS.getPrefixed().send(sender);
+            Language.NO_PERMS.getPrefixed().send(sender);
             return true;
         }
 
@@ -71,47 +71,6 @@ public class ItemsCommand implements CommandExecutor {
                     ItemsPlugin.getInstance().getItemHandler().addItem(args[1], player.getInventory().getItemInMainHand());
                     sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&eAdded item under name &f" + args[1]));
                     break;
-                case "get":
-                    if (args.length < 2) {
-                        sender.sendMessage(StringUtil.color("&cNot enough arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/i get <name> [amount]"));
-                        return true;
-                    }
-
-                    if (args.length > 3) {
-                        sender.sendMessage(StringUtil.color("&cToo many arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/i get <name> [amount]"));
-                        return true;
-                    }
-
-                    if (!ItemsPlugin.getInstance().getItemHandler().getItems().containsKey(args[1])) {
-                        sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cThat item is not saved."));
-                        return true;
-                    }
-
-                    if (!(sender instanceof Player)) {
-                        sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cYou have to be a player."));
-                        return true;
-                    }
-
-                    int amount = 1;
-
-                    if (args.length > 2)
-                        try {
-                            amount = Integer.parseInt(args[2]);
-                        } catch (NumberFormatException e) {
-                            sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cAmount has to be a number."));
-                        }
-
-                    player = (Player) sender;
-
-                    ItemStack item = ItemsPlugin.getInstance().getItemHandler().getItem(args[1]).build();
-
-                    item.setAmount(amount);
-                    player.getInventory().addItem(item);
-
-                    sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&eItem &f" + args[1] + "&7x" + amount + " &eadded to your inventory."));
-                    break;
                 case "remove":
                 case "rem":
                 case "r":
@@ -154,7 +113,7 @@ public class ItemsCommand implements CommandExecutor {
                         return true;
                     }
 
-                    item = ItemsPlugin.getInstance().getItemHandler().getItem(args[1]).build();
+                    ItemStack item = ItemsPlugin.getInstance().getItemHandler().getItem(args[1]).build();
 
                     sender.sendMessage(StringUtil.color("&eName: &f" + item.getItemMeta().getDisplayName()));
                     sender.sendMessage(StringUtil.color("&eMaterial: &f" + item.getType().toString()));
@@ -194,7 +153,7 @@ public class ItemsCommand implements CommandExecutor {
                         return true;
                     }
 
-                    amount = 1;
+                    int amount = 1;
 
                     if (args.length == 4) {
                         try {
@@ -231,16 +190,16 @@ public class ItemsCommand implements CommandExecutor {
 
                     location.getWorld().dropItemNaturally(location, item);
 
-                    Messages.SPAWNED_AT.getPrefixed()
+                    Language.SPAWNED_AT.getPrefixed()
                             .fill("%item%", args[1])
                             .fill("%amount%", String.valueOf(amount))
                             .fill("%location%", LocationUtil.locationToString(location, ", "))
                             .send(sender);
                     break;
                 case "give":
-                    if (args.length < 3) {
+                    if (args.length < 2) {
                         sender.sendMessage(StringUtil.color("&cNot enough arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/i give <name> <playerName> (amount)"));
+                        sender.sendMessage(StringUtil.color("&cUsage: &7/i give <name> (playerName) (amount)"));
                         return true;
                     }
 
@@ -249,14 +208,24 @@ public class ItemsCommand implements CommandExecutor {
                         return true;
                     }
 
-                    OfflinePlayer offlineTarget = Bukkit.getPlayer(args[2]);
+                    Player target;
+                    if (args.length == 3) {
+                        OfflinePlayer offlineTarget = Bukkit.getPlayer(args[2]);
 
-                    if (offlineTarget == null || !offlineTarget.isOnline() || offlineTarget.getPlayer() == null) {
-                        Messages.PLAYER_OFFLINE.getPrefixed().send(sender);
-                        return true;
+                        if (offlineTarget == null || !offlineTarget.isOnline() || offlineTarget.getPlayer() == null) {
+                            Language.PLAYER_OFFLINE.getPrefixed().send(sender);
+                            return true;
+                        }
+
+                        target = offlineTarget.getPlayer();
+                    } else {
+                        if (!(sender instanceof Player)) {
+                            Language.ONLY_PLAYERS.sendPrefixed(sender);
+                            return true;
+                        }
+
+                        target = (Player) sender;
                     }
-
-                    Player target = offlineTarget.getPlayer();
 
                     amount = 1;
 
@@ -279,11 +248,11 @@ public class ItemsCommand implements CommandExecutor {
                     break;
                 case "load":
                     ItemsPlugin.getInstance().getItemHandler().loadItems();
-                    Messages.ITEMS_LOADED.getPrefixed().send(sender);
+                    Language.ITEMS_LOADED.getPrefixed().send(sender);
                     break;
                 case "save":
                     ItemsPlugin.getInstance().getItemHandler().saveItems();
-                    Messages.ITEMS_SAVED.getPrefixed().send(sender);
+                    Language.ITEMS_SAVED.getPrefixed().send(sender);
                     break;
                 case "help":
                 case "h":
@@ -303,7 +272,7 @@ public class ItemsCommand implements CommandExecutor {
                 "\n&e/" + label + " detail <name> &8- &7Displays info about an item in the db." +
                 "\n&e/" + label + " drop <name> <worldName;x;y;z> (amount) &8- &7Drops item on a given location." +
                 "\n&e/" + label + " give <name> <playerName> [amount] &8- &7Give player an item." +
-                "\n&e/att help &8- &7Help page regarding attributes." + "" +
+                "\n&e/att help &8- &7Help page regarding attributes." +
                 "\n&e/setname <name> &8- &7Set display name of an item." +
                 "\n&e/lore &8- &7List item lore." +
                 "\n&e/addlore <line> &8- &7Add a line of lore." +

@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import space.devport.utils.itemutil.ItemBuilder;
 import space.devport.utils.itemutil.ItemNBTEditor;
 import space.devport.utils.messageutil.StringUtil;
-import space.devport.wertik.items.utils.Messages;
+import space.devport.wertik.items.utils.Language;
 import space.devport.wertik.items.utils.Utils;
 
 import java.util.List;
@@ -25,12 +25,12 @@ public class UtilCommands implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String s, String[] args) {
 
         if (!(sender instanceof Player)) {
-            Messages.ONLY_PLAYERS.getPrefixed().send(sender);
+            Language.ONLY_PLAYERS.getPrefixed().send(sender);
             return true;
         }
 
         if (!sender.hasPermission("items.control")) {
-            Messages.NO_PERMS.getPrefixed().send(sender);
+            Language.NO_PERMS.getPrefixed().send(sender);
             return true;
         }
 
@@ -112,7 +112,7 @@ public class UtilCommands implements CommandExecutor {
                 builder.addLine(line.toString());
                 player.getInventory().setItemInMainHand(builder.build());
 
-                Messages.LINE_ADDED.getPrefixed().send(sender);
+                Language.LINE_ADDED.getPrefixed().send(sender);
                 break;
             case "remlore":
                 if (args.length < 1) {
@@ -145,7 +145,7 @@ public class UtilCommands implements CommandExecutor {
                 meta.setLore(lore);
                 item.setItemMeta(meta);
                 player.getInventory().setItemInMainHand(item);
-                Messages.LINE_REMOVED.getPrefixed().send(sender);
+                Language.LINE_REMOVED.getPrefixed().send(sender);
                 break;
             case "addflag":
                 if (args.length < 1) {
@@ -169,7 +169,7 @@ public class UtilCommands implements CommandExecutor {
 
                 player.getInventory().setItemInMainHand(builder.build());
 
-                Messages.FLAG_ADDED.getPrefixed().send(sender);
+                Language.FLAG_ADDED.getPrefixed().send(sender);
                 break;
             case "remflag":
                 if (args.length < 1) {
@@ -188,7 +188,7 @@ public class UtilCommands implements CommandExecutor {
                 builder = new ItemBuilder(player.getInventory().getItemInMainHand());
 
                 if (!builder.getFlags().contains(flag)) {
-                    Messages.NO_FLAG.getPrefixed().send(sender);
+                    Language.NO_FLAG.getPrefixed().send(sender);
                     return true;
                 }
 
@@ -227,7 +227,7 @@ public class UtilCommands implements CommandExecutor {
                 }
 
                 if (enchantment == null) {
-                    Messages.INVALID_ENCHANT.getPrefixed().send(sender);
+                    Language.INVALID_ENCHANT.getPrefixed().send(sender);
                     return true;
                 }
 
@@ -235,7 +235,7 @@ public class UtilCommands implements CommandExecutor {
                         .addEnchant(enchantment, level);
 
                 player.getInventory().setItemInMainHand(builder.build());
-                Messages.ENCHANT_ADDED.getPrefixed().send(sender);
+                Language.ENCHANT_ADDED.getPrefixed().send(sender);
                 break;
             case "remench":
                 if (args.length < 1) {
@@ -252,7 +252,7 @@ public class UtilCommands implements CommandExecutor {
                 }
 
                 if (enchantment == null) {
-                    Messages.INVALID_ENCHANT.getPrefixed().send(sender);
+                    Language.INVALID_ENCHANT.getPrefixed().send(sender);
                     return true;
                 }
 
@@ -260,7 +260,7 @@ public class UtilCommands implements CommandExecutor {
                         .removeEnchant(enchantment);
 
                 player.getInventory().setItemInMainHand(builder.build());
-                Messages.ENCHANT_REMOVED.getPrefixed().send(sender);
+                Language.ENCHANT_REMOVED.getPrefixed().send(sender);
                 break;
             case "enchs":
                 builder = new ItemBuilder(player.getInventory().getItemInMainHand());

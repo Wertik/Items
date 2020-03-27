@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import space.devport.utils.messageutil.StringUtil;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.handlers.AttributeHandler;
-import space.devport.wertik.items.utils.Messages;
+import space.devport.wertik.items.utils.Language;
 import space.devport.wertik.items.utils.Utils;
 
 import java.util.ArrayList;
@@ -38,12 +38,12 @@ public class AttCommands implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
 
         if (!(sender instanceof Player)) {
-            Messages.ONLY_PLAYERS.getPrefixed().send(sender);
+            Language.ONLY_PLAYERS.getPrefixed().send(sender);
             return true;
         }
 
         if (!sender.hasPermission("items.control")) {
-            Messages.NO_PERMS.getPrefixed().send(sender);
+            Language.NO_PERMS.getPrefixed().send(sender);
             return true;
         }
 

@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import space.devport.utils.itemutil.ItemNBTEditor;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.objects.Attribute;
-import space.devport.wertik.items.utils.Messages;
+import space.devport.wertik.items.utils.Language;
 import space.devport.wertik.items.utils.Utils;
 
 public class ItemListener implements Listener {
@@ -54,7 +54,7 @@ public class ItemListener implements Listener {
 
             double cooldownTime = ItemsPlugin.getInstance().getCooldownHandler().getTimeRemaining(player, attribute.getName());
 
-            Messages.ITEM_ON_COOLDOWN.getPrefixed()
+            Language.ITEM_ON_COOLDOWN.getPrefixed()
                     .fill("%time%", String.valueOf(cooldownTime))
                     .send(player);
             return;
@@ -64,7 +64,7 @@ public class ItemListener implements Listener {
         if (attribute.getUseLimit() > 0) {
             // Consume if above
             if ((ItemsPlugin.getInstance().getAttributeHandler().getUses(item, attribute) + 1) > attribute.getUseLimit()) {
-                Messages.ITEM_USE_LIMIT.getPrefixed().send(player);
+                Language.ITEM_USE_LIMIT.getPrefixed().send(player);
                 Utils.setItem(player, event.getHand(), null);
             } else
                 Utils.setItem(player, event.getHand(), ItemsPlugin.getInstance().getAttributeHandler().addUse(item, attribute));

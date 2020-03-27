@@ -3,11 +3,12 @@ package space.devport.wertik.items.utils;
 import com.google.common.base.Strings;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.command.CommandSender;
 import space.devport.utils.configutil.Configuration;
 import space.devport.utils.messageutil.MessageBuilder;
 import space.devport.wertik.items.ItemsPlugin;
 
-public enum Messages {
+public enum Language {
 
     /**
      * GENERAL
@@ -57,7 +58,7 @@ public enum Messages {
     @Setter
     private String value;
 
-    Messages(String path, String value) {
+    Language(String path, String value) {
         this.path = path;
         this.value = value;
     }
@@ -65,7 +66,7 @@ public enum Messages {
     public static void load() {
         Configuration lang = new Configuration(ItemsPlugin.getInstance(), "language");
 
-        for (Messages message : values()) {
+        for (Language message : values()) {
             String value = lang.getFileConfiguration().getString(message.getPath());
 
             if (!Strings.isNullOrEmpty(value)) {
@@ -76,6 +77,14 @@ public enum Messages {
         }
 
         lang.save();
+    }
+
+    public void send(CommandSender sender) {
+        get().send(sender);
+    }
+
+    public void sendPrefixed(CommandSender sender) {
+        getPrefixed().send(sender);
     }
 
     public MessageBuilder get() {

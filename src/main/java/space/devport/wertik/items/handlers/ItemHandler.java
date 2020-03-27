@@ -15,6 +15,12 @@ public class ItemHandler {
     // System name, item
     private final Map<String, ItemBuilder> items = new HashMap<>();
 
+    private final Configuration storage;
+
+    public ItemHandler() {
+        storage = new Configuration(ItemsPlugin.getInstance(), "items");
+    }
+
     // Check if an item has attributes attached
     public boolean hasAttribute(ItemStack item) {
         return ItemsPlugin.getInstance().getActionNames()
@@ -24,8 +30,7 @@ public class ItemHandler {
 
     // Load items from yaml
     public void loadItems() {
-        Configuration storage = new Configuration(ItemsPlugin.getInstance(), "items");
-
+        storage.reload();
         items.clear();
 
         for (String name : storage.getFileConfiguration().getKeys(false)) {
@@ -40,9 +45,6 @@ public class ItemHandler {
 
     // Save all items
     public void saveItems() {
-        Configuration storage = new Configuration(ItemsPlugin.getInstance(), "items");
-
-        storage.clear();
 
         for (String itemName : this.items.keySet()) {
             ItemBuilder item = this.items.get(itemName);
@@ -51,12 +53,34 @@ public class ItemHandler {
         }
 
         storage.save();
-        this.items.clear();
+    }
+
+    public void saveItem(String name) {
+        ItemBuilder item = getItem(name);
+
+        if (item == null)
+            return;
+
+        storage.setItemBuilder(name, item);
+        storage.save();
+    }
+
+    public void loadItem(String name) {
+        storage.reload();
+
+        if (!storage.getFileConfiguration().contains(name))
+            return;
+
+        addItem(name, storage.loadItemBuilder(name));
     }
 
     // Get item from cache
     public ItemBuilder getItem(String name) {
         return this.items.get(name);
+    }
+
+    public void addItem(String name, ItemBuilder builder) {
+        this.items.put(name, builder);
     }
 
     // Add a new item to cache

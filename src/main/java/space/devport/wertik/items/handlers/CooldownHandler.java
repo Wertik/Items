@@ -1,12 +1,13 @@
 package space.devport.wertik.items.handlers;
 
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.objects.Attribute;
 import space.devport.wertik.items.objects.Cooldown;
-import space.devport.wertik.items.utils.Messages;
+import space.devport.wertik.items.utils.Language;
 
 import java.util.*;
 
@@ -66,14 +67,13 @@ public class CooldownHandler {
         }
 
         // Update
-
         this.cooldownCache.put(uniqueID, cooldowns);
 
         // Message the player, if online
-        OfflinePlayer player = ItemsPlugin.getInstance().getServer().getOfflinePlayer(uniqueID);
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uniqueID);
 
-        if (player.isOnline() && player.getPlayer() != null)
-            Messages.COOLDOWN_EXPIRED.get().send(player.getPlayer());
+        if (offlinePlayer.isOnline() && offlinePlayer.getPlayer() != null)
+            Language.COOLDOWN_EXPIRED.get().send(offlinePlayer.getPlayer());
     }
 
     public Cooldown getCooldown(Player player, String attributeName) {

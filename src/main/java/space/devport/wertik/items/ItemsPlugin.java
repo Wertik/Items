@@ -14,7 +14,7 @@ import space.devport.wertik.items.handlers.AttributeHandler;
 import space.devport.wertik.items.handlers.CooldownHandler;
 import space.devport.wertik.items.handlers.ItemHandler;
 import space.devport.wertik.items.listeners.ItemListener;
-import space.devport.wertik.items.utils.Messages;
+import space.devport.wertik.items.utils.Language;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +22,13 @@ import java.util.List;
 import java.util.Random;
 
 public class ItemsPlugin extends JavaPlugin {
+
+    /* Global TO-DO */
+    // TODO: Allow saving items to different files and folders (like BossShopPro)
+    // TODO: Add all remaining strings to language
+    // TODO: Test everything properly
+    // TODO: Add PlaceholderAPI support
+    // TODO: Figure out syncing item cache w file (prob save to cache & to file when updated in-game)
 
     @Getter
     private static ItemsPlugin instance;
@@ -68,7 +75,7 @@ public class ItemsPlugin extends JavaPlugin {
         cfg = new Configuration(this, "config");
         loadOptions();
 
-        Messages.load();
+        Language.load();
 
         // Load attributes
         attributeHandler = new AttributeHandler();
