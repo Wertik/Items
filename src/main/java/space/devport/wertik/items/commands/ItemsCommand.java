@@ -57,19 +57,23 @@ public class ItemsCommand implements CommandExecutor {
                     }
 
                     if (!(sender instanceof Player)) {
-                        sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cYou have to be a player."));
+                        Language.ONLY_PLAYERS.sendPrefixed(sender);
                         return true;
                     }
 
                     Player player = (Player) sender;
 
-                    if (player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
-                        sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cCannot add air."));
+                    if (Utils.getItem(player).getType().equals(Material.AIR)) {
+                        Language.CANNOT_HELP_WITH_AIR.sendPrefixed(sender);
                         return true;
                     }
 
-                    ItemsPlugin.getInstance().getItemHandler().addItem(args[1], player.getInventory().getItemInMainHand());
-                    sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&eAdded item under name &f" + args[1]));
+                    if (ItemsPlugin.getInstance().getItemHandler().getItem(args[1]) == null)
+                        Language.ITEM_ADDED.getPrefixed().fill("%item%", args[1]).send(sender);
+                    else
+                        Language.ITEM_UPDATED.getPrefixed().fill("%item%", args[1]).send(sender);
+
+                    ItemsPlugin.getInstance().getItemHandler().addItem(args[1], Utils.getItem(player));
                     break;
                 case "remove":
                 case "rem":
@@ -87,12 +91,12 @@ public class ItemsCommand implements CommandExecutor {
                     }
 
                     if (!ItemsPlugin.getInstance().getItemHandler().getItems().containsKey(args[1])) {
-                        sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cThsi item is not saved."));
+                        Language.ITEM_NOT_VALID.getPrefixed().fill("%item%", args[1]).send(sender);
                         return true;
                     }
 
                     ItemsPlugin.getInstance().getItemHandler().removeItem(args[1]);
-                    sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&eRemoved item &f" + args[1]));
+                    Language.ITEM_REMOVED.getPrefixed().fill("%item%", args[1]).send(sender);
                     break;
                 case "detail":
                 case "d":
@@ -109,7 +113,7 @@ public class ItemsCommand implements CommandExecutor {
                     }
 
                     if (!ItemsPlugin.getInstance().getItemHandler().getItems().containsKey(args[1])) {
-                        sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cThat item is not saved."));
+                        Language.ITEM_NOT_VALID.getPrefixed().fill("%item%", args[1]).send(sender);
                         return true;
                     }
 
@@ -153,7 +157,7 @@ public class ItemsCommand implements CommandExecutor {
                     }
 
                     if (!ItemsPlugin.getInstance().getItemHandler().getItems().containsKey(args[1])) {
-                        sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cThat item is not saved."));
+                        Language.ITEM_NOT_VALID.getPrefixed().fill("%item%", args[1]).send(sender);
                         return true;
                     }
 

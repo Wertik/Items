@@ -36,7 +36,7 @@ public class UtilCommands implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        final ItemStack item = player.getInventory().getItemInMainHand();
+        final ItemStack item = Utils.getItem(player);
         final ItemBuilder builder = new ItemBuilder(item);
 
         if (item.getType() == Material.AIR) {

@@ -48,4 +48,11 @@ public class Utils {
                 player.getInventory().setItemInOffHand(item);
         }
     }
+
+    public ItemStack getItem(Player player) {
+        if (SpigotHelper.getVersion().contains("1.7") || SpigotHelper.getVersion().contains("1.8"))
+            return player.getItemInHand();
+        else
+            return player.getInventory().getItemInMainHand();
+    }
 }

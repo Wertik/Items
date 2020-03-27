@@ -44,6 +44,8 @@ public class ItemListener implements Listener {
 
         if (attribute == null) return;
 
+        event.setCancelled(true);
+
         // If the item is not usable, send a message and return
         if (!ItemsPlugin.getInstance().getCooldownHandler().isUsable(player, attribute.getName())) {
 

@@ -18,6 +18,8 @@ public enum Language {
     ONLY_PLAYERS("Only-Players", "&cAction has to be done in-game."),
     PLAYER_OFFLINE("Player-Offline", "&cThat player is not online."),
     CANNOT_HELP_WITH_AIR("Cannot-Help-With-Air", "&cCannot help you with AIR."),
+    RELOAD_DONE("Reload-Done", "&7Done... reload took &f%time%&7ms."),
+    RELOAD_NOTE("Reload-Note", "Reload does not manipulate with item storage, to load/save them, do '/items load/save'."),
 
     /**
      * UTIL COMMANDS
@@ -38,6 +40,9 @@ public enum Language {
      */
 
     SPAWNED_AT("Spawned-At", "&7Item &f%item%&7x%amount%&7 spawned &8@ &7%location%"),
+    ITEM_ADDED("Item-Added", "&7Item added under name &f%item%"),
+    ITEM_UPDATED("Item-Updated", "&7Item &f%item% &7updated."),
+    ITEM_REMOVED("Item-Removed", "&7Item &f%item% &7removed."),
     ITEMS_SAVED("Items-Saved", "&7Items saved to storage."),
     ITEMS_LOADED("Items-Loaded", "&7Items loaded from storage."),
     ITEM_SAVED("Item-Saved", "&7Item &f%item% &7saved to storage."),
