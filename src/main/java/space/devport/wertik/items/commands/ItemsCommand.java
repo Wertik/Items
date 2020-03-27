@@ -295,15 +295,15 @@ public class ItemsCommand implements CommandExecutor {
 
     private void help(CommandSender sender, String label) {
         sender.sendMessage(StringUtil.color("&8&m        &e Items &8&m        &r" +
-                "\n&e/" + label + " save [item] &8- &7Save all items, or by name." +
-                "\n&e/" + label + " load [item] &8- &7Load all items, or by name." +
+                "\n&e/" + label + " list &8- &7Lists saved items." +
+                "\n&e/" + label + " save (name) &8- &7Save all items, or by name." +
+                "\n&e/" + label + " load (name) &8- &7Load all items, or by name." +
                 "\n&e/" + label + " add <name> &8- &7Saves item in hand to db under given name." +
                 "\n&e/" + label + " remove <name> &8- &7Removes item by name." +
-                "\n&e/" + label + " list &8- &7Lists saved items." +
                 "\n&e/" + label + " detail <name> &8- &7Displays info about an item in the db." +
                 "\n&e/" + label + " drop <name> <worldName;x;y;z> (amount) &8- &7Drops item on a given location." +
                 "\n&e/" + label + " give <name> (playerName) (amount) &8- &7Give player an item." +
-                "\n&e/att help &8- &7Help page regarding attributes." +
+                "\n&e/att &8- &7Help page regarding attributes." +
                 "\n&e/setname <name> &8- &7Set display name of an item." +
                 "\n&e/lore &8- &7List item lore." +
                 "\n&e/addlore <line> &8- &7Add a line of lore." +
