@@ -6,6 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -48,7 +49,7 @@ public class UtilCommands implements CommandExecutor {
             case "setname":
                 builder.displayName(StringUtil.color(String.join(" ", args)));
 
-                player.getInventory().setItemInMainHand(builder.build());
+                Utils.setItem(player, EquipmentSlot.HAND, builder.build());
 
                 Language.ITEM_RENAMED.sendPrefixed(sender);
                 break;
@@ -91,7 +92,7 @@ public class UtilCommands implements CommandExecutor {
                 break;
             case "lore":
                 if (builder.getLore().getMessage().isEmpty()) {
-                    sender.sendMessage("&eLore: &cNo lore.");
+                    sender.sendMessage(StringUtil.color("&eLore: &cNo lore."));
                     return true;
                 }
 
@@ -112,7 +113,7 @@ public class UtilCommands implements CommandExecutor {
 
                 builder.addLine(String.join(" ", args));
 
-                player.getInventory().setItemInMainHand(builder.build());
+                Utils.setItem(player, EquipmentSlot.HAND, builder.build());
                 Language.LINE_ADDED.getPrefixed().send(sender);
                 break;
             case "remlore":
@@ -147,7 +148,8 @@ public class UtilCommands implements CommandExecutor {
 
                 meta.setLore(lore);
                 item.setItemMeta(meta);
-                player.getInventory().setItemInMainHand(item);
+
+                Utils.setItem(player, EquipmentSlot.HAND, builder.build());
                 Language.LINE_REMOVED.getPrefixed().send(sender);
                 break;
             case "flags":
@@ -176,9 +178,7 @@ public class UtilCommands implements CommandExecutor {
                 }
 
                 builder.addFlag(flag);
-
-                player.getInventory().setItemInMainHand(builder.build());
-
+                Utils.setItem(player, EquipmentSlot.HAND, builder.build());
                 Language.FLAG_ADDED.getPrefixed().send(sender);
                 break;
             case "remflag":
@@ -204,7 +204,7 @@ public class UtilCommands implements CommandExecutor {
                 }
 
                 builder.addFlag(flag);
-                player.getInventory().setItemInMainHand(builder.build());
+                Utils.setItem(player, EquipmentSlot.HAND, builder.build());
                 Language.FLAG_ADDED.sendPrefixed(sender);
                 break;
             case "enchs":
@@ -243,7 +243,7 @@ public class UtilCommands implements CommandExecutor {
 
                 builder.addEnchant(enchantment, level);
 
-                player.getInventory().setItemInMainHand(builder.build());
+                Utils.setItem(player, EquipmentSlot.HAND, builder.build());
                 Language.ENCHANT_ADDED.getPrefixed().send(sender);
                 break;
             case "remench":
@@ -268,7 +268,7 @@ public class UtilCommands implements CommandExecutor {
 
                 builder.removeEnchant(enchantment);
 
-                player.getInventory().setItemInMainHand(builder.build());
+                Utils.setItem(player, EquipmentSlot.HAND, builder.build());
                 Language.ENCHANT_REMOVED.getPrefixed().send(sender);
                 break;
         }

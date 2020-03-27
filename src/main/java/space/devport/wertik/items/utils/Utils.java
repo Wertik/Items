@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 import space.devport.utils.SpigotHelper;
 
 import java.util.List;
@@ -17,8 +18,13 @@ public class Utils {
 
         if (!map.isEmpty()) {
             str = new StringBuilder();
+
+            int n = 0;
             for (Object key : map.keySet()) {
-                str.append(key.toString()).append(separator).append(map.get(key).toString()).append(splitter);
+                str.append(key.toString()).append(separator).append(map.get(key).toString());
+                n++;
+                if (n < map.size() - 1)
+                    str.append(splitter);
             }
         }
 
@@ -38,7 +44,7 @@ public class Utils {
         return stringList.toString();
     }
 
-    public void consumeItem(Player player, EquipmentSlot hand, ItemStack item) {
+    public void consumeItem(Player player, @Nullable EquipmentSlot hand, ItemStack item) {
         if (item.getAmount() == 1)
             setItem(player, hand, null);
         else {
@@ -47,7 +53,7 @@ public class Utils {
         }
     }
 
-    public void setItem(Player player, EquipmentSlot hand, ItemStack item) {
+    public void setItem(Player player, @Nullable EquipmentSlot hand, ItemStack item) {
         if (SpigotHelper.getVersion().contains("1.7") || SpigotHelper.getVersion().contains("1.8"))
             player.setItemInHand(item);
         else {

@@ -162,7 +162,7 @@ public class AttributeHandler {
     }
 
     public int getUses(ItemStack item, Attribute attribute) {
-        return getUses(item).getOrDefault(attribute, -1);
+        return getUses(item).getOrDefault(attribute, 0);
     }
 
     public ItemStack setUses(ItemStack item, Attribute attribute, int uses) {

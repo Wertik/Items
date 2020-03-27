@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import space.devport.wertik.items.ItemsPlugin;
@@ -36,7 +37,7 @@ public class AttCommands implements CommandExecutor {
         }
 
         Player player = (Player) sender;
-        ItemStack item = player.getInventory().getItemInMainHand();
+        ItemStack item = Utils.getItem(player);
 
         if (args.length == 0) {
             help(sender);
@@ -82,7 +83,7 @@ public class AttCommands implements CommandExecutor {
                         return true;
                     }
 
-                    player.getInventory().setItemInMainHand(attributeHandler.setAttribute(item, args[2], args[1]));
+                    Utils.setItem(player, EquipmentSlot.HAND, attributeHandler.setAttribute(item, args[2], args[1]));
                     Language.ATTRIBUTE_ADDED.getPrefixed().fill("%attribute%", args[1]).send(sender);
                     break;
                 case "rem":
@@ -120,11 +121,11 @@ public class AttCommands implements CommandExecutor {
                     String param = args[1].toLowerCase();
 
                     if (attributeHandler.getAttributes(item).containsKey(param)) {
-                        player.getInventory().setItemInMainHand(attributeHandler.removeAttribute(item, param));
+                        Utils.setItem(player, EquipmentSlot.HAND, attributeHandler.removeAttribute(item, param));
                         Language.ATTRIBUTE_REMOVED.getPrefixed().fill("%attribute%", param).send(sender);
                         return true;
                     } else if (attributeHandler.getAttributes(item).containsValue(param)) {
-                        player.getInventory().setItemInMainHand(attributeHandler.removeAttribute(item, param));
+                        Utils.setItem(player, EquipmentSlot.HAND, attributeHandler.removeAttribute(item, param));
                         Language.ATTRIBUTE_REMOVED.getPrefixed().fill("%attribute%", param).send(sender);
                         return true;
                     } else
@@ -145,7 +146,7 @@ public class AttCommands implements CommandExecutor {
                         return true;
                     }
 
-                    player.getInventory().setItemInMainHand(attributeHandler.clearAttributes(item));
+                    Utils.setItem(player, EquipmentSlot.HAND, attributeHandler.clearAttributes(item));
                     Language.ATTRIBUTES_CLEARED.sendPrefixed(sender);
                     break;
                 case "list":
@@ -165,7 +166,7 @@ public class AttCommands implements CommandExecutor {
                             }
 
                             Language.ATTRIBUTES_LIST.getPrefixed()
-                                    .fill("%attributes%", Utils.mapToString(attributeHandler.getAttributes(item), "&7, &f", " &8- ", "&cNo attributes saved."))
+                                    .fill("%attributes%", "\n &7" + Utils.mapToString(attributeHandler.getAttributes(item), "\n &7", "&8 - &7", "&cNo attributes saved."))
                                     .send(sender);
                             break;
                         }

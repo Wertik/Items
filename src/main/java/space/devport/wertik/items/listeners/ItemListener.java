@@ -6,7 +6,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import space.devport.utils.SpigotHelper;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.objects.Attribute;
 import space.devport.wertik.items.utils.Language;
@@ -31,7 +33,6 @@ public class ItemListener implements Listener {
         if (action == null) return;
 
         Player player = event.getPlayer();
-
         ItemStack item = event.getItem();
 
         if (item == null) return;
@@ -57,14 +58,16 @@ public class ItemListener implements Listener {
             return;
         }
 
+        EquipmentSlot hand = SpigotHelper.getVersion().contains("1.8") || SpigotHelper.getVersion().contains("1.7") ? null : event.getHand();
+
         // 0 == unlimited
         if (attribute.getUseLimit() > 0) {
             // Consume if above
-            if ((ItemsPlugin.getInstance().getAttributeHandler().getUses(item, attribute) + 1) > attribute.getUseLimit()) {
-                Language.ITEM_USE_LIMIT.getPrefixed().send(player);
-                Utils.consumeItem(player, event.getHand(), item);
+            if ((ItemsPlugin.getInstance().getAttributeHandler().getUses(item, attribute) + 1) >= attribute.getUseLimit()) {
+                Language.ITEM_USE_LIMIT.sendPrefixed(player);
+                Utils.consumeItem(player, hand, item);
             } else
-                Utils.consumeItem(player, event.getHand(), ItemsPlugin.getInstance().getAttributeHandler().addUse(item, attribute));
+                Utils.consumeItem(player, hand, ItemsPlugin.getInstance().getAttributeHandler().addUse(item, attribute));
         }
 
         // Reward the player
