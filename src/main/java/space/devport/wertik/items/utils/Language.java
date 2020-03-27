@@ -25,41 +25,43 @@ public enum Language {
 
     LINE_ADDED("Line-Added", "&7Line added to item lore."),
     LINE_REMOVED("Line-Removed", "&7Line removed from item lore."),
-    FLAG_ADDED("Flag-Added", "&cFlag added to item."),
-    FLAG_REMOVED("Flag-Removed", "&cFlag removed from item."),
+    FLAG_ADDED("Flag-Added", "&7Flag added to item."),
+    FLAG_REMOVED("Flag-Removed", "&7Flag removed from item."),
     NO_FLAG("No-Flag", "&cItem doesn't have this flag."),
     ENCHANT_ADDED("Enchant-Added", "&7Enchant added to item."),
     ENCHANT_REMOVED("Enchant-Removed", "&7Enchantment removed."),
     INVALID_ENCHANT("Invalid-Enchantment", "&cEnchantment is invalid."),
+    ITEM_RENAMED("Item-Renamed", "&7Item renamed."),
 
     /**
      * ITEM COMMANDS
      */
 
-    SPAWNED_AT("Spawned-At", "&eItem &f%item%&7x%amount%&e spawned &8@ &7%location%"),
-    ITEMS_SAVED("Items-Saved", "&eItems saved to storage."),
-    ITEMS_LOADED("Items-Loaded", "&eItems loaded from storage."),
-    ITEM_SAVED("Item-Saved", "&eItem &f%item% &esaved to storage."),
-    ITEM_LOADED("Item-Loaded", "&eItem &f%item% &eloaded from storage."),
-    ITEM_NOT_VALID("Item-Not-Valid", "&eItem &f%item% &edoes not exist."),
+    SPAWNED_AT("Spawned-At", "&7Item &f%item%&7x%amount%&7 spawned &8@ &7%location%"),
+    ITEMS_SAVED("Items-Saved", "&7Items saved to storage."),
+    ITEMS_LOADED("Items-Loaded", "&7Items loaded from storage."),
+    ITEM_SAVED("Item-Saved", "&7Item &f%item% &7saved to storage."),
+    ITEM_LOADED("Item-Loaded", "&7Item &f%item% &7loaded from storage."),
+    ITEM_NOT_VALID("Item-Not-Valid", "&7Item &f%item% &7does not exist."),
 
     /**
      * ATTRIBUTES
      */
 
-    ATTRIBUTE_ADDED("Attribute-Added", "&eAttribute &f%attribute% &eadded to item."),
-    ATTRIBUTE_REMOVED("Attribute-Removed", "&eAttribute &f%attribute% &eremoved from item."),
+    ATTRIBUTE_ADDED("Attribute-Added", "&7Attribute &f%attribute% &7added to item."),
+    ATTRIBUTE_REMOVED("Attribute-Removed", "&7Attribute &f%attribute% &7removed from item."),
 
     /**
      * COOLDOWNS
      */
 
     COOLDOWN_EXPIRED("Cooldown-Expired", "&7Cooldown on attribute %attribute% has expired."),
-    ITEM_ON_COOLDOWN("Item-Cooldown", "&7Item is still on cooldown, wait &f%time%&7."),
+    ITEM_ON_COOLDOWN("Item-Cooldown", "&7Item is still on cooldown, wait &f%time%&7s."),
 
     /**
      * LIMIT USE
      */
+
     ITEM_USE_LIMIT("Item-Use-Limit", "&7You have reached this items maximum amount of uses.");
 
     @Getter

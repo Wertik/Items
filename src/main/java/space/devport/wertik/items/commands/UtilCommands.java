@@ -46,19 +46,13 @@ public class UtilCommands implements CommandExecutor {
 
         switch (cmd.getName().toLowerCase()) {
             case "setname":
-                StringBuilder name = new StringBuilder();
-
-                for (String arg : args) {
-                    name.append(arg).append(" ");
-                }
-
                 ItemBuilder builder = new ItemBuilder(item);
 
-                builder.displayName(StringUtil.color(name.toString()));
+                builder.displayName(StringUtil.color(String.join(" ", args)));
 
                 player.getInventory().setItemInMainHand(builder.build());
 
-                player.sendMessage(StringUtil.color("&eRenamed."));
+                Language.ITEM_RENAMED.sendPrefixed(sender);
                 break;
             case "detail":
                 sender.sendMessage(StringUtil.color("&eName: &f" + item.getItemMeta().getDisplayName()));

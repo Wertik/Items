@@ -3,7 +3,6 @@ package space.devport.wertik.items;
 import lombok.Getter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.event.block.Action;
 import org.bukkit.plugin.java.JavaPlugin;
 import space.devport.utils.ConsoleOutput;
 import space.devport.utils.DevportUtils;
@@ -30,6 +29,7 @@ public class ItemsPlugin extends JavaPlugin {
     // TODO: Add PlaceholderAPI support
     // TODO: Figure out syncing item cache w file (prob save to cache & to file when updated in-game)
     // TODO: Add sneak click
+    // TODO: Placeholders for use limit, cooldown n shit in rewards
 
     @Getter
     private static ItemsPlugin instance;
