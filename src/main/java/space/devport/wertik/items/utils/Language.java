@@ -17,6 +17,14 @@ public enum Language {
     PLAYER_OFFLINE("Player-Offline", "&cThat player is not online."),
     CANNOT_HELP_WITH_AIR("Cannot-Help-With-Air", "&cCannot help you with AIR."),
     RELOAD("Reload-Done", "&7Done... reload took &f%time%&7ms.", "Reload does not manipulate with item storage, to load/save them, do '/items load/save'."),
+    TOO_MANY_ARGUMENTS("Too-Many-Arguments", "&cToo many arguments.", "&cUsage: &7%usage%"),
+    NOT_ENOUGH_ARGUMENTS("Not-Enough-Arguments", "&cNot enough arguments.", "&cUsage: &7%usage%"),
+
+    /**
+     * USAGE
+     */
+
+    USAGE_SAVE("Usage.Items-Save", "/%label% save (name)"),
 
     /**
      * UTIL COMMANDS
@@ -94,12 +102,19 @@ public enum Language {
     public static void load() {
         Configuration lang = new Configuration(ItemsPlugin.getInstance(), "language");
 
+        boolean save = false;
+
         for (Language message : values()) {
-            MessageBuilder msg = lang.loadMessageBuilder(message.getPath(), message.getValue());
-            message.setValue(msg);
+            if (!lang.getFileConfiguration().contains(message.getPath())) {
+                lang.setMessageBuilder(message.getPath(), message.getValue());
+                save = true;
+            } else {
+                message.setValue(lang.loadMessageBuilder(message.getPath(), message.getValue()));
+            }
         }
 
-        lang.save();
+        if (save)
+            lang.save();
     }
 
     public void send(CommandSender sender) {
