@@ -249,7 +249,7 @@ public class ItemsCommand implements CommandExecutor {
                     break;
                 case "load":
                     if (args.length > 1) {
-                        if (ItemsPlugin.getInstance().getItemHandler().getItem(args[1]) == null) {
+                        if (!ItemsPlugin.getInstance().getItemHandler().checkItemStorage(args[1])) {
                             Language.ITEM_NOT_VALID.getPrefixed().fill("%item%", args[1]).send(sender);
                             return true;
                         }

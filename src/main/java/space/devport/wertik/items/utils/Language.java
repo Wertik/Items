@@ -43,6 +43,13 @@ public enum Language {
     ITEM_NOT_VALID("Item-Not-Valid", "&eItem &f%item% &edoes not exist."),
 
     /**
+     * ATTRIBUTES
+     * */
+
+    ATTRIBUTE_ADDED("Attribute-Added", "&eAttribute &f%attribute% &eadded to item."),
+    ATTRIBUTE_REMOVED("Attribute-Removed", "&eAttribute &f%attribute% &eremoved from item."),
+
+    /**
      * COOLDOWNS
      */
 

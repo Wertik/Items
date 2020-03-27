@@ -5,7 +5,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import space.devport.utils.messageutil.StringUtil;
@@ -80,17 +79,16 @@ public class AttCommands implements CommandExecutor {
                         return true;
                     }
 
-                    try {
-                        Action.valueOf(args[2].toUpperCase());
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    String action = args[2].toLowerCase();
+
+                    if (!ItemsPlugin.getInstance().getActionNames().contains(action)) {
                         sender.sendMessage(StringUtil.color("&cThat click type is not valid."));
                         sender.sendMessage(StringUtil.color("&cValid ones: &f" + String.join(", ", ItemsPlugin.getInstance().getActionNames())));
                         return true;
                     }
 
                     player.getInventory().setItemInMainHand(attributeHandler.setAttribute(item, args[1], args[2]));
-                    sender.sendMessage(StringUtil.color("&eShould be added."));
+                    Language.ATTRIBUTE_ADDED.getPrefixed().fill("%attribute%", args[1]).send(sender);
                     break;
                 case "rem":
                 case "r":
@@ -124,11 +122,11 @@ public class AttCommands implements CommandExecutor {
 
                     if (attributeHandler.getAttributes(item).containsKey(param)) {
                         player.getInventory().setItemInMainHand(attributeHandler.removeAttribute(item, param));
-                        sender.sendMessage(StringUtil.color("&Action removed."));
+                        Language.ATTRIBUTE_REMOVED.getPrefixed().fill("%attribute%", param).send(sender);
                         return true;
                     } else if (attributeHandler.getAttributes(item).containsValue(param)) {
-                        player.setItemInHand(attributeHandler.removeAttribute(item, param));
-                        sender.sendMessage(StringUtil.color("&eAttribute removed."));
+                        player.getInventory().setItemInMainHand(attributeHandler.removeAttribute(item, param));
+                        Language.ATTRIBUTE_REMOVED.getPrefixed().fill("%attribute%", param).send(sender);
                         return true;
                     } else
                         sender.sendMessage(StringUtil.color("&cCould not remove attribute."));

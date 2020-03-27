@@ -74,6 +74,12 @@ public class ItemHandler {
         addItem(name, storage.loadItemBuilder(name));
     }
 
+    public boolean checkItemStorage(String name) {
+        storage.reload();
+
+        return storage.getFileConfiguration().contains(name);
+    }
+
     // Get item from cache
     public ItemBuilder getItem(String name) {
         return this.items.get(name);
