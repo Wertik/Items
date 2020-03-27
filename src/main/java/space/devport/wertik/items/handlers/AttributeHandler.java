@@ -81,12 +81,12 @@ public class AttributeHandler {
     }
 
     public ItemStack setAttribute(ItemStack item, String action, String attribute) {
-        return ItemNBTEditor.writeNBT(item, action.toLowerCase(), attribute.toLowerCase());
+        return ItemNBTEditor.writeNBT(item, action.toLowerCase(), attribute);
     }
 
     // Remove attribute by action
     public ItemStack removeAction(ItemStack item, String action) {
-        return ItemNBTEditor.removeNBT(item, action);
+        return ItemNBTEditor.removeNBT(item, action.toLowerCase());
     }
 
     // Remove attribute from all actions

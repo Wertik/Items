@@ -44,7 +44,7 @@ public enum Language {
 
     /**
      * ATTRIBUTES
-     * */
+     */
 
     ATTRIBUTE_ADDED("Attribute-Added", "&eAttribute &f%attribute% &eadded to item."),
     ATTRIBUTE_REMOVED("Attribute-Removed", "&eAttribute &f%attribute% &eremoved from item."),
@@ -102,8 +102,11 @@ public enum Language {
     }
 
     public MessageBuilder getPrefixed() {
-        MessageBuilder builder = new MessageBuilder(ItemsPlugin.getInstance().getConsoleOutput().getPrefix());
-        get().getMessage().forEach(builder::addLine);
-        return builder;
+        if (get().isEmpty())
+            return new MessageBuilder();
+
+        MessageBuilder message = new MessageBuilder(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + get().getWorkingMessage().get(0));
+        get().getWorkingMessage().subList(0, get().getWorkingMessage().size() - 1).forEach(message::addLine);
+        return message;
     }
 }

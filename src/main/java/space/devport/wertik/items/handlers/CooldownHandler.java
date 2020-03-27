@@ -113,8 +113,15 @@ public class CooldownHandler {
             return true;
         }
 
-        return this.cooldownCache.get(uniqueID)
-                .stream()
-                .noneMatch(cd -> cd.getAttributeName().equals(attributeName));
+        Cooldown cd = this.cooldownCache.get(uniqueID).stream().filter(i -> i.getAttributeName().equalsIgnoreCase(attributeName)).findAny().orElse(null);
+
+        if (cd == null) return true;
+
+        if (System.currentTimeMillis() > cd.getTime()) {
+            removeCooldown(uniqueID, attributeName);
+            return true;
+        }
+
+        return false;
     }
 }

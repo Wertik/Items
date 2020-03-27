@@ -87,7 +87,7 @@ public class AttCommands implements CommandExecutor {
                         return true;
                     }
 
-                    player.getInventory().setItemInMainHand(attributeHandler.setAttribute(item, args[1], args[2]));
+                    player.getInventory().setItemInMainHand(attributeHandler.setAttribute(item, args[2], args[1]));
                     Language.ATTRIBUTE_ADDED.getPrefixed().fill("%attribute%", args[1]).send(sender);
                     break;
                 case "rem":

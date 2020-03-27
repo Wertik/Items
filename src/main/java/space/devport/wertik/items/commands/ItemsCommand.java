@@ -137,7 +137,11 @@ public class ItemsCommand implements CommandExecutor {
                     // NBT
                     if (ItemNBTEditor.hasNBT(item)) {
                         sender.sendMessage(StringUtil.color("&eNBT:"));
-                        ItemNBTEditor.getNBTTagMap(item).forEach((k, v) -> sender.sendMessage(StringUtil.color("&8- &7" + k + "&f:&7" + v)));
+
+                        for (String tag : ItemNBTEditor.getNBTTagMap(item).keySet()) {
+                            if (!ItemsPlugin.getInstance().getFilteredNBT().contains(tag))
+                                sender.sendMessage(StringUtil.color("&8- &7" + tag + "&f:&7" + ItemNBTEditor.getNBT(item, tag)));
+                        }
                     }
                     break;
                 case "drop":

@@ -1,5 +1,6 @@
 package space.devport.wertik.items.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,9 +20,7 @@ public class ItemListener implements Listener {
     public void onUse(PlayerInteractEvent event) {
 
         // ignore physical action == button/plate interaction
-        if (event.getAction().equals(Action.PHYSICAL)) {
-            return;
-        }
+        if (event.getAction() == Action.PHYSICAL) return;
 
         String action = null;
         for (String a : ItemsPlugin.getInstance().getActionNames()) {
@@ -31,38 +30,39 @@ public class ItemListener implements Listener {
             }
         }
 
-        if (action == null)
+        if (action == null) {
+            Bukkit.getLogger().info("Found no action");
             return;
+        }
 
         Player player = event.getPlayer();
 
         ItemStack item = event.getItem();
 
-        if (item == null)
+        if (item == null) {
+            Bukkit.getLogger().info("Found no item");
             return;
+        }
 
         // Ignore air and non-special items
-        if (item.getType().equals(Material.AIR) || !ItemsPlugin.getInstance().getItemHandler().hasAttribute(item)) {
+        if (item.getType() == Material.AIR)
             return;
-        }
-
-        // Returns if there are no attributes set for this action
-        if (!ItemNBTEditor.hasNBTKey(item, action)) {
-            return;
-        }
 
         // Get attribute from item
         Attribute attribute = ItemsPlugin.getInstance().getAttributeHandler().getAttribute(item, action);
 
         // Attribute might be invalid
         if (attribute == null) {
+            Bukkit.getLogger().info("Found no attribute in cache");
             return;
         }
 
         // If the item is not usable, send a message and return
         if (!ItemsPlugin.getInstance().getCooldownHandler().isUsable(player, attribute.getName())) {
 
-            double cooldownTime = ItemsPlugin.getInstance().getCooldownHandler().getTimeRemaining(player, attribute.getName());
+            Bukkit.getLogger().info("Not usable");
+
+            double cooldownTime = ItemsPlugin.getInstance().getCooldownHandler().getTimeRemaining(player, attribute.getName()) / 1000D;
 
             Language.ITEM_ON_COOLDOWN.getPrefixed()
                     .fill("%time%", String.valueOf(cooldownTime))

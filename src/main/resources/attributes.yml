@@ -15,7 +15,7 @@ attribute-one:
     - 'p! say Woooohooo! indeed.'
     - 'op! pl'
   # Item cooldown in seconds
-  cooldown: 3600
+  cooldown: 5
   # How many times can this item be used before being consumed.
   use-limit: 1
 attribute-two:

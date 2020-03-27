@@ -38,6 +38,9 @@ public class ItemsPlugin extends JavaPlugin {
     private final List<String> actionNames = new ArrayList<>(Arrays.asList("right_click", "left_click"));
 
     @Getter
+    private final List<String> filteredNBT = new ArrayList<>(Arrays.asList("Enchantments", "Damage"));
+
+    @Getter
     public ConsoleOutput consoleOutput;
 
     @Getter

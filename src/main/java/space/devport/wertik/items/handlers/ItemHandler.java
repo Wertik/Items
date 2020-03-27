@@ -21,13 +21,6 @@ public class ItemHandler {
         storage = new Configuration(ItemsPlugin.getInstance(), "items");
     }
 
-    // Check if an item has attributes attached
-    public boolean hasAttribute(ItemStack item) {
-        return ItemsPlugin.getInstance().getActionNames()
-                .stream()
-                .anyMatch(action -> ItemNBTEditor.hasNBTKey(item, action.toLowerCase()));
-    }
-
     // Load items from yaml
     public void loadItems() {
         storage.reload();

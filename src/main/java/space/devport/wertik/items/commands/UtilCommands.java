@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import space.devport.utils.itemutil.ItemBuilder;
 import space.devport.utils.itemutil.ItemNBTEditor;
 import space.devport.utils.messageutil.StringUtil;
+import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.utils.Language;
 import space.devport.wertik.items.utils.Utils;
 
@@ -89,7 +90,8 @@ public class UtilCommands implements CommandExecutor {
                 if (ItemNBTEditor.hasNBT(item)) {
                     sender.sendMessage(StringUtil.color("&eNBT:"));
                     for (String tag : ItemNBTEditor.getNBTTagMap(item).keySet()) {
-                        sender.sendMessage(StringUtil.color("&8- &7" + tag + "&f:&7" + ItemNBTEditor.getNBT(item, tag)));
+                        if (!ItemsPlugin.getInstance().getFilteredNBT().contains(tag))
+                            sender.sendMessage(StringUtil.color("&8- &7" + tag + "&f:&7" + ItemNBTEditor.getNBT(item, tag)));
                     }
                 }
 
