@@ -1,8 +1,6 @@
 package space.devport.wertik.items.utils;
 
-import com.google.common.base.Strings;
 import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.command.CommandSender;
 import space.devport.utils.configutil.Configuration;
 import space.devport.utils.messageutil.MessageBuilder;
@@ -18,8 +16,7 @@ public enum Language {
     ONLY_PLAYERS("Only-Players", "&cAction has to be done in-game."),
     PLAYER_OFFLINE("Player-Offline", "&cThat player is not online."),
     CANNOT_HELP_WITH_AIR("Cannot-Help-With-Air", "&cCannot help you with AIR."),
-    RELOAD_DONE("Reload-Done", "&7Done... reload took &f%time%&7ms."),
-    RELOAD_NOTE("Reload-Note", "Reload does not manipulate with item storage, to load/save them, do '/items load/save'."),
+    RELOAD("Reload-Done", "&7Done... reload took &f%time%&7ms.", "Reload does not manipulate with item storage, to load/save them, do '/items load/save'."),
 
     /**
      * UTIL COMMANDS
@@ -74,25 +71,32 @@ public enum Language {
     private final String path;
 
     @Getter
-    @Setter
-    private String value;
+    private MessageBuilder value;
 
-    Language(String path, String value) {
+    Language(String path, MessageBuilder value) {
         this.path = path;
         this.value = value;
+    }
+
+    Language(String path, String... value) {
+        this.path = path;
+        this.value = new MessageBuilder(value);
+    }
+
+    public void setValue(MessageBuilder value) {
+        this.value = value;
+    }
+
+    public void setValue(String... value) {
+        setValue(new MessageBuilder(value));
     }
 
     public static void load() {
         Configuration lang = new Configuration(ItemsPlugin.getInstance(), "language");
 
         for (Language message : values()) {
-            String value = lang.getFileConfiguration().getString(message.getPath());
-
-            if (!Strings.isNullOrEmpty(value)) {
-                message.setValue(value);
-            } else {
-                lang.getFileConfiguration().set(message.getPath(), message.getValue());
-            }
+            MessageBuilder msg = lang.loadMessageBuilder(message.getPath(), message.getValue());
+            message.setValue(msg);
         }
 
         lang.save();

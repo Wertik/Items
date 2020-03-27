@@ -7,7 +7,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import space.devport.utils.ConsoleOutput;
 import space.devport.utils.DevportUtils;
 import space.devport.utils.configutil.Configuration;
-import space.devport.utils.messageutil.StringUtil;
 import space.devport.wertik.items.commands.*;
 import space.devport.wertik.items.handlers.AttributeHandler;
 import space.devport.wertik.items.handlers.CooldownHandler;
@@ -132,8 +131,7 @@ public class ItemsPlugin extends JavaPlugin {
 
         consoleOutput.addListener(sender);
 
-        Language.RELOAD_DONE.getPrefixed().fill("%time%", "" + (System.currentTimeMillis() - start)).send(sender);
-        Language.RELOAD_NOTE.send(sender);
+        Language.RELOAD.getPrefixed().fill("%time%", "" + (System.currentTimeMillis() - start)).send(sender);
     }
 
     @Override

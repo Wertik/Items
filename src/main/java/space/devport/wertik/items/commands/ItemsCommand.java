@@ -42,39 +42,6 @@ public class ItemsCommand implements CommandExecutor {
                     sender.sendMessage(StringUtil.color("&eItems: &f" +
                             Utils.listToString(new ArrayList<>(ItemsPlugin.getInstance().getItemHandler().getItems().keySet()), "&7, &f", "&cNo items saved.")));
                     break;
-                case "add":
-                case "a":
-                    if (args.length < 2) {
-                        sender.sendMessage(StringUtil.color("&cNot enough arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/i add <name>"));
-                        return true;
-                    }
-
-                    if (args.length > 2) {
-                        sender.sendMessage(StringUtil.color("&cToo many arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/i add <name>"));
-                        return true;
-                    }
-
-                    if (!(sender instanceof Player)) {
-                        Language.ONLY_PLAYERS.sendPrefixed(sender);
-                        return true;
-                    }
-
-                    Player player = (Player) sender;
-
-                    if (Utils.getItem(player).getType().equals(Material.AIR)) {
-                        Language.CANNOT_HELP_WITH_AIR.sendPrefixed(sender);
-                        return true;
-                    }
-
-                    if (ItemsPlugin.getInstance().getItemHandler().getItem(args[1]) == null)
-                        Language.ITEM_ADDED.getPrefixed().fill("%item%", args[1]).send(sender);
-                    else
-                        Language.ITEM_UPDATED.getPrefixed().fill("%item%", args[1]).send(sender);
-
-                    ItemsPlugin.getInstance().getItemHandler().addItem(args[1], Utils.getItem(player));
-                    break;
                 case "remove":
                 case "rem":
                 case "r":
@@ -276,15 +243,33 @@ public class ItemsCommand implements CommandExecutor {
                     break;
                 case "save":
                     if (args.length > 1) {
-                        if (ItemsPlugin.getInstance().getItemHandler().getItem(args[1]) == null) {
-                            Language.ITEM_NOT_VALID.getPrefixed().fill("%item%", args[1]).send(sender);
+                        if (args.length > 2) {
+                            sender.sendMessage(StringUtil.color("&cToo many arguments."));
+                            sender.sendMessage(StringUtil.color("&cUsage: &7/i save (name)"));
                             return true;
                         }
 
-                        ItemsPlugin.getInstance().getItemHandler().saveItem(args[1]);
-                        Language.ITEM_SAVED.getPrefixed().fill("%item%", args[1]).send(sender);
+                        if (!(sender instanceof Player)) {
+                            Language.ONLY_PLAYERS.sendPrefixed(sender);
+                            return true;
+                        }
+
+                        Player player = (Player) sender;
+
+                        if (Utils.getItem(player).getType().equals(Material.AIR)) {
+                            Language.CANNOT_HELP_WITH_AIR.sendPrefixed(sender);
+                            return true;
+                        }
+
+                        if (ItemsPlugin.getInstance().getItemHandler().getItem(args[1]) == null)
+                            Language.ITEM_SAVED.getPrefixed().fill("%item%", args[1]).send(sender);
+                        else
+                            Language.ITEM_UPDATED.getPrefixed().fill("%item%", args[1]).send(sender);
+
+                        ItemsPlugin.getInstance().getItemHandler().addItem(args[1], Utils.getItem(player));
                         return true;
                     }
+
                     ItemsPlugin.getInstance().getItemHandler().saveItems();
                     Language.ITEMS_SAVED.getPrefixed().send(sender);
                     break;
@@ -300,9 +285,8 @@ public class ItemsCommand implements CommandExecutor {
     private void help(CommandSender sender, String label) {
         sender.sendMessage(StringUtil.color("&8&m        &e Items &8&m        &r" +
                 "\n&e/" + label + " list &8- &7Lists saved items." +
-                "\n&e/" + label + " save (name) &8- &7Save all items, or by name." +
+                "\n&e/" + label + " save (name) &8- &7Save all loaded items, or save item in hand under a name." +
                 "\n&e/" + label + " load (name) &8- &7Load all items, or by name." +
-                "\n&e/" + label + " add <name> &8- &7Saves item in hand to db under given name." +
                 "\n&e/" + label + " remove <name> &8- &7Removes item by name." +
                 "\n&e/" + label + " detail <name> &8- &7Displays info about an item in the db." +
                 "\n&e/" + label + " drop <name> <worldName;x;y;z> (amount) &8- &7Drops item on a given location." +

@@ -79,10 +79,7 @@ public class ItemHandler {
 
     public void addItem(String name, ItemBuilder builder) {
         this.items.put(name, builder);
-
-        storage.reload();
-        storage.setItemBuilder(name, builder);
-        storage.save();
+        saveItem(name);
     }
 
     // Add a new item to cache
