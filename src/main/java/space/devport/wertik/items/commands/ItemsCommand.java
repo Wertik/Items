@@ -168,7 +168,7 @@ public class ItemsCommand implements CommandExecutor {
 
                     for (int i = 1; i < locationString.length; i++) {
                         try {
-                            Integer.valueOf(locationString[i]);
+                            Double.parseDouble(locationString[i]);
                         } catch (NumberFormatException e) {
                             sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cCoordinates have to be provided in integers."));
                             return true;
@@ -180,11 +180,12 @@ public class ItemsCommand implements CommandExecutor {
                     item.setAmount(amount);
 
                     Location location = new Location(ItemsPlugin.getInstance().getServer().getWorld(locationString[0]),
-                            Integer.parseInt(locationString[1]),
-                            Integer.parseInt(locationString[2]),
-                            Integer.parseInt(locationString[3]));
+                            Double.parseDouble(locationString[1]),
+                            Double.parseDouble(locationString[2]),
+                            Double.parseDouble(locationString[3]));
 
                     if (location.getWorld() == null) {
+                        // World not loaded or invalid
                         return true;
                     }
 
@@ -268,10 +269,9 @@ public class ItemsCommand implements CommandExecutor {
                 "\n&e/" + label + " add <name> &8- &7Saves item in hand to db under given name." +
                 "\n&e/" + label + " remove <name> &8- &7Removes item by name." +
                 "\n&e/" + label + " list &8- &7Lists saved items." +
-                "\n&e/" + label + " get <name> [amount] &8- &7Adds a saved item into your inventory." +
                 "\n&e/" + label + " detail <name> &8- &7Displays info about an item in the db." +
                 "\n&e/" + label + " drop <name> <worldName;x;y;z> (amount) &8- &7Drops item on a given location." +
-                "\n&e/" + label + " give <name> <playerName> [amount] &8- &7Give player an item." +
+                "\n&e/" + label + " give <name> (playerName) (amount) &8- &7Give player an item." +
                 "\n&e/att help &8- &7Help page regarding attributes." +
                 "\n&e/setname <name> &8- &7Set display name of an item." +
                 "\n&e/lore &8- &7List item lore." +
@@ -280,6 +280,8 @@ public class ItemsCommand implements CommandExecutor {
                 "\n&e/flags &8- &7Display flags on an item." +
                 "\n&e/addflag <flagName> &8- &7Add itemFlag to an item." +
                 "\n&e/remflag <flagName> &8- &7Remove itemFlag from an item." +
-                "\n&e/enchs"));
+                "\n&e/enchs &8- &7List enchantments on item." +
+                "\n&e/addench <enchantment> <level> &8- &7Add enchant to item." +
+                "\n&e/remench <enchantment> &8- &7Remove enchantment from item."));
     }
 }
