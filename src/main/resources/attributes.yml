@@ -23,10 +23,10 @@ attribute-one:
 the-second-attribute:
   commands:
     - 'give %player% diamond 1'
-    # Messages can be either one line, or multiple.
-    # Send to the player only.
-    inform: '&7You used an item with the Second Attribute! gj!'
-    # Broadcasted to the server.
-    broadcast:
-      - '&8&m        &e Item used'
-      - '&7&m  &r&e> &8Attribute fired'
+  # Messages can be either one line, or multiple.
+  # Send to the player only.
+  inform: '&7You used an item with the Second Attribute! gj!'
+  # Broadcasted to the server.
+  broadcast:
+    - '&8&m        &e Item used'
+    - '&7&m  &r&e> &8Attribute fired'
