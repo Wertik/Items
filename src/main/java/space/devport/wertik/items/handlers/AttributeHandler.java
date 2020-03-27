@@ -53,11 +53,11 @@ public class AttributeHandler {
             Reward reward = new Reward();
 
             // Commands
-            storage.getStringList("commands", new ArrayList<>());
+            storage.getStringList(name + ".commands", new ArrayList<>());
 
             // Messages
-            reward.setBroadcast(storage.loadMessageBuilder("broadcast", new MessageBuilder()));
-            reward.setInform(storage.loadMessageBuilder("inform", new MessageBuilder()));
+            reward.setBroadcast(storage.loadMessageBuilder(name + ".broadcast", new MessageBuilder()));
+            reward.setInform(storage.loadMessageBuilder(name + ".inform", new MessageBuilder()));
 
             attribute.setReward(reward);
 

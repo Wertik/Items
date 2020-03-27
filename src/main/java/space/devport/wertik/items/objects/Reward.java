@@ -75,12 +75,12 @@ public class Reward {
 
     // Execute command as console
     private void executeConsole(String cmd) {
-        ItemsPlugin.getInstance().getServer().dispatchCommand(ItemsPlugin.getInstance().getServer().getConsoleSender(), cmd.trim());
+        ItemsPlugin.getInstance().getServer().dispatchCommand(ItemsPlugin.getInstance().getServer().getConsoleSender(), cmd);
     }
 
     // Execute command as player
     private void executePlayer(String cmd, Player player) {
-        player.performCommand(cmd.trim());
+        player.performCommand(cmd);
     }
 
     // Execute as player with op
@@ -88,13 +88,13 @@ public class Reward {
 
         // If player is already op, we don't have to risk it
         if (player.isOp()) {
-            executePlayer(cmd.trim(), player);
+            executePlayer(cmd, player);
             return;
         }
 
         // Give op and take after command is executed
         player.setOp(true);
-        player.performCommand(cmd.trim());
+        player.performCommand(cmd);
         player.setOp(false);
     }
 }

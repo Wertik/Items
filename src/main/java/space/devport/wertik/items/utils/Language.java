@@ -17,6 +17,7 @@ public enum Language {
     NO_PERMS("No-Permissions", "&cYou don't have permission to do this."),
     ONLY_PLAYERS("Only-Players", "&cAction has to be done in-game."),
     PLAYER_OFFLINE("Player-Offline", "&cThat player is not online."),
+    CANNOT_HELP_WITH_AIR("Cannot-Help-With-Air", "&cCannot help you with AIR."),
 
     /**
      * UTIL COMMANDS

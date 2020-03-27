@@ -3,7 +3,6 @@ package space.devport.wertik.items.handlers;
 import org.bukkit.inventory.ItemStack;
 import space.devport.utils.configutil.Configuration;
 import space.devport.utils.itemutil.ItemBuilder;
-import space.devport.utils.itemutil.ItemNBTEditor;
 import space.devport.wertik.items.ItemsPlugin;
 
 import java.util.Collections;
@@ -80,16 +79,24 @@ public class ItemHandler {
 
     public void addItem(String name, ItemBuilder builder) {
         this.items.put(name, builder);
+
+        storage.reload();
+        storage.setItemBuilder(name, builder);
+        storage.save();
     }
 
     // Add a new item to cache
     public void addItem(String name, ItemStack item) {
-        this.items.put(name, new ItemBuilder(item));
+        addItem(name, new ItemBuilder(item));
     }
 
     // Remove an item from cache
     public void removeItem(String name) {
         this.items.remove(name);
+
+        storage.reload();
+        storage.getFileConfiguration().set(name, null);
+        storage.save();
     }
 
     public Map<String, ItemBuilder> getItems() {

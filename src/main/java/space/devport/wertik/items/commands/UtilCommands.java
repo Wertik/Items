@@ -37,12 +37,12 @@ public class UtilCommands implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
-            sender.sendMessage(StringUtil.color("&cCannot help you with AIR."));
+        final ItemStack item = player.getInventory().getItemInMainHand();
+
+        if (item.getType() == Material.AIR) {
+            Language.CANNOT_HELP_WITH_AIR.sendPrefixed(sender);
             return true;
         }
-
-        ItemStack item;
 
         switch (cmd.getName().toLowerCase()) {
             case "setname":
@@ -52,7 +52,7 @@ public class UtilCommands implements CommandExecutor {
                     name.append(arg).append(" ");
                 }
 
-                ItemBuilder builder = new ItemBuilder(player.getInventory().getItemInMainHand());
+                ItemBuilder builder = new ItemBuilder(item);
 
                 builder.displayName(StringUtil.color(name.toString()));
 
@@ -61,8 +61,6 @@ public class UtilCommands implements CommandExecutor {
                 player.sendMessage(StringUtil.color("&eRenamed."));
                 break;
             case "detail":
-                item = player.getInventory().getItemInMainHand();
-
                 sender.sendMessage(StringUtil.color("&eName: &f" + item.getItemMeta().getDisplayName()));
                 sender.sendMessage(StringUtil.color("&eMaterial: &f" + item.getType().toString()));
                 sender.sendMessage(StringUtil.color("&eAmount: &f" + item.getAmount()));
@@ -103,17 +101,11 @@ public class UtilCommands implements CommandExecutor {
                     return true;
                 }
 
-                StringBuilder line = new StringBuilder();
+                builder = new ItemBuilder(item);
 
-                for (String arg : args) {
-                    line.append(" ").append(arg);
-                }
+                builder.addLine(String.join(" ", args));
 
-                builder = new ItemBuilder(player.getInventory().getItemInMainHand());
-
-                builder.addLine(line.toString());
                 player.getInventory().setItemInMainHand(builder.build());
-
                 Language.LINE_ADDED.getPrefixed().send(sender);
                 break;
             case "remlore":
@@ -131,7 +123,6 @@ public class UtilCommands implements CommandExecutor {
                     return true;
                 }
 
-                item = player.getInventory().getItemInMainHand();
                 ItemMeta meta = item.getItemMeta();
 
                 if (meta == null || !meta.hasLore()) {
@@ -199,13 +190,19 @@ public class UtilCommands implements CommandExecutor {
                 player.getInventory().setItemInMainHand(builder.build());
                 break;
             case "flags":
-                builder = new ItemBuilder(player.getInventory().getItemInMainHand());
+                builder = new ItemBuilder(item);
                 List<String> flags = builder.getFlags().stream().map(ItemFlag::name).collect(Collectors.toList());
                 sender.sendMessage(StringUtil.color("&eFlags: &f" + Utils.listToString(flags, "&7, &f", "&cNo flags.")));
                 break;
             case "lore":
-                builder = new ItemBuilder(player.getInventory().getItemInMainHand());
-                sender.sendMessage(StringUtil.color(StringUtil.color("&eLore: &f" + Utils.listToString(builder.getLore().getMessage(), "&7, &f", "&cNo lore."))));
+                builder = new ItemBuilder(item);
+
+                sender.sendMessage(StringUtil.color("&eLore:"));
+                int i = 0;
+                for (String line : builder.getLore().getMessage()) {
+                    sender.sendMessage(StringUtil.color("&f " + i + " &8- &r" + line));
+                    i++;
+                }
                 break;
             case "addench":
                 if (args.length < 2) {
