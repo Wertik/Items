@@ -3,4 +3,4 @@
 # Version: ${project.version}
 
 debug-enabled: false
-plugin-prefix: '&eItems &8>> '
+plugin-prefix: '&eItems &8>> &r'

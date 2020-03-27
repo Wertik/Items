@@ -143,11 +143,13 @@ public enum Language {
     }
 
     public void send(CommandSender sender) {
-        get().send(sender);
+        if (!get().isEmptyAbsolute())
+            get().send(sender);
     }
 
     public void sendPrefixed(CommandSender sender) {
-        getPrefixed().send(sender);
+        if (!getPrefixed().isEmpty())
+            getPrefixed().send(sender);
     }
 
     public MessageBuilder get() {
@@ -155,7 +157,7 @@ public enum Language {
     }
 
     public MessageBuilder getPrefixed() {
-        if (get().isEmpty())
+        if (get().isEmptyAbsolute())
             return new MessageBuilder();
 
         MessageBuilder message = new MessageBuilder(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + get().getWorkingMessage().get(0));
