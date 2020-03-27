@@ -4,10 +4,10 @@
 
 # Attribute name
 attribute-one:
-  # Commands to run on *click*
+  # Commands to run when the item is used
   # p! - commands ran as player
   # op! - executed as player with OP
-  # random! - picks a random command from marked, you can use above modifiers. (random has to be the first one.)
+  # random! - randomly picks one command from marked, you can use above modifiers. (random has to be the first one.)
   commands:
     - 'random! say Woooohoo!'
     - 'random! say No Wooohoo for u.'
@@ -15,9 +15,11 @@ attribute-one:
     - 'p! say Woooohooo! indeed.'
     - 'op! pl'
   # Item cooldown in seconds
+  # No cooldown when not specified
   cooldown: 5
   # How many times can this item be used before being consumed.
+  # Unlimited when 0 or not specified
   use-limit: 1
-attribute-two:
+the-second-attribute:
   commands:
     - 'give %player% diamond 1'

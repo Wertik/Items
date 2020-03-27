@@ -4,6 +4,3 @@
 
 debug-enabled: true
 plugin-prefix: '&eItems &8>> '
-
-# Inform the player when cooldown on an attribute expires?
-inform-on-cd: true
