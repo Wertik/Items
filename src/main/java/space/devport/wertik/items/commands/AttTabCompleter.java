@@ -34,7 +34,7 @@ public class AttTabCompleter implements TabCompleter {
         List<String> tabComplete = new ArrayList<>();
 
         if (args.length == 1) {
-            String[] subs = {"add", "remove", "list", "listhand", "clear", "help"};
+            String[] subs = {"add", "remove", "list", "clear", "help"};
             if (!args[0].equals("")) {
                 for (String sub : subs)
                     if (sub.toLowerCase().startsWith(args[0].toLowerCase()))

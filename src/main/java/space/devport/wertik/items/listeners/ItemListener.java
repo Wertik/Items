@@ -23,7 +23,17 @@ public class ItemListener implements Listener {
             return;
         }
 
-        String action = event.getAction().toString().toLowerCase();
+        String action = null;
+        for (String a : ItemsPlugin.getInstance().getActionNames()) {
+            if (event.getAction().toString().toLowerCase().contains(a)) {
+                action = a;
+                break;
+            }
+        }
+
+        if (action == null)
+            return;
+
         Player player = event.getPlayer();
 
         ItemStack item = event.getItem();

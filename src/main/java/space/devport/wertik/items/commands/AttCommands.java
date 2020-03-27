@@ -152,34 +152,30 @@ public class AttCommands implements CommandExecutor {
                     break;
                 case "list":
                 case "l":
-                    if (args.length > 1) {
+                    if (args.length > 2) {
                         sender.sendMessage(StringUtil.color("&cToo many arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/att list"));
+                        sender.sendMessage(StringUtil.color("&cUsage: &7/att list [hand]"));
                         return true;
                     }
 
-                    plugin.consoleOutput.debug("Atts: " + attributeHandler.getAttributeCache().keySet());
+                    if (args.length == 2) {
+                        if (args[1].equalsIgnoreCase("hand") || args[1].equalsIgnoreCase("h")) {
+                            if (item.getType().equals(Material.AIR)) {
+                                player.sendMessage(ItemsPlugin.getInstance().consoleOutput.getPrefix() + StringUtil.color("&cCannot help you with AIR."));
+                                return true;
+                            }
+
+                            sender.sendMessage(StringUtil.color("&eAttributes:"));
+                            Map<String, String> attributes = attributeHandler.getAttributes(item);
+
+                            for (String key : attributeHandler.getAttributes(item).keySet())
+                                sender.sendMessage(StringUtil.color("&8- &7" + key + "&f:&7" + attributes.get(key)));
+                            break;
+                        }
+                    }
+
+                    plugin.consoleOutput.debug("Attributes: " + attributeHandler.getAttributeCache().keySet());
                     sender.sendMessage(StringUtil.color("&eAttributes: &f" + Utils.listToString(new ArrayList<>(attributeHandler.getAttributeCache().keySet()), "&7, &f", "&cNo attributes saved.")));
-                    break;
-                case "listhand":
-                case "lh":
-                case "listh":
-                    if (item.getType().equals(Material.AIR)) {
-                        player.sendMessage(ItemsPlugin.getInstance().consoleOutput.getPrefix() + StringUtil.color("&cCannot help you with AIR."));
-                        return true;
-                    }
-
-                    if (args.length > 1) {
-                        sender.sendMessage(StringUtil.color("&cToo many arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/att listHand"));
-                        return true;
-                    }
-
-                    sender.sendMessage(StringUtil.color("&eAttributes:"));
-                    Map<String, String> attributes = attributeHandler.getAttributes(item);
-
-                    for (String key : attributeHandler.getAttributes(item).keySet())
-                        sender.sendMessage(StringUtil.color("&8- &7" + key + "&f:&7" + attributes.get(key)));
                     break;
                 case "help":
                 case "h":
@@ -195,7 +191,6 @@ public class AttCommands implements CommandExecutor {
                 "\n&e/att add <name> <action> &8- &7Add attribute to an item." +
                 "\n&e/att rem <name/action> &8- &7Remove attribute based on clickType/Name." +
                 "\n&e/att clear &8- &7Clears attributes." +
-                "\n&e/att list &8- &7Lists attributes from config." +
-                "\n&e/att listHand &8- &7List attributes on item in your hand."));
+                "\n&e/att list [hand/h] &8- &7Lists attributes from config or on item in hand."));
     }
 }

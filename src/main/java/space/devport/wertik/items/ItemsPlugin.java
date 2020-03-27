@@ -35,7 +35,7 @@ public class ItemsPlugin extends JavaPlugin {
 
     // Possible actions in lower case
     @Getter
-    private final List<String> actionNames = new ArrayList<>();
+    private final List<String> actionNames = new ArrayList<>(Arrays.asList("right_click", "left_click"));
 
     @Getter
     public ConsoleOutput consoleOutput;
@@ -67,9 +67,6 @@ public class ItemsPlugin extends JavaPlugin {
         // Setup ConsoleOutput
         DevportUtils utils = new DevportUtils(this);
         consoleOutput = utils.getConsoleOutput();
-
-        // Load actions
-        Arrays.stream(Action.values()).forEach(a -> actionNames.add(a.name().toLowerCase()));
 
         // Load configuration and basic options
         cfg = new Configuration(this, "config");
