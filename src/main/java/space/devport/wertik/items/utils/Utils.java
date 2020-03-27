@@ -13,7 +13,7 @@ import java.util.Map;
 public class Utils {
 
     public String mapToString(Map<?, ?> map, String splitter, String separator, String ifEmpty) {
-        StringBuilder str = ifEmpty == null ? null : new StringBuilder(ifEmpty);
+        StringBuilder str = ifEmpty == null ? new StringBuilder() : new StringBuilder(ifEmpty);
 
         if (!map.isEmpty()) {
             str = new StringBuilder();
@@ -22,7 +22,7 @@ public class Utils {
             }
         }
 
-        return str == null ? null : str.toString();
+        return str.toString();
     }
 
     public String listToString(List<String> list, String splitter, String ifEmpty) {

@@ -104,8 +104,9 @@ public class UtilCommands implements CommandExecutor {
                 break;
             case "addlore":
                 if (args.length < 1) {
-                    sender.sendMessage(StringUtil.color("&cNot enough arguments."));
-                    sender.sendMessage(StringUtil.color("&cUsage: &7/addlore <line>"));
+                    Language.NOT_ENOUGH_ARGUMENTS.getPrefixed()
+                            .fill("%usage%", "/addlore <line>")
+                            .send(sender);
                     return true;
                 }
 
@@ -116,8 +117,9 @@ public class UtilCommands implements CommandExecutor {
                 break;
             case "remlore":
                 if (args.length < 1) {
-                    sender.sendMessage(StringUtil.color("&cNot enough arguments."));
-                    sender.sendMessage(StringUtil.color("&cUsage: &7/remlore <lineIndex>"));
+                    Language.NOT_ENOUGH_ARGUMENTS.getPrefixed()
+                            .fill("%usage%", "/remlore <index>")
+                            .send(sender);
                     return true;
                 }
 
@@ -125,14 +127,16 @@ public class UtilCommands implements CommandExecutor {
                 try {
                     index = Integer.parseInt(args[0]);
                 } catch (NumberFormatException e) {
-                    sender.sendMessage(StringUtil.color("&cThat is not a number."));
+                    Language.NOT_A_NUMBER.getPrefixed()
+                            .fill("%param%", args[0])
+                            .send(sender);
                     return true;
                 }
 
                 ItemMeta meta = item.getItemMeta();
 
                 if (meta == null || !meta.hasLore()) {
-                    sender.sendMessage(StringUtil.color("&cThat item does not have a lore."));
+                    Language.NO_LORE.sendPrefixed(sender);
                     return true;
                 }
 
@@ -148,12 +152,15 @@ public class UtilCommands implements CommandExecutor {
                 break;
             case "flags":
                 List<String> flags = builder.getFlags().stream().map(ItemFlag::name).collect(Collectors.toList());
-                sender.sendMessage(StringUtil.color("&eFlags: &f" + Utils.listToString(flags, "&7, &f", "&cNo flags.")));
+                Language.FLAGS_LIST.getPrefixed()
+                        .fill("%flags%", Utils.listToString(flags, "&7, &f", "&cNo flags."))
+                        .send(sender);
                 break;
             case "addflag":
                 if (args.length < 1) {
-                    sender.sendMessage(StringUtil.color("&cNot enough arguments."));
-                    sender.sendMessage(StringUtil.color("&cUsage: &7/addflag <itemFlag>"));
+                    Language.NOT_ENOUGH_ARGUMENTS.getPrefixed()
+                            .fill("%usage%", "/addflag <itemFlag>")
+                            .send(sender);
                     return true;
                 }
 
@@ -162,7 +169,9 @@ public class UtilCommands implements CommandExecutor {
                 try {
                     flag = ItemFlag.valueOf(args[0].toUpperCase());
                 } catch (Exception e) {
-                    sender.sendMessage(StringUtil.color("&cFlag is invalid."));
+                    Language.FLAG_INVALID.getPrefixed()
+                            .fill("%flag%", args[0])
+                            .send(sender);
                     return true;
                 }
 
@@ -174,15 +183,18 @@ public class UtilCommands implements CommandExecutor {
                 break;
             case "remflag":
                 if (args.length < 1) {
-                    sender.sendMessage(StringUtil.color("&cNot enough arguments."));
-                    sender.sendMessage(StringUtil.color("&cUsage: &7/addflag <itemFlag>"));
+                    Language.NOT_ENOUGH_ARGUMENTS.getPrefixed()
+                            .fill("%usage%", "/addflag <itemFlag>")
+                            .send(sender);
                     return true;
                 }
 
                 try {
                     flag = ItemFlag.valueOf(args[0].toUpperCase());
                 } catch (Exception e) {
-                    sender.sendMessage(StringUtil.color("&cThat flag is invalid."));
+                    Language.FLAG_INVALID.getPrefixed()
+                            .fill("%flag%", args[0])
+                            .send(sender);
                     return true;
                 }
 
@@ -192,16 +204,19 @@ public class UtilCommands implements CommandExecutor {
                 }
 
                 builder.addFlag(flag);
-
                 player.getInventory().setItemInMainHand(builder.build());
+                Language.FLAG_ADDED.sendPrefixed(sender);
                 break;
             case "enchs":
-                sender.sendMessage(StringUtil.color("&eEnchants: &f" + Utils.mapToString(builder.getEnchants(), "&7, &f", "&f:", "&cNo enchants.")));
+                Language.ENCHANTS_LIST.getPrefixed()
+                        .fill("%enchants%", Utils.mapToString(builder.getEnchants(), "&7, &f", "&f:", "&cNo enchants."))
+                        .send(sender);
                 break;
             case "addench":
                 if (args.length < 2) {
-                    sender.sendMessage(StringUtil.color("&cNot enough arguments."));
-                    sender.sendMessage(StringUtil.color("&cUsage: &7/addench <enchantment> <level>"));
+                    Language.NOT_ENOUGH_ARGUMENTS.getPrefixed()
+                            .fill("%usage%", "/addench <enchantment> <level>")
+                            .send(sender);
                     return true;
                 }
 
@@ -209,7 +224,9 @@ public class UtilCommands implements CommandExecutor {
                 try {
                     level = Integer.parseInt(args[1]);
                 } catch (NumberFormatException e) {
-                    sender.sendMessage(StringUtil.color("&cThat is not a number."));
+                    Language.NOT_A_NUMBER.getPrefixed()
+                            .fill("%param%", args[1])
+                            .send(sender);
                     return true;
                 }
 
@@ -220,7 +237,7 @@ public class UtilCommands implements CommandExecutor {
                 }
 
                 if (enchantment == null) {
-                    Language.INVALID_ENCHANT.getPrefixed().send(sender);
+                    Language.INVALID_ENCHANT.sendPrefixed(sender);
                     return true;
                 }
 
@@ -231,8 +248,9 @@ public class UtilCommands implements CommandExecutor {
                 break;
             case "remench":
                 if (args.length < 1) {
-                    sender.sendMessage(StringUtil.color("&cNot enough arguments."));
-                    sender.sendMessage(StringUtil.color("&cUsage: &7/remench <enchantment>"));
+                    Language.NOT_ENOUGH_ARGUMENTS.getPrefixed()
+                            .fill("%usage%", "/remench <enchantment>")
+                            .send(sender);
                     return true;
                 }
 
@@ -253,7 +271,6 @@ public class UtilCommands implements CommandExecutor {
                 player.getInventory().setItemInMainHand(builder.build());
                 Language.ENCHANT_REMOVED.getPrefixed().send(sender);
                 break;
-            default:
         }
         return false;
     }

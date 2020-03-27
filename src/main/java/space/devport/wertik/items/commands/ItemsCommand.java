@@ -39,21 +39,24 @@ public class ItemsCommand implements CommandExecutor {
             switch (args[0].toLowerCase()) {
                 case "list":
                 case "l":
-                    sender.sendMessage(StringUtil.color("&eItems: &f" +
-                            Utils.listToString(new ArrayList<>(ItemsPlugin.getInstance().getItemHandler().getItems().keySet()), "&7, &f", "&cNo items saved.")));
+                    Language.ITEMS_LIST.getPrefixed()
+                            .fill("%items%", Utils.listToString(new ArrayList<>(ItemsPlugin.getInstance().getItemHandler().getItems().keySet()), "&7, &f", "&cNo items saved."))
+                            .send(sender);
                     break;
                 case "remove":
                 case "rem":
                 case "r":
                     if (args.length < 2) {
-                        sender.sendMessage(StringUtil.color("&cNot enough arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/i rem <name>"));
+                        Language.NOT_ENOUGH_ARGUMENTS.getPrefixed()
+                                .fill("%usage%", "/" + label + " remove <name>")
+                                .send(sender);
                         return true;
                     }
 
                     if (args.length > 2) {
-                        sender.sendMessage(StringUtil.color("&cToo many arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/i rem <name>"));
+                        Language.TOO_MANY_ARGUMENTS.getPrefixed()
+                                .fill("%usage%", "/" + label + " remove <name>")
+                                .send(sender);
                         return true;
                     }
 
@@ -68,14 +71,16 @@ public class ItemsCommand implements CommandExecutor {
                 case "detail":
                 case "d":
                     if (args.length < 2) {
-                        sender.sendMessage(StringUtil.color("&cNot enough arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/i detail <name>"));
+                        Language.NOT_ENOUGH_ARGUMENTS.getPrefixed()
+                                .fill("%usage%", "/" + label + " detail <name>")
+                                .send(sender);
                         return true;
                     }
 
                     if (args.length > 2) {
-                        sender.sendMessage(StringUtil.color("&cToo many arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/i detail <name>"));
+                        Language.TOO_MANY_ARGUMENTS.getPrefixed()
+                                .fill("%usage%", "/" + label + " detail <name>")
+                                .send(sender);
                         return true;
                     }
 
@@ -116,10 +121,10 @@ public class ItemsCommand implements CommandExecutor {
                     }
                     break;
                 case "drop":
-                    // /i drop <name> <worldName;x;y;z> (amount)
                     if (args.length < 3) {
-                        sender.sendMessage(StringUtil.color("&cNot enough arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/i drop <name> <worldName;x;y;z> [amount]"));
+                        Language.NOT_ENOUGH_ARGUMENTS.getPrefixed()
+                                .fill("%usage%", "/" + label + " drop <name> <worldName;x;y;z> (amount)")
+                                .send(sender);
                         return true;
                     }
 
@@ -134,7 +139,7 @@ public class ItemsCommand implements CommandExecutor {
                         try {
                             amount = Integer.parseInt(args[3]);
                         } catch (NumberFormatException e) {
-                            sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cAmount should be a number."));
+                            Language.NOT_A_NUMBER.sendPrefixed(sender);
                             return true;
                         }
                     }
@@ -145,7 +150,7 @@ public class ItemsCommand implements CommandExecutor {
                         try {
                             Double.parseDouble(locationString[i]);
                         } catch (NumberFormatException e) {
-                            sender.sendMessage(ItemsPlugin.getInstance().getConsoleOutput().getPrefix() + StringUtil.color("&cCoordinates have to be provided in numbers."));
+                            Language.NOT_A_NUMBER.sendPrefixed(sender);
                             return true;
                         }
                     }
@@ -166,7 +171,7 @@ public class ItemsCommand implements CommandExecutor {
 
                     location.getWorld().dropItemNaturally(location, item);
 
-                    Language.SPAWNED_AT.getPrefixed()
+                    Language.ITEM_SPAWNED_AT.getPrefixed()
                             .fill("%item%", args[1])
                             .fill("%amount%", String.valueOf(amount))
                             .fill("%location%", LocationUtil.locationToString(location, ", "))
@@ -174,8 +179,9 @@ public class ItemsCommand implements CommandExecutor {
                     break;
                 case "give":
                     if (args.length < 2) {
-                        sender.sendMessage(StringUtil.color("&cNot enough arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/i give <name> (playerName) (amount)"));
+                        Language.NOT_ENOUGH_ARGUMENTS.getPrefixed()
+                                .fill("%usage%", "/" + label + " give <name> (playerName) (amount)")
+                                .send(sender);
                         return true;
                     }
 
@@ -209,7 +215,9 @@ public class ItemsCommand implements CommandExecutor {
                         try {
                             amount = Integer.parseInt(args[3]);
                         } catch (NumberFormatException e) {
-                            sender.sendMessage(StringUtil.color("&cThat is not a number."));
+                            Language.NOT_A_NUMBER.getPrefixed()
+                                    .fill("%param%", args[3])
+                                    .send(sender);
                             return true;
                         }
 
@@ -244,8 +252,9 @@ public class ItemsCommand implements CommandExecutor {
                 case "save":
                     if (args.length > 1) {
                         if (args.length > 2) {
-                            sender.sendMessage(StringUtil.color("&cToo many arguments."));
-                            sender.sendMessage(StringUtil.color("&cUsage: &7/i save (name)"));
+                            Language.TOO_MANY_ARGUMENTS.getPrefixed()
+                                    .fill("%usage%", "/" + label + " save (name)")
+                                    .send(sender);
                             return true;
                         }
 
@@ -283,24 +292,6 @@ public class ItemsCommand implements CommandExecutor {
     }
 
     private void help(CommandSender sender, String label) {
-        sender.sendMessage(StringUtil.color("&8&m        &e Items &8&m        &r" +
-                "\n&e/" + label + " list &8- &7Lists saved items." +
-                "\n&e/" + label + " save (name) &8- &7Save all loaded items, or save item in hand under a name." +
-                "\n&e/" + label + " load (name) &8- &7Load all items, or by name." +
-                "\n&e/" + label + " remove <name> &8- &7Removes item by name." +
-                "\n&e/" + label + " detail <name> &8- &7Displays info about an item in the db." +
-                "\n&e/" + label + " drop <name> <worldName;x;y;z> (amount) &8- &7Drops item on a given location." +
-                "\n&e/" + label + " give <name> (playerName) (amount) &8- &7Give player an item." +
-                "\n&e/att &8- &7Help page regarding attributes." +
-                "\n&e/setname <name> &8- &7Set display name of an item." +
-                "\n&e/lore &8- &7List item lore." +
-                "\n&e/addlore <line> &8- &7Add a line of lore." +
-                "\n&e/remlore <lineINdex> &8- &7Remove a line from item lore." +
-                "\n&e/flags &8- &7Display flags on an item." +
-                "\n&e/addflag <flagName> &8- &7Add itemFlag to an item." +
-                "\n&e/remflag <flagName> &8- &7Remove itemFlag from an item." +
-                "\n&e/enchs &8- &7List enchantments on item." +
-                "\n&e/addench <enchantment> <level> &8- &7Add enchant to item." +
-                "\n&e/remench <enchantment> &8- &7Remove enchantment from item."));
+        Language.ITEMS_HELP.get().fill("%label%", label).send(sender);
     }
 }

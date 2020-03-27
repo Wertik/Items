@@ -7,30 +7,19 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import space.devport.utils.messageutil.StringUtil;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.handlers.AttributeHandler;
 import space.devport.wertik.items.utils.Language;
 import space.devport.wertik.items.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class AttCommands implements CommandExecutor {
 
-    /*
-     * /att add <name> <clickType>
-     * /att rem <name/clickType>
-     * /att list
-     * /att clear
-     * */
-
-    private final ItemsPlugin plugin;
     private final AttributeHandler attributeHandler;
 
     public AttCommands() {
-        plugin = ItemsPlugin.getInstance();
-        attributeHandler = plugin.getAttributeHandler();
+        attributeHandler = ItemsPlugin.getInstance().getAttributeHandler();
     }
 
     @Override
@@ -58,14 +47,14 @@ public class AttCommands implements CommandExecutor {
                 case "a":
                     if (args.length < 3) {
                         Language.NOT_ENOUGH_ARGUMENTS.getPrefixed()
-                                .fill("%usage%", "/att add <name> <clickType>")
+                                .fill("%usage%", "/" + label + " add <name> <clickType>")
                                 .send(sender);
                         return true;
                     }
 
                     if (args.length > 3) {
                         Language.TOO_MANY_ARGUMENTS.getPrefixed()
-                                .fill("%usage%", "/att add <name> <clickType>")
+                                .fill("%usage%", "/" + label + " add <name> <clickType>")
                                 .send(sender);
                         return true;
                     }
@@ -101,14 +90,14 @@ public class AttCommands implements CommandExecutor {
                 case "remove":
                     if (args.length < 2) {
                         Language.NOT_ENOUGH_ARGUMENTS.getPrefixed()
-                                .fill("%usage%", "/att remove <attribute/action>")
+                                .fill("%usage%", "/" + label + " remove <attribute/action>")
                                 .send(sender);
                         return true;
                     }
 
                     if (args.length > 2) {
                         Language.TOO_MANY_ARGUMENTS.getPrefixed()
-                                .fill("%usage%", "/att remove <attribute/action>")
+                                .fill("%usage%", "/" + label + " remove <attribute/action>")
                                 .send(sender);
                         return true;
                     }
@@ -121,8 +110,10 @@ public class AttCommands implements CommandExecutor {
                     if (!attributeHandler.getAttributes(item).containsKey(args[1].toLowerCase()) &&
                             !attributeHandler.getAttributes(item).containsValue(args[1].toLowerCase())) {
 
-                        sender.sendMessage(StringUtil.color("&cThis item does not have any of this set."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/att remove <name/clickType>"));
+                        Language.ATTRIBUTE_INVALID_PARAM.getPrefixed()
+                                .fill("%param%", args[1])
+                                .fill("%usage%", "/" + label + " remove <name/clickType>")
+                                .send(sender);
                         return true;
                     }
 
@@ -137,14 +128,14 @@ public class AttCommands implements CommandExecutor {
                         Language.ATTRIBUTE_REMOVED.getPrefixed().fill("%attribute%", param).send(sender);
                         return true;
                     } else
-                        sender.sendMessage(StringUtil.color("&cCould not remove attribute."));
+                        Language.ATTRIBUTE_COULD_NOT_REMOVE.sendPrefixed(sender);
 
                     break;
                 case "clear":
                 case "c":
                     if (args.length > 1) {
                         Language.TOO_MANY_ARGUMENTS.getPrefixed()
-                                .fill("%usage%", "/att clear")
+                                .fill("%usage%", "/" + label + " clear")
                                 .send(sender);
                         return true;
                     }
@@ -161,7 +152,7 @@ public class AttCommands implements CommandExecutor {
                 case "l":
                     if (args.length > 2) {
                         Language.TOO_MANY_ARGUMENTS.getPrefixed()
-                                .fill("%usage%", "/att list (hand)")
+                                .fill("%usage%", "/" + label + " list (hand)")
                                 .send(sender);
                         return true;
                     }
@@ -173,17 +164,16 @@ public class AttCommands implements CommandExecutor {
                                 return true;
                             }
 
-                            sender.sendMessage(StringUtil.color("&eAttributes:"));
-                            Map<String, String> attributes = attributeHandler.getAttributes(item);
-
-                            for (String key : attributeHandler.getAttributes(item).keySet())
-                                sender.sendMessage(StringUtil.color("&8- &7" + key + "&f:&7" + attributes.get(key)));
+                            Language.ATTRIBUTES_LIST.getPrefixed()
+                                    .fill("%attributes%", Utils.mapToString(attributeHandler.getAttributes(item), "&7, &f", " &8- ", "&cNo attributes saved."))
+                                    .send(sender);
                             break;
                         }
                     }
 
-                    plugin.consoleOutput.debug("Attributes: " + attributeHandler.getAttributeCache().keySet());
-                    sender.sendMessage(StringUtil.color("&eAttributes: &f" + Utils.listToString(new ArrayList<>(attributeHandler.getAttributeCache().keySet()), "&7, &f", "&cNo attributes saved.")));
+                    Language.ATTRIBUTES_LIST.getPrefixed()
+                            .fill("%attributes%", Utils.listToString(new ArrayList<>(attributeHandler.getAttributeCache().keySet()), "&7, &f", "&cNo attributes saved."))
+                            .send(sender);
                     break;
                 case "help":
                 case "h":
