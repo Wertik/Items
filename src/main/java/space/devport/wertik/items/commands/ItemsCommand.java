@@ -205,7 +205,7 @@ public class ItemsCommand implements CommandExecutor {
                     }
 
                     Player target;
-                    if (args.length == 3) {
+                    if (args.length == 3 && !args[2].equalsIgnoreCase("-r")) {
                         OfflinePlayer offlineTarget = Bukkit.getPlayer(args[2]);
 
                         if (offlineTarget == null || !offlineTarget.isOnline() || offlineTarget.getPlayer() == null) {
@@ -225,7 +225,7 @@ public class ItemsCommand implements CommandExecutor {
 
                     amount = 1;
 
-                    if (args.length == 4)
+                    if (args.length == 4 && !args[3].equalsIgnoreCase("-r"))
                         try {
                             amount = Integer.parseInt(args[3]);
                         } catch (NumberFormatException e) {
@@ -236,7 +236,7 @@ public class ItemsCommand implements CommandExecutor {
                         }
 
                     // Raw item
-                    if (String.join(" ", args).contains(" -r ")) {
+                    if (String.join(" ", args).contains(" -r")) {
                         giveItem = ItemsPlugin.getInstance().getItemHandler().getItem(args[1]);
                     } else giveItem = ItemsPlugin.getInstance().getItemHandler().prepareItem(args[1], target);
 
