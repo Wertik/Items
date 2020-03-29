@@ -1,7 +1,6 @@
 package space.devport.wertik.items.handlers;
 
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -18,16 +17,11 @@ import java.util.Map;
 
 public class AttributeHandler {
 
-    // Attribute cache
     @Getter
     private final Map<String, Attribute> attributeCache = new HashMap<>();
 
     public Attribute getAttribute(String attributeName) {
         return this.attributeCache.get(attributeName);
-    }
-
-    public boolean isValid(String attributeName) {
-        return this.attributeCache.containsKey(attributeName);
     }
 
     public void load() {

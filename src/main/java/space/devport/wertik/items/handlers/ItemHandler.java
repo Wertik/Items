@@ -3,11 +3,13 @@ package space.devport.wertik.items.handlers;
 import org.bukkit.inventory.ItemStack;
 import space.devport.utils.configutil.Configuration;
 import space.devport.utils.itemutil.ItemBuilder;
+import space.devport.utils.itemutil.ItemNBTEditor;
 import space.devport.wertik.items.ItemsPlugin;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class ItemHandler {
 
@@ -98,5 +100,26 @@ public class ItemHandler {
 
     public Map<String, ItemBuilder> getItems() {
         return Collections.unmodifiableMap(this.items);
+    }
+
+    // Item Manipulation
+
+    public ItemStack setUnstackable(ItemStack item, boolean b) {
+        // Throw it back at 'em
+        if (item == null) return null;
+
+        if (b) {
+            // Assign a new random UUID
+            String uniqueID = UUID.randomUUID().toString();
+            return ItemNBTEditor.writeNBT(item, "items_unstackable", uniqueID);
+        } else return ItemNBTEditor.removeNBT(item, "items_unstackable");
+    }
+
+    public boolean isUnstackable(ItemStack item) {
+        if (item == null) return false;
+
+        if (!ItemNBTEditor.hasNBT(item)) return false;
+
+        return ItemNBTEditor.hasNBTKey(item, "items_unstackable");
     }
 }

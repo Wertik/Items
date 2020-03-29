@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import space.devport.utils.itemutil.ItemBuilder;
 import space.devport.utils.itemutil.ItemNBTEditor;
 import space.devport.utils.messageutil.StringUtil;
 import space.devport.utils.regionutil.LocationUtil;
@@ -28,6 +29,9 @@ public class ItemsCommand implements CommandExecutor {
             Language.NO_PERMS.getPrefixed().send(sender);
             return true;
         }
+
+        ItemStack item;
+        ItemBuilder builder;
 
         if (args.length < 1) {
             help(sender, label);
@@ -89,34 +93,41 @@ public class ItemsCommand implements CommandExecutor {
                         return true;
                     }
 
-                    ItemStack item = ItemsPlugin.getInstance().getItemHandler().getItem(args[1]).build();
+                    builder = ItemsPlugin.getInstance().getItemHandler().getItem(args[1]);
 
-                    sender.sendMessage(StringUtil.color("&eName: &f" + item.getItemMeta().getDisplayName()));
-                    sender.sendMessage(StringUtil.color("&eMaterial: &f" + item.getType().toString()));
-                    sender.sendMessage(StringUtil.color("&eAmount: &f" + item.getAmount()));
+                    sender.sendMessage(StringUtil.color("&eName: &f" + (builder.getDisplayName().isEmpty() ? builder.getMaterial().toString() : builder.getDisplayName().toString())));
+                    sender.sendMessage(StringUtil.color("&eMaterial: &f" + builder.getMaterial().name()));
+                    sender.sendMessage(StringUtil.color("&eAmount: &f" + builder.getAmount()));
 
-                    if (item.getItemMeta().hasLore()) {
+                    // Lore
+                    if (!builder.getLore().getMessage().isEmpty()) {
                         sender.sendMessage(StringUtil.color("&eLore:"));
-                        item.getItemMeta().getLore().forEach(line -> sender.sendMessage(StringUtil.color("&8- &r" + line)));
+                        int i = 0;
+                        for (String line : builder.getLore().getMessage()) {
+                            sender.sendMessage(StringUtil.color("&f " + i + " &8- &r" + line));
+                            i++;
+                        }
                     }
 
-                    if (item.getItemMeta().hasEnchants()) {
+                    // Enchants
+                    if (!builder.getEnchants().isEmpty()) {
                         sender.sendMessage(StringUtil.color("&eEnchants:"));
-                        item.getEnchantments().keySet().forEach(ench -> sender.sendMessage(StringUtil.color("&8- &7" + ench.getName() + "&f;&7" + item.getItemMeta().getEnchantLevel(ench))));
+                        builder.getEnchants().forEach((enchantment, level) -> sender.sendMessage(StringUtil.color(" &8- &7" + enchantment.toString() + "&f;&7" + level)));
                     }
 
-                    if (!item.getItemMeta().getItemFlags().isEmpty()) {
+                    // Flags
+                    if (!builder.getFlags().isEmpty()) {
                         sender.sendMessage(StringUtil.color("&eFlags:"));
-                        item.getItemMeta().getItemFlags().forEach(flag -> sender.sendMessage(StringUtil.color("&8- &7" + flag.name())));
+                        builder.getFlags().forEach(flag -> sender.sendMessage(StringUtil.color(" &8- &7" + flag.toString())));
                     }
 
                     // NBT
-                    if (ItemNBTEditor.hasNBT(item)) {
+                    if (!builder.getNBT().isEmpty()) {
                         sender.sendMessage(StringUtil.color("&eNBT:"));
 
-                        for (String tag : ItemNBTEditor.getNBTTagMap(item).keySet()) {
-                            if (!ItemsPlugin.getInstance().getFilteredNBT().contains(tag))
-                                sender.sendMessage(StringUtil.color("&8- &7" + tag + "&f:&7" + ItemNBTEditor.getNBT(item, tag)));
+                        for (String key : builder.getNBT().keySet()) {
+                            if (!ItemsPlugin.getInstance().getFilteredNBT().contains(key))
+                                sender.sendMessage(StringUtil.color(" &8- &7" + key + "&f:&7" + builder.getNBT().get(key)));
                         }
                     }
                     break;

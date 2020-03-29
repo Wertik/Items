@@ -40,6 +40,7 @@ public enum Language {
     ENCHANT_REMOVED("Enchant-Removed", "&7Enchantment removed."),
     INVALID_ENCHANT("Invalid-Enchantment", "&cEnchantment is invalid."),
     ITEM_RENAMED("Item-Renamed", "&7Item renamed."),
+    SET_UNSTACKABLE("Set-Unstackable", "&7Unstackable property set to &f%state%&7."),
 
     /**
      * ITEM COMMANDS
