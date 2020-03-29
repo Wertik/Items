@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import space.devport.utils.itemutil.ItemBuilder;
-import space.devport.utils.itemutil.ItemNBTEditor;
 import space.devport.utils.messageutil.StringUtil;
 import space.devport.utils.regionutil.LocationUtil;
 import space.devport.wertik.items.ItemsPlugin;
@@ -166,9 +165,13 @@ public class ItemsCommand implements CommandExecutor {
                         }
                     }
 
-                    item = ItemsPlugin.getInstance().getItemHandler().getItem(args[1]).build();
+                    ItemStack giveItem = ItemsPlugin.getInstance().getItemHandler().getItem(args[1]).build();
 
-                    item.setAmount(amount);
+                    // Update unstackable property
+                    if (ItemsPlugin.getInstance().getItemHandler().isUnstackable(giveItem))
+                        giveItem = ItemsPlugin.getInstance().getItemHandler().setUnstackable(giveItem, true);
+
+                    giveItem.setAmount(amount);
 
                     Location location = new Location(ItemsPlugin.getInstance().getServer().getWorld(locationString[0]),
                             Double.parseDouble(locationString[1]),
@@ -180,7 +183,7 @@ public class ItemsCommand implements CommandExecutor {
                         return true;
                     }
 
-                    location.getWorld().dropItemNaturally(location, item);
+                    location.getWorld().dropItemNaturally(location, giveItem);
 
                     Language.ITEM_SPAWNED_AT.getPrefixed()
                             .fill("%item%", args[1])
@@ -233,7 +236,13 @@ public class ItemsCommand implements CommandExecutor {
                         }
 
                     for (int i = 0; i < amount; i++) {
-                        target.getInventory().addItem(ItemsPlugin.getInstance().getItemHandler().getItem(args[1]).build());
+                        giveItem = ItemsPlugin.getInstance().getItemHandler().getItem(args[1]).build();
+
+                        // Update unstackable property
+                        if (ItemsPlugin.getInstance().getItemHandler().isUnstackable(giveItem))
+                            giveItem = ItemsPlugin.getInstance().getItemHandler().setUnstackable(giveItem, true);
+
+                        target.getInventory().addItem(giveItem);
                     }
 
                     Language.ITEM_GIVEN.getPrefixed()
