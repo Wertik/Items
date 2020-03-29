@@ -34,5 +34,5 @@ the-second-attribute:
   cooldown: 10
   # Broadcasted to the server.
   broadcast:
-    - '&8&m        &e Item used'
-    - '&7&m  &r&e> &8Attribute fired'
+    - '&8&m        &e Epic Item used'
+    - '&7&m  &r&e> &f%player% &7used a cool attribute!'

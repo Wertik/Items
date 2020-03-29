@@ -29,7 +29,8 @@ public class ItemsPlugin extends JavaPlugin {
     // TODO: Full permissions
     // TODO: Optional "transaction" logger
     // TODO: Add support for WorldGuard - disable specific items
-    // TODO: Add the ability to re-parse placeholders on attribute item use
+    // TODO: Add the ability to re-parse placeholders on item on attribute item use
+    // TODO: Add missing tab completion
 
     @Getter
     private static ItemsPlugin instance;

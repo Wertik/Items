@@ -50,10 +50,15 @@ public class Reward {
         }
 
         // Inform
-        inform.send(player);
+        inform.copyPlaceholders(format).send(player);
+        inform.pull();
 
         // Broadcast
-        Bukkit.getOnlinePlayers().forEach(broadcast::send);
+        broadcast.copyPlaceholders(format);
+        for (Player loopPlayer : Bukkit.getOnlinePlayers()) {
+            broadcast.send(loopPlayer);
+            broadcast.pull();
+        }
     }
 
     // Parses a command

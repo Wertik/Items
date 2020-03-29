@@ -61,21 +61,25 @@ public class ItemListener implements Listener {
 
         EquipmentSlot hand = SpigotHelper.getVersion().contains("1.8") || SpigotHelper.getVersion().contains("1.7") ? null : event.getHand();
 
+        int uses = ItemsPlugin.getInstance().getAttributeHandler().getUses(item, attribute.getName());
+
         // 0 == unlimited
         if (attribute.getUseLimit() > 0) {
             // Consume if above
-            if ((ItemsPlugin.getInstance().getAttributeHandler().getUses(item, attribute) + 1) >= attribute.getUseLimit()) {
+            if ((uses + 1) >= attribute.getUseLimit()) {
                 Language.ITEM_USE_LIMIT.sendPrefixed(player);
                 Utils.consumeItem(player, hand, item);
             } else
-                Utils.consumeItem(player, hand, ItemsPlugin.getInstance().getAttributeHandler().addUse(item, attribute));
+                Utils.setItem(player, hand, ItemsPlugin.getInstance().getAttributeHandler().addUse(item, attribute.getName()));
+
+            uses++;
         }
 
         // Reward the player
         Reward reward = attribute.getReward();
 
         reward.getFormat()
-                .fill("%uses%", String.valueOf(ItemsPlugin.getInstance().getAttributeHandler().getUses(item, attribute)))
+                .fill("%uses%", String.valueOf(uses))
                 .fill("%use_limit%", String.valueOf(attribute.getUseLimit() == 0 ? Language.UNLIMITED.get().toString() : attribute.getUseLimit()))
                 .fill("%cooldown%", String.valueOf(attribute.getCooldown() / 1000D));
 

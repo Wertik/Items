@@ -118,15 +118,15 @@ public class AttributeHandler {
     }
 
     // items_uses : "<attribute>:<uses>;<attribute>:<uses>"
-    public ItemStack addUse(ItemStack item, Attribute attribute) {
+    public ItemStack addUse(ItemStack item, String attribute) {
         if (!ItemNBTEditor.hasNBTKey(item, "items_uses"))
             return setUses(item, attribute, 1);
         else
             return setUses(item, attribute, getUses(item, attribute) + 1);
     }
 
-    public HashMap<Attribute, Integer> getUses(ItemStack item) {
-        HashMap<Attribute, Integer> usesMap = new HashMap<>();
+    public HashMap<String, Integer> getUses(ItemStack item) {
+        HashMap<String, Integer> usesMap = new HashMap<>();
 
         if (!ItemNBTEditor.hasNBTKey(item, "items_uses"))
             return usesMap;
@@ -149,31 +149,30 @@ public class AttributeHandler {
                 continue;
             }
 
-            usesMap.put(attribute, uses);
+            usesMap.put(attribute.getName(), uses);
         }
 
         return usesMap;
     }
 
-    public int getUses(ItemStack item, Attribute attribute) {
-        return getUses(item).getOrDefault(attribute, 0);
+    public int getUses(ItemStack item, String attributeName) {
+        return getUses(item).getOrDefault(attributeName, 0);
     }
 
-    public ItemStack setUses(ItemStack item, Attribute attribute, int uses) {
+    public ItemStack setUses(ItemStack item, String attributeName, int uses) {
 
         if (ItemNBTEditor.hasNBTKey(item, "items_uses")) {
-            int current = getUses(item, attribute);
 
-            if (current == -1) {
+            if (!getUses(item).containsKey(attributeName)) {
                 // Append the attribute uses
-                item = ItemNBTEditor.writeNBT(item, "items_uses", ItemNBTEditor.getNBT(item, "items_uses") + ";" + attribute.getName() + ":" + uses);
+                item = ItemNBTEditor.writeNBT(item, "items_uses", ItemNBTEditor.getNBT(item, "items_uses") + ";" + attributeName + ":" + uses);
             } else {
                 // Replace with new value
                 item = ItemNBTEditor.writeNBT(item, "items_uses", ItemNBTEditor.getNBT(item, "items_uses")
-                        .replace(attribute.getName() + ":" + current, attribute.getName() + ":" + uses));
+                        .replace(attributeName + ":" + getUses(item, attributeName), attributeName + ":" + uses));
             }
         } else {
-            item = ItemNBTEditor.writeNBT(item, "items_uses", attribute.getName() + ":" + uses);
+            item = ItemNBTEditor.writeNBT(item, "items_uses", attributeName + ":" + uses);
         }
 
         return item;

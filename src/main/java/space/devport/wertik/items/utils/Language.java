@@ -65,7 +65,8 @@ public enum Language {
             "&e/remflag <flagName> &8- &7Remove itemFlag from an item.",
             "&e/enchs &8- &7List enchantments on item.",
             "&e/addench <enchantment> <level> &8- &7Add enchant to item.",
-            "&e/remench <enchantment> &8- &7Remove enchantment from item."),
+            "&e/remench <enchantment> &8- &7Remove enchantment from item.",
+            "&e/unstackable (true/false) &8- &7Make an item unstackable."),
     ITEM_SPAWNED_AT("Spawned-At", "&7Item &f%item%&7x%amount%&7 spawned &8@ &7%location%"),
     ITEMS_LIST("Items-List", "&7Items: %items%"),
     ITEM_ADDED("Item-Added", "&7Item added under name &f%item%"),
@@ -77,6 +78,7 @@ public enum Language {
     ITEM_LOADED("Item-Loaded", "&7Item &f%item% &7loaded from storage."),
     ITEM_NOT_VALID("Item-Not-Valid", "&cItem &f%item% &cdoes not exist."),
     ITEM_GIVEN("Item-Given", "&7Gave player &f%player% &7item &e%item%&7x&f%amount%"),
+    ITEM_GIVEN_RAW("Item-Given-Raw", "&7Gave player &f%player% &7raw item &e%item%&7x&f%amount%"),
 
     /**
      * ATTRIBUTES

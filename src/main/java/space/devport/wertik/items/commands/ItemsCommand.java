@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import space.devport.utils.itemutil.ItemBuilder;
+import space.devport.utils.messageutil.MessageBuilder;
 import space.devport.utils.messageutil.StringUtil;
 import space.devport.utils.regionutil.LocationUtil;
 import space.devport.wertik.items.ItemsPlugin;
@@ -29,7 +30,6 @@ public class ItemsCommand implements CommandExecutor {
             return true;
         }
 
-        ItemStack item;
         ItemBuilder builder;
 
         if (args.length < 1) {
@@ -235,8 +235,10 @@ public class ItemsCommand implements CommandExecutor {
                             return true;
                         }
 
+                    boolean raw = String.join(" ", args).contains(" -r");
+
                     // Raw item
-                    if (String.join(" ", args).contains(" -r")) {
+                    if (raw) {
                         giveItem = ItemsPlugin.getInstance().getItemHandler().getItem(args[1]);
                     } else giveItem = ItemsPlugin.getInstance().getItemHandler().prepareItem(args[1], target);
 
@@ -244,8 +246,9 @@ public class ItemsCommand implements CommandExecutor {
                         target.getInventory().addItem(giveItem);
                     }
 
-                    Language.ITEM_GIVEN.getPrefixed()
-                            .fill("%item%", args[1])
+                    MessageBuilder message = raw ? Language.ITEM_GIVEN_RAW.getPrefixed() : Language.ITEM_GIVEN.getPrefixed();
+
+                    message.fill("%item%", args[1])
                             .fill("%player%", target.getName())
                             .fill("%amount%", "" + amount)
                             .send(sender);

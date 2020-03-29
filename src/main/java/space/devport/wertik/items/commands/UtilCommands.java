@@ -271,7 +271,11 @@ public class UtilCommands implements CommandExecutor {
                             .send(sender);
                 }
 
-                boolean b = Boolean.parseBoolean(args[0]);
+                boolean b;
+                if (args.length > 0)
+                     b = Boolean.parseBoolean(args[0]);
+                else
+                    b = !ItemsPlugin.getInstance().getItemHandler().isUnstackable(item);
 
                 Utils.setItem(player, EquipmentSlot.HAND, ItemsPlugin.getInstance().getItemHandler().setUnstackable(item, b));
                 Language.SET_UNSTACKABLE.getPrefixed()
