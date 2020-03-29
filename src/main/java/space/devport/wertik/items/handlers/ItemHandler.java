@@ -1,10 +1,12 @@
 package space.devport.wertik.items.handlers;
 
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import space.devport.utils.configutil.Configuration;
 import space.devport.utils.itemutil.ItemBuilder;
 import space.devport.utils.itemutil.ItemNBTEditor;
 import space.devport.wertik.items.ItemsPlugin;
+import space.devport.wertik.items.utils.Utils;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -50,7 +52,7 @@ public class ItemHandler {
     }
 
     public void saveItem(String name) {
-        ItemBuilder item = getItem(name);
+        ItemBuilder item = getBuilder(name);
 
         if (item == null)
             return;
@@ -75,8 +77,37 @@ public class ItemHandler {
     }
 
     // Get item from cache
-    public ItemBuilder getItem(String name) {
+    public ItemBuilder getBuilder(String name) {
         return this.items.get(name);
+    }
+
+    public ItemStack getItem(String name) {
+        return getBuilder(name).build();
+    }
+
+    public ItemBuilder prepareBuilder(String name) {
+        return prepareBuilder(name, null);
+    }
+
+    public ItemBuilder prepareBuilder(String name, Player player) {
+        ItemBuilder builder = getBuilder(name);
+
+        // Parse displayname
+        builder.getDisplayName().setWorkingMessage(Utils.parsePlaceholders(builder.getDisplayName().getWorkingMessage(), player));
+
+        // Parse lore
+        builder.getLore().setWorkingMessage(Utils.parsePlaceholders(builder.getLore().getWorkingMessage(), player));
+
+        // Update unstackable uuid
+        if (builder.getNBT().containsKey("items_unstackable")) {
+            builder.removeNBT("items_unstackable").addNBT("items_unstackable", UUID.randomUUID().toString());
+        }
+
+        return builder;
+    }
+
+    public ItemStack prepareItem(String name, Player player) {
+        return prepareBuilder(name, player).build();
     }
 
     public void addItem(String name, ItemBuilder builder) {

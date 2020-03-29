@@ -92,7 +92,7 @@ public class ItemsCommand implements CommandExecutor {
                         return true;
                     }
 
-                    builder = ItemsPlugin.getInstance().getItemHandler().getItem(args[1]);
+                    builder = ItemsPlugin.getInstance().getItemHandler().getBuilder(args[1]);
 
                     sender.sendMessage(StringUtil.color("&eName: &f" + (builder.getDisplayName().isEmpty() ? builder.getMaterial().toString() : builder.getDisplayName().toString())));
                     sender.sendMessage(StringUtil.color("&eMaterial: &f" + builder.getMaterial().name()));
@@ -165,7 +165,7 @@ public class ItemsCommand implements CommandExecutor {
                         }
                     }
 
-                    ItemStack giveItem = ItemsPlugin.getInstance().getItemHandler().getItem(args[1]).build();
+                    ItemStack giveItem = ItemsPlugin.getInstance().getItemHandler().getBuilder(args[1]).build();
 
                     // Update unstackable property
                     if (ItemsPlugin.getInstance().getItemHandler().isUnstackable(giveItem))
@@ -194,7 +194,7 @@ public class ItemsCommand implements CommandExecutor {
                 case "give":
                     if (args.length < 2) {
                         Language.NOT_ENOUGH_ARGUMENTS.getPrefixed()
-                                .fill("%usage%", "/" + label + " give <name> (playerName) (amount)")
+                                .fill("%usage%", "/" + label + " give <name> (playerName) (amount) (-r)")
                                 .send(sender);
                         return true;
                     }
@@ -235,13 +235,12 @@ public class ItemsCommand implements CommandExecutor {
                             return true;
                         }
 
+                    // Raw item
+                    if (String.join(" ", args).contains(" -r ")) {
+                        giveItem = ItemsPlugin.getInstance().getItemHandler().getItem(args[1]);
+                    } else giveItem = ItemsPlugin.getInstance().getItemHandler().prepareItem(args[1], target);
+
                     for (int i = 0; i < amount; i++) {
-                        giveItem = ItemsPlugin.getInstance().getItemHandler().getItem(args[1]).build();
-
-                        // Update unstackable property
-                        if (ItemsPlugin.getInstance().getItemHandler().isUnstackable(giveItem))
-                            giveItem = ItemsPlugin.getInstance().getItemHandler().setUnstackable(giveItem, true);
-
                         target.getInventory().addItem(giveItem);
                     }
 
@@ -290,7 +289,7 @@ public class ItemsCommand implements CommandExecutor {
                             return true;
                         }
 
-                        if (ItemsPlugin.getInstance().getItemHandler().getItem(args[1]) == null)
+                        if (ItemsPlugin.getInstance().getItemHandler().getBuilder(args[1]) == null)
                             Language.ITEM_SAVED.getPrefixed().fill("%item%", args[1]).send(sender);
                         else
                             Language.ITEM_UPDATED.getPrefixed().fill("%item%", args[1]).send(sender);

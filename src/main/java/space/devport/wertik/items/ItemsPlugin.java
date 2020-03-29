@@ -3,6 +3,7 @@ package space.devport.wertik.items;
 import lombok.Getter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import space.devport.utils.ConsoleOutput;
 import space.devport.utils.DevportUtils;
@@ -57,6 +58,8 @@ public class ItemsPlugin extends JavaPlugin {
     @Getter
     private Random random;
 
+    public boolean usePlaceholderAPI = false;
+
     private void loadOptions() {
         consoleOutput.setDebug(getConfig().getBoolean("debug-enabled"));
         consoleOutput.setPrefix(cfg.getColoredString("plugin-prefix", ""));
@@ -76,6 +79,8 @@ public class ItemsPlugin extends JavaPlugin {
         // Load configuration and basic options
         cfg = new Configuration(this, "config");
         loadOptions();
+
+        checkHooks();
 
         Language.load();
 
@@ -125,6 +130,8 @@ public class ItemsPlugin extends JavaPlugin {
         cfg.reload();
         loadOptions();
 
+        checkHooks();
+
         Language.load();
 
         attributeHandler.load();
@@ -140,6 +147,19 @@ public class ItemsPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         itemHandler.saveItems();
+    }
+
+    private void checkHooks() {
+        PluginManager pluginManager = getServer().getPluginManager();
+
+        // PlaceholderAPI
+        if (pluginManager.getPlugin("PlaceholderAPI") != null && !usePlaceholderAPI) {
+            this.usePlaceholderAPI = true;
+            consoleOutput.info("Found PlaceholderAPI, using it's placeholders.");
+        } else if (pluginManager.getPlugin("PlaceholderAPI") == null && usePlaceholderAPI) {
+            this.usePlaceholderAPI = false;
+            consoleOutput.info("Couldn't find PlaceholderAPI, disabling placeholder usage.");
+        }
     }
 
     @Override

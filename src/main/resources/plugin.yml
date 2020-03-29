@@ -2,6 +2,7 @@ name: Items
 author: Wertik1206
 version: ${project.version}
 main: space.devport.wertik.items.ItemsPlugin
+softdepend: [PlaceholderAPI]
 commands:
   items:
     aliases: [i]
@@ -31,6 +32,8 @@ commands:
     description: Add lore line to your item.
   remlore:
     description: Remove lore line from your item.
+  unstackable:
+    description: Make item unstackable.
 permissions:
   items.control:
     description: Allows commands

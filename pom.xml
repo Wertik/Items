@@ -62,6 +62,10 @@
             <id>devportutils</id>
             <url>http://play.pvpcraft.cz:8081/repository/devportutils/</url>
         </repository>
+        <repository>
+            <id>placeholderapi</id>
+            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -88,6 +92,12 @@
             <groupId>space.devport.utils</groupId>
             <artifactId>DevportUtils</artifactId>
             <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>2.10.5</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

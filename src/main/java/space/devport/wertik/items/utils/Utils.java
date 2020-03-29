@@ -1,14 +1,17 @@
 package space.devport.wertik.items.utils;
 
 import lombok.experimental.UtilityClass;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import space.devport.utils.SpigotHelper;
+import space.devport.wertik.items.ItemsPlugin;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @UtilityClass
 public class Utils {
@@ -69,5 +72,15 @@ public class Utils {
             return player.getItemInHand();
         else
             return player.getInventory().getItemInMainHand();
+    }
+
+    public String parsePlaceholders(String string, Player player) {
+        if (ItemsPlugin.getInstance().usePlaceholderAPI) string = PlaceholderAPI.setPlaceholders(player, string);
+        return string;
+    }
+
+    public List<String> parsePlaceholders(List<String> list, Player player) {
+        if (!ItemsPlugin.getInstance().usePlaceholderAPI) return list;
+        return list.stream().map(line -> PlaceholderAPI.setPlaceholders(player, line)).collect(Collectors.toList());
     }
 }

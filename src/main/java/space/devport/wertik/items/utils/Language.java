@@ -54,7 +54,7 @@ public enum Language {
             "&e/%label% remove <name> &8- &7Removes item by name.",
             "&e/%label% detail <name> &8- &7Displays info about an item in the db.",
             "&e/%label% drop <name> <worldName;x;y;z> (amount) &8- &7Drops item on a given location.",
-            "&e/%label% give <name> (playerName) (amount) &8- &7Give player an item.",
+            "&e/%label% give <name> (playerName) (amount) (-r) &8- &7Give player an item. Use -r to get a raw, unparsed version.",
             "&e/att &8- &7Help page regarding attributes.",
             "&e/setname <name> &8- &7Set display name of an item.",
             "&e/lore &8- &7List item lore.",
