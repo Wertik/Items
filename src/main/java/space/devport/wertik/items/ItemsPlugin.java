@@ -31,6 +31,7 @@ public class ItemsPlugin extends JavaPlugin {
     // TODO: Add support for WorldGuard - disable specific items
     // TODO: Add the ability to re-parse placeholders on item on attribute item use
     // TODO: Add missing tab completion
+    // TODO: Clickable chat editing/GUI
 
     @Getter
     private static ItemsPlugin instance;

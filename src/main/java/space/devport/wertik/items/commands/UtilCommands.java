@@ -110,7 +110,9 @@ public class UtilCommands implements CommandExecutor {
                     return true;
                 }
 
-                builder.getLore().addLine(String.join(" ", args));
+                List<String> lore = builder.getLore().getMessage();
+                lore.add(String.join(" ", args));
+                builder.lore(lore);
 
                 Utils.setItem(player, EquipmentSlot.HAND, builder.build());
                 Language.LINE_ADDED.getPrefixed().send(sender);
@@ -138,9 +140,9 @@ public class UtilCommands implements CommandExecutor {
                     return true;
                 }
 
-                List<String> lore = builder.getLore().getMessage();
-                lore.remove(index);
-                builder.getLore().setMessage(lore);
+                List<String> workLore = builder.getLore().getMessage();
+                workLore.remove(index);
+                builder.getLore().setMessage(workLore);
 
                 Utils.setItem(player, EquipmentSlot.HAND, builder.build());
                 Language.LINE_REMOVED.getPrefixed().send(sender);
