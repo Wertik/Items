@@ -24,8 +24,14 @@ the-second-attribute:
   commands:
     - 'give %player% diamond 1'
   # Messages can be either one line, or multiple.
-  # Send to the player only.
-  inform: '&7You used an item with the Second Attribute! gj!'
+  # Sent to the player only.
+  inform:
+    - ' '
+    - '&7Left uses: &7%uses%&f/&e%use_limit%'
+    - '&7Cooldown: &f%cooldown% &7seconds.'
+    - ' '
+  use-limit: 5
+  cooldown: 10
   # Broadcasted to the server.
   broadcast:
     - '&8&m        &e Item used'
