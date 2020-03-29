@@ -75,9 +75,9 @@ public class ItemListener implements Listener {
         Reward reward = attribute.getReward();
 
         reward.getFormat()
-                .fill("%uses_" + attribute.getName() + "%", String.valueOf(ItemsPlugin.getInstance().getAttributeHandler().getUses(item, attribute)))
-                .fill("%use_limit_" + attribute.getName() + "%", String.valueOf(attribute.getUseLimit() == 0 ? Language.UNLIMITED.get().toString() : attribute.getUseLimit()))
-                .fill("%cooldown_" + attribute.getName() + "%", String.valueOf(attribute.getCooldown() / 1000D));
+                .fill("%uses%", String.valueOf(ItemsPlugin.getInstance().getAttributeHandler().getUses(item, attribute)))
+                .fill("%use_limit%", String.valueOf(attribute.getUseLimit() == 0 ? Language.UNLIMITED.get().toString() : attribute.getUseLimit()))
+                .fill("%cooldown%", String.valueOf(attribute.getCooldown() / 1000D));
 
         reward.give(event.getPlayer());
 
