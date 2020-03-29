@@ -59,7 +59,7 @@ public enum Language {
             "&e/setname <name> &8- &7Set display name of an item.",
             "&e/lore &8- &7List item lore.",
             "&e/addlore <line> &8- &7Add a line of lore.",
-            "&e/remlore <lineINdex> &8- &7Remove a line from item lore.",
+            "&e/remlore <lineIndex> &8- &7Remove a line from item lore.",
             "&e/flags &8- &7Display flags on an item.",
             "&e/addflag <flagName> &8- &7Add itemFlag to an item.",
             "&e/remflag <flagName> &8- &7Remove itemFlag from an item.",

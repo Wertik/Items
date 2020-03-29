@@ -110,7 +110,7 @@ public class UtilCommands implements CommandExecutor {
                     return true;
                 }
 
-                builder.addLine(String.join(" ", args));
+                builder.getLore().addLine(String.join(" ", args));
 
                 Utils.setItem(player, EquipmentSlot.HAND, builder.build());
                 Language.LINE_ADDED.getPrefixed().send(sender);
