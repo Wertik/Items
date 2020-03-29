@@ -108,7 +108,9 @@ public enum Language {
      * LIMIT USE
      */
 
-    ITEM_USE_LIMIT("Item-Use-Limit", "&7You have reached this items maximum amount of uses.");
+    ITEM_USE_LIMIT("Item-Use-Limit", "&7You have reached this items maximum amount of uses."),
+    UNLIMITED("Additional.Unlimited", "&7Unlimited")
+    ;
 
     @Getter
     private final String path;

@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import space.devport.utils.SpigotHelper;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.objects.Attribute;
+import space.devport.wertik.items.objects.Reward;
 import space.devport.wertik.items.utils.Language;
 import space.devport.wertik.items.utils.Utils;
 
@@ -71,7 +72,14 @@ public class ItemListener implements Listener {
         }
 
         // Reward the player
-        attribute.getReward().give(event.getPlayer());
+        Reward reward = attribute.getReward();
+
+        reward.getFormat()
+                .fill("%uses_" + attribute.getName() + "%", String.valueOf(ItemsPlugin.getInstance().getAttributeHandler().getUses(item, attribute)))
+                .fill("%use_limit_" + attribute.getName() + "%", String.valueOf(attribute.getUseLimit() == 0 ? Language.UNLIMITED.get().toString() : attribute.getUseLimit()))
+                .fill("%cooldown_" + attribute.getName() + "%", String.valueOf(attribute.getCooldown() / 1000D));
+
+        reward.give(event.getPlayer());
 
         ItemsPlugin.getInstance().getCooldownHandler().addCooldown(player, attribute);
     }

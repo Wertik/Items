@@ -26,10 +26,10 @@ public class ItemsPlugin extends JavaPlugin {
     // TODO: Allow saving items to different files and folders (like BossShopPro)
     // TODO: Add all remaining strings to language
     // TODO: Add sneak click
-    // TODO: Placeholders for use limit, cooldown n shit in rewards
     // TODO: Full permissions
     // TODO: Optional "transaction" logger
     // TODO: Add support for WorldGuard - disable specific items
+    // TODO: Add the ability to re-parse placeholders on attribute item use
 
     @Getter
     private static ItemsPlugin instance;
