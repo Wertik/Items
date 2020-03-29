@@ -1,17 +1,6 @@
-# Configuration for Items made by Wertík from The Port
+# Configuration for ${project.name}
+#
+# Version: ${project.version}
 
-debug-enabled: true
-plugin-prefix: '&eItems &8>> '
-
-drop-naturally: true
-
-# Inform the player when cooldown on an attribute expires?
-inform-on-cd: true
-
-# Enables Tab Completer
-show-tips-on-tab-complete: true
-
-# Default messages
-Strings:
-  cooldown-message: '&cYou need to wait %time% more seconds before using that again.'
-  cooldown-expire-message: '&aYou can use that item again!'
+debug-enabled: false
+plugin-prefix: '&eItems &8>> &r'

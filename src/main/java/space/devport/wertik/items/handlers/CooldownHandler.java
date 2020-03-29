@@ -1,110 +1,127 @@
 package space.devport.wertik.items.handlers;
 
+import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.scheduler.BukkitRunnable;
-import space.devport.wertik.items.Main;
+import org.bukkit.entity.Player;
+import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.objects.Attribute;
 import space.devport.wertik.items.objects.Cooldown;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.utils.Language;
 
 import java.util.*;
 
 public class CooldownHandler {
 
-    // uniqueID, Cooldowns
-    private HashMap<String, List<Cooldown>> cooldownCache = new HashMap<>();
+    // UUID, Cooldowns
+    @Getter
+    private final Map<UUID, List<Cooldown>> cooldownCache = new HashMap<>();
 
-    // Remove all cooldowns on reload
-    // TODO Add persist later
-    public void reload() {
-        cooldownCache.clear();
+    public void addCooldown(Player player, Attribute attribute) {
+        addCooldown(player.getUniqueId(), attribute);
     }
 
-    // Start a cooldown for a player
+    // Start cooldown for a player
     public void addCooldown(UUID uniqueID, Attribute attribute) {
 
-        // No need to start if it has no cooldown time configured.
-        if (!attribute.hasCooldown())
+        if (!attribute.hasCooldown()) {
             return;
+        }
 
-        // Add a new cooldown
-        List<Cooldown> cooldowns = cooldownCache.containsKey(uniqueID.toString()) ? cooldownCache.get(uniqueID.toString()) : new ArrayList<>();
+        // Add a new cooldown, or update already existing ones
+        List<Cooldown> cooldowns = cooldownCache.containsKey(uniqueID) ? cooldownCache.get(uniqueID) : new ArrayList<>();
 
-        // Add a new cooldown to the list, so we can pull the time later.
-        cooldowns.add(new Cooldown(attribute.getName(), System.currentTimeMillis() + (attribute.getCooldown() * 1000)));
-        cooldownCache.put(uniqueID.toString(), cooldowns);
+        Cooldown cooldown = new Cooldown(attribute.getName(), uniqueID, System.currentTimeMillis() + attribute.getCooldown());
 
-        // Start a runnable to remove it
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                removeCooldown(uniqueID, attribute.getName());
-            }
-        }.runTaskLaterAsynchronously(Main.inst, attribute.getCooldown() * 20);
+        cooldowns.add(cooldown);
+
+        this.cooldownCache.put(uniqueID, cooldowns);
+
+        cooldown.runTaskLaterAsynchronously(ItemsPlugin.getInstance(), attribute.getCooldown() * 20);
     }
 
-    // Remove cooldown from a player
+    public void removeCooldown(Player player, String attributeName) {
+        removeCooldown(player.getUniqueId(), attributeName);
+    }
+
+    // Remove cooldown
     public void removeCooldown(UUID uniqueID, String attributeName) {
 
         // Just to make sure there's something to remove.
-        if (!cooldownCache.containsKey(uniqueID.toString()))
-            return;
-
-        List<Cooldown> cooldowns = cooldownCache.get(uniqueID.toString());
-
-        // If there is only one cooldown or none, remove altogether.
-        if (cooldowns.size() == 1 || cooldowns.isEmpty()) {
-            Main.inst.cO.debug("Removing " + uniqueID.toString() + " from cooldowns");
-            cooldownCache.remove(uniqueID.toString());
+        if (!cooldownCache.containsKey(uniqueID)) {
             return;
         }
+
+        List<Cooldown> cooldowns = cooldownCache.get(uniqueID);
 
         // Loop through and find the cooldown, remove it.
-        Optional<Cooldown> first = cooldowns.stream()
+        cooldowns.stream()
                 .filter(cd -> cd.getAttributeName().equals(attributeName))
-                .findFirst();
-        first.ifPresent(cooldowns::remove);
+                .findFirst()
+                .ifPresent(cooldowns::remove);
 
-        // If there is only one cooldown, remove altogether.
+        // Remove if empty
         if (cooldowns.isEmpty()) {
-            Main.inst.cO.debug("Removing " + uniqueID.toString() + " from cooldowns");
-            cooldownCache.remove(uniqueID.toString());
+            this.cooldownCache.remove(uniqueID);
             return;
         }
 
-        cooldownCache.put(uniqueID.toString(), cooldowns);
-        Main.inst.cO.debug("Updated " + uniqueID.toString() + " to cooldown size " + cooldowns.size());
+        // Update
+        this.cooldownCache.put(uniqueID, cooldowns);
 
-        // Message the player
-        OfflinePlayer player = Main.inst.getServer().getOfflinePlayer(uniqueID);
-        if (player.isOnline())
-            player.getPlayer().sendMessage(Utils.parse(Main.inst.getAttributeHandler().get(attributeName).getCooldownExpireMessage(), player.getPlayer()));
+        // Message the player, if online
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uniqueID);
+
+        if (offlinePlayer.isOnline() && offlinePlayer.getPlayer() != null)
+            Language.COOLDOWN_EXPIRED.get().send(offlinePlayer.getPlayer());
+    }
+
+    public Cooldown getCooldown(Player player, String attributeName) {
+        return getCooldown(player.getUniqueId(), attributeName);
     }
 
     // Get a cooldown
-    public Cooldown getCooldown(String uniqueID, String attributeName) {
+    public Cooldown getCooldown(UUID uniqueID, String attributeName) {
 
-        // He has no cooldowns at all
-        if (!cooldownCache.containsKey(uniqueID)) return null;
+        if (!cooldownCache.containsKey(uniqueID)) {
+            return null;
+        }
 
-        // Find desired cooldown
-        Optional<Cooldown> first = cooldownCache.get(uniqueID).stream().filter(cd -> cd.getAttributeName().equals(attributeName)).findFirst();
+        Optional<Cooldown> first = cooldownCache.get(uniqueID)
+                .stream()
+                .filter(cd -> cd.getAttributeName().equals(attributeName))
+                .findFirst();
 
-        // Return it if present
         return first.orElse(null);
     }
 
-    // Return cooldown time left in seconds
-    public double getCooldownTime(String uniqueID, String attributeName) {
-        return (getCooldown(uniqueID, attributeName).getTime() - System.currentTimeMillis()) / 1000D;
+    public double getTimeRemaining(Player player, String attributeName) {
+        return getTimeRemaining(player.getUniqueId(), attributeName);
+    }
+
+    public double getTimeRemaining(UUID uniqueID, String attributeName) {
+        return (getCooldown(uniqueID, attributeName).getTime() - System.currentTimeMillis());
+    }
+
+    public boolean isUsable(Player player, String attributeName) {
+        return isUsable(player.getUniqueId(), attributeName);
     }
 
     // Return whether or not the player can use the attribute
-    public boolean isUsable(String uniqueID, String attributeName) {
-        if (!cooldownCache.containsKey(uniqueID))
+    public boolean isUsable(UUID uniqueID, String attributeName) {
+        if (!cooldownCache.containsKey(uniqueID)) {
             return true;
+        }
 
-        // Stream through the cooldowns the player has, if we find any with correct attribute name, return false, has cooldown.
-        return cooldownCache.get(uniqueID).stream().noneMatch(cd -> cd.getAttributeName().equals(attributeName));
+        Cooldown cd = this.cooldownCache.get(uniqueID).stream().filter(i -> i.getAttributeName().equalsIgnoreCase(attributeName)).findAny().orElse(null);
+
+        if (cd == null) return true;
+
+        if (System.currentTimeMillis() > cd.getTime()) {
+            removeCooldown(uniqueID, attributeName);
+            return true;
+        }
+
+        return false;
     }
 }

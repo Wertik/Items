@@ -1,21 +1,38 @@
-# Attribute Configuration for Items made by Wertík from The Port
+# Attribute Configuration for ${project.name}
+#
+# Version: ${project.version}
 
 # Attribute name
 attribute-one:
-  # Commands to run on *click*
-  # Commands with prefix "p!" are run for player
-  # op! - player given OP permissions
-  # random! - picks a random command from marked, you can use above modifiers. (random has to be the first one.)
+  # Commands to run when the item is used
+  # p! - commands ran as player
+  # op! - executed as player with OP
+  # random! - randomly picks one command from marked, you can use above modifiers. (random has to be the first one.)
   commands:
     - 'random! say Woooohoo!'
-    - 'random! say No Wooohoo for u. ._.'
-    - 'random! p! me I say. Wooohoo! '
+    - 'random! say No Wooohoo for u.'
+    - 'random! p! me I say. Wooohoo!'
     - 'p! say Woooohooo! indeed.'
     - 'op! pl'
-  # Item cooldown
-  cooldown: 3600
-  # Remove after use?
-  one-time-use: true
-  # Cooldown messages, uses defaults in config.yml if not specified.
-  cooldown-message: '&cThere is a cooldown on this item, wait &7%time%s &cto use it again.'
-  cooldown-expire-message: '&aYou can use that item again!'
+  # Item cooldown in seconds
+  # No cooldown when not specified
+  cooldown: 5
+  # How many times can this item be used before being consumed.
+  # Unlimited when 0 or not specified
+  use-limit: 1
+the-second-attribute:
+  commands:
+    - 'give %player% diamond 1'
+  # Messages can be either one line, or multiple.
+  # Sent to the player only.
+  inform:
+    - ' '
+    - '&7Left uses: &7%uses%&f/&e%use_limit%'
+    - '&7Cooldown: &f%cooldown% &7seconds.'
+    - ' '
+  use-limit: 5
+  cooldown: 10
+  # Broadcasted to the server.
+  broadcast:
+    - '&8&m        &e Epic Item used'
+    - '&7&m  &r&e> &f%player% &7used a cool attribute!'

@@ -5,51 +5,39 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import space.devport.utils.messageutil.StringUtil;
-import space.devport.wertik.items.Main;
+import org.jetbrains.annotations.NotNull;
+import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.handlers.AttributeHandler;
-import space.devport.wertik.items.handlers.ItemHandler;
+import space.devport.wertik.items.utils.Language;
 import space.devport.wertik.items.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class AttCommands implements CommandExecutor {
 
-    /*
-     * /att add <name> <clickType>
-     * /att rem <name/clickType>
-     * /att list
-     * /att clear
-     * */
-
-    private final Main plugin;
     private final AttributeHandler attributeHandler;
-    private final ItemHandler itemHandler;
 
     public AttCommands() {
-        plugin = Main.inst;
-        attributeHandler = plugin.getAttributeHandler();
-        itemHandler = plugin.getItemHandler();
+        attributeHandler = ItemsPlugin.getInstance().getAttributeHandler();
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage(StringUtil.color("&cOnly players."));
+            Language.ONLY_PLAYERS.getPrefixed().send(sender);
             return true;
         }
 
         if (!sender.hasPermission("items.control")) {
-            sender.sendMessage(StringUtil.color("&cYou don't have permission to do this."));
+            Language.NO_PERMS.getPrefixed().send(sender);
             return true;
         }
 
         Player player = (Player) sender;
-        ItemStack item = player.getItemInHand();
+        ItemStack item = Utils.getItem(player);
 
         if (args.length == 0) {
             help(sender);
@@ -59,127 +47,134 @@ public class AttCommands implements CommandExecutor {
                 case "add":
                 case "a":
                     if (args.length < 3) {
-                        sender.sendMessage(StringUtil.color("&cNot enough arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/att add <name> <clickType>"));
+                        Language.NOT_ENOUGH_ARGUMENTS.getPrefixed()
+                                .fill("%usage%", "/" + label + " add <name> <clickType>")
+                                .send(sender);
                         return true;
                     }
 
                     if (args.length > 3) {
-                        sender.sendMessage(StringUtil.color("&cToo many arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/att add <name> <clickType>"));
+                        Language.TOO_MANY_ARGUMENTS.getPrefixed()
+                                .fill("%usage%", "/" + label + " add <name> <clickType>")
+                                .send(sender);
                         return true;
                     }
 
                     if (item.getType().equals(Material.AIR)) {
-                        player.sendMessage(StringUtil.color("&cCannot help you with AIR."));
+                        Language.CANNOT_HELP_WITH_AIR.sendPrefixed(sender);
                         return true;
                     }
 
                     if (!attributeHandler.getAttributeCache().containsKey(args[1])) {
-                        sender.sendMessage(StringUtil.color("&cThat attribute is not valid."));
-                        sender.sendMessage(StringUtil.color("&cValids: &f" + Utils.listToString(new ArrayList<>(attributeHandler.getAttributeCache().keySet()), "&7, &f", "&cNo attributes configured.")));
+                        Language.ATTRIBUTE_INVALID.getPrefixed()
+                                .fill("%attribute%", args[1])
+                                .fill("%valid%", Utils.listToString(new ArrayList<>(attributeHandler.getAttributeCache().keySet()), "&7, &f", "&cNo attributes configured."))
+                                .send(sender);
                         return true;
                     }
 
-                    try {
-                        Action.valueOf(args[2].toUpperCase());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        sender.sendMessage(StringUtil.color("&cThat click type is not valid."));
-                        sender.sendMessage(StringUtil.color("&cValids: &f"));
-                        for (Action a : Action.values()) {
-                            sender.sendMessage(a.name());
-                        }
+                    String action = args[2].toLowerCase();
+
+                    if (!ItemsPlugin.getInstance().getActionNames().contains(action)) {
+                        Language.CLICK_TYPE_INVALID.getPrefixed()
+                                .fill("%action%", args[2])
+                                .fill("%valid%", String.join(", ", ItemsPlugin.getInstance().getActionNames()))
+                                .send(sender);
                         return true;
                     }
 
-                    player.setItemInHand(itemHandler.setAttribute(item, args[1], args[2].toUpperCase()));
-                    sender.sendMessage(StringUtil.color("&eShould be added."));
+                    Utils.setItem(player, EquipmentSlot.HAND, attributeHandler.setAttribute(item, args[2], args[1]));
+                    Language.ATTRIBUTE_ADDED.getPrefixed().fill("%attribute%", args[1]).send(sender);
                     break;
                 case "rem":
                 case "r":
                 case "remove":
                     if (args.length < 2) {
-                        sender.sendMessage(StringUtil.color("&cNot enough arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/att rem <name/clickType>"));
+                        Language.NOT_ENOUGH_ARGUMENTS.getPrefixed()
+                                .fill("%usage%", "/" + label + " remove <attribute/action>")
+                                .send(sender);
                         return true;
                     }
 
                     if (args.length > 2) {
-                        sender.sendMessage(StringUtil.color("&cToo many arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/att rem <name/clickType>"));
+                        Language.TOO_MANY_ARGUMENTS.getPrefixed()
+                                .fill("%usage%", "/" + label + " remove <attribute/action>")
+                                .send(sender);
                         return true;
                     }
 
                     if (item.getType().equals(Material.AIR)) {
-                        player.sendMessage(StringUtil.color("&cCannot help you with AIR."));
+                        Language.CANNOT_HELP_WITH_AIR.sendPrefixed(sender);
                         return true;
                     }
 
-                    if (!itemHandler.getAttributes(item).containsKey(args[1].toLowerCase()) && !itemHandler.getAttributes(item).containsValue(args[1].toLowerCase())) {
-                        sender.sendMessage(StringUtil.color("&cThis does not have any of this set."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/att rem <name/clickType>"));
+                    if (!attributeHandler.getAttributes(item).containsKey(args[1].toLowerCase()) &&
+                            !attributeHandler.getAttributes(item).containsValue(args[1].toLowerCase())) {
+
+                        Language.ATTRIBUTE_INVALID_PARAM.getPrefixed()
+                                .fill("%param%", args[1])
+                                .fill("%usage%", "/" + label + " remove <name/clickType>")
+                                .send(sender);
                         return true;
                     }
 
-                    if (itemHandler.getAttributes(item).containsKey(args[1].toLowerCase())) {
-                        player.setItemInHand(itemHandler.removeAttribute(item, args[1].toLowerCase()));
-                        sender.sendMessage(StringUtil.color("&eAttribute removed."));
+                    String param = args[1].toLowerCase();
+
+                    if (attributeHandler.getAttributes(item).containsKey(param)) {
+                        Utils.setItem(player, EquipmentSlot.HAND, attributeHandler.removeAttribute(item, param));
+                        Language.ATTRIBUTE_REMOVED.getPrefixed().fill("%attribute%", param).send(sender);
                         return true;
-                    } else if (itemHandler.getAttributes(item).containsValue(args[1].toLowerCase())) {
-                        player.setItemInHand(itemHandler.removeAttribute(item, args[1].toLowerCase()));
-                        sender.sendMessage(StringUtil.color("&eAttribute removed."));
+                    } else if (attributeHandler.getAttributes(item).containsValue(param)) {
+                        Utils.setItem(player, EquipmentSlot.HAND, attributeHandler.removeAttribute(item, param));
+                        Language.ATTRIBUTE_REMOVED.getPrefixed().fill("%attribute%", param).send(sender);
                         return true;
                     } else
-                        sender.sendMessage(StringUtil.color("&cCould not remove attribute."));
+                        Language.ATTRIBUTE_COULD_NOT_REMOVE.sendPrefixed(sender);
 
                     break;
                 case "clear":
                 case "c":
                     if (args.length > 1) {
-                        sender.sendMessage(StringUtil.color("&cToo many arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/att clear"));
+                        Language.TOO_MANY_ARGUMENTS.getPrefixed()
+                                .fill("%usage%", "/" + label + " clear")
+                                .send(sender);
                         return true;
                     }
 
                     if (item.getType().equals(Material.AIR)) {
-                        player.sendMessage(StringUtil.color("&cCannot help you with AIR."));
+                        Language.CANNOT_HELP_WITH_AIR.sendPrefixed(sender);
                         return true;
                     }
 
-                    player.setItemInHand(itemHandler.clearAttributes(item));
-                    sender.sendMessage(StringUtil.color("&eAttributes cleared."));
+                    Utils.setItem(player, EquipmentSlot.HAND, attributeHandler.clearAttributes(item));
+                    Language.ATTRIBUTES_CLEARED.sendPrefixed(sender);
                     break;
                 case "list":
                 case "l":
-                    if (args.length > 1) {
-                        sender.sendMessage(StringUtil.color("&cToo many arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/att list"));
+                    if (args.length > 2) {
+                        Language.TOO_MANY_ARGUMENTS.getPrefixed()
+                                .fill("%usage%", "/" + label + " list (hand)")
+                                .send(sender);
                         return true;
                     }
 
-                    plugin.cO.debug("Atts: " + attributeHandler.getAttributeCache().keySet());
-                    sender.sendMessage(StringUtil.color("&eAttributes: &f" + Utils.listToString(new ArrayList<>(attributeHandler.getAttributeCache().keySet()), "&7, &f", "&cNo attributes saved.")));
-                    break;
-                case "listhand":
-                case "lh":
-                case "listh":
-                    if (item.getType().equals(Material.AIR)) {
-                        player.sendMessage(Main.inst.cO.getPrefix() + StringUtil.color("&cCannot help you with AIR."));
-                        return true;
+                    if (args.length == 2) {
+                        if (args[1].equalsIgnoreCase("hand") || args[1].equalsIgnoreCase("h")) {
+                            if (item.getType().equals(Material.AIR)) {
+                                Language.CANNOT_HELP_WITH_AIR.sendPrefixed(sender);
+                                return true;
+                            }
+
+                            Language.ATTRIBUTES_LIST.getPrefixed()
+                                    .fill("%attributes%", "\n &7" + Utils.mapToString(attributeHandler.getAttributes(item), "\n &7", "&8 - &7", "&cNo attributes saved."))
+                                    .send(sender);
+                            break;
+                        }
                     }
 
-                    if (args.length > 1) {
-                        sender.sendMessage(StringUtil.color("&cToo many arguments."));
-                        sender.sendMessage(StringUtil.color("&cUsage: &7/att listHand"));
-                        return true;
-                    }
-
-                    sender.sendMessage(StringUtil.color("&eAttributes:"));
-                    Map<String, String> attributes = itemHandler.getAttributes(item);
-
-                    for (String key : itemHandler.getAttributes(item).keySet())
-                        sender.sendMessage(StringUtil.color("&8- &7" + key + "&f:&7" + attributes.get(key)));
+                    Language.ATTRIBUTES_LIST.getPrefixed()
+                            .fill("%attributes%", Utils.listToString(new ArrayList<>(attributeHandler.getAttributeCache().keySet()), "&7, &f", "&cNo attributes saved."))
+                            .send(sender);
                     break;
                 case "help":
                 case "h":
@@ -191,11 +186,6 @@ public class AttCommands implements CommandExecutor {
     }
 
     private void help(CommandSender sender) {
-        sender.sendMessage(StringUtil.color("&8&m--------&r &eAttributes &8&m--------" +
-                "\n&e/att add <name> <action> &8- &7Add attribute to an item." +
-                "\n&e/att rem <name/action> &8- &7Remove attribute based on clickType/Name." +
-                "\n&e/att clear &8- &7Clears attributes." +
-                "\n&e/att list &8- &7Lists attributes from config." +
-                "\n&e/att listHand &8- &7List attributes on item in your hand."));
+        Language.ATTRIBUTES_HELP.send(sender);
     }
 }

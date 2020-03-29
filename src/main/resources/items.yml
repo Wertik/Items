@@ -1,0 +1,19 @@
+# Items storage for ${project.name}
+#
+# Version: ${project.version}
+
+diablock:
+  type: DIAMOND_BLOCK
+  data: 0
+  amount: 1
+  name: §6Item of §f%player_name%
+  lore:
+    - §r
+    - §6>> §7Item given §f@ §7%player_x% §f| §7%player_z% §f| §7%player_world%
+    - §r
+  enchants: []
+  flags: []
+  nbt:
+    - right_click;the-second-attribute
+    - items_unstackable;8a9af028-10c0-4537-ad5a-3e77bf5f5cce
+  glow: false

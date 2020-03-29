@@ -1,127 +1,156 @@
 package space.devport.wertik.items.handlers;
 
-import lombok.Getter;
-import org.bukkit.event.block.Action;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import space.devport.utils.configutil.Configuration;
+import space.devport.utils.itemutil.ItemBuilder;
 import space.devport.utils.itemutil.ItemNBTEditor;
-import space.devport.wertik.items.Main;
-import space.devport.wertik.items.objects.Attribute;
+import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.utils.Utils;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class ItemHandler {
 
-    // items.yml
+    // System name, item
+    private final Map<String, ItemBuilder> items = new HashMap<>();
+
     private final Configuration storage;
 
-    // System name, item
-    @Getter
-    private final HashMap<String, ItemStack> items = new HashMap<>();
-
     public ItemHandler() {
-        storage = new Configuration(Main.inst, "items");
-    }
-
-    // Check if an item has attributes attached
-    public boolean isSpecial(ItemStack item) {
-        return Main.inst.getActionNames().stream().anyMatch(a -> ItemNBTEditor.hasNBTKey(item, a.toUpperCase()));
+        storage = new Configuration(ItemsPlugin.getInstance(), "items");
     }
 
     // Load items from yaml
-    public void load() {
-        items.clear();
+    public void loadItems() {
         storage.reload();
+        this.items.clear();
 
         for (String name : storage.getFileConfiguration().getKeys(false)) {
 
-            // Parse from base64
-            String base64 = storage.getFileConfiguration().getString(name);
-            ItemStack item = Utils.itemStackFromBase64(base64);
+            ItemBuilder item = storage.loadItemBuilder(name);
 
-            // No 0 amount items please.
-            if (item.getAmount() == 0)
-                item.setAmount(1);
-
-            // Load into cache
-            items.put(name, item);
-            Main.inst.cO.debug("Loaded " + name);
+            // Filter 0 amount items
+            if (item.getAmount() > 0)
+                this.items.put(name, item);
         }
     }
 
     // Save all items
     public void saveItems() {
-        storage.clear();
-        items.keySet().forEach(name -> storage.getFileConfiguration().set(name, Utils.itemStackToBase64(items.get(name))));
+
+        for (String itemName : this.items.keySet()) {
+            ItemBuilder item = this.items.get(itemName);
+
+            storage.setItemBuilder(itemName, item);
+        }
+
         storage.save();
     }
 
-    // Add attribute to an item
-    public ItemStack setAttribute(ItemStack item, String attributeName, String action) {
-        return ItemNBTEditor.writeNBT(item, action, attributeName);
+    public void saveItem(String name) {
+        ItemBuilder item = getBuilder(name);
+
+        if (item == null)
+            return;
+
+        storage.setItemBuilder(name, item);
+        storage.save();
     }
 
-    // Remove attribute by action
-    public ItemStack removeAction(ItemStack item, String action) {
-        return ItemNBTEditor.hasNBTKey(item, action) ? ItemNBTEditor.removeNBT(item, action) : item;
+    public void loadItem(String name) {
+        storage.reload();
+
+        if (!storage.getFileConfiguration().contains(name))
+            return;
+
+        addItem(name, storage.loadItemBuilder(name));
     }
 
-    // Remove attribute from all actions
-    public ItemStack removeAttribute(ItemStack item, String attributeName) {
-        Map<String, String> nbt = getAttributes(item);
+    public boolean checkItemStorage(String name) {
+        storage.reload();
 
-        for (String key : nbt.keySet())
-            if (nbt.get(key).equalsIgnoreCase(attributeName))
-                item = ItemNBTEditor.removeNBT(item, key);
-
-        return item;
-    }
-
-    // Clear all attributes
-    public ItemStack clearAttributes(ItemStack item) {
-        for (String action : Main.inst.getActionNames())
-            item = removeAttribute(item, action);
-        return item;
-    }
-
-    // Get attribute by action type
-    public Attribute getAttribute(ItemStack item, String clickType) {
-        for (String key : ItemNBTEditor.getNBTTagMap(item).keySet())
-            if (key.equalsIgnoreCase(clickType))
-                return Main.inst.getAttributeHandler().get(ItemNBTEditor.getNBT(item, key));
-        return null;
+        return storage.getFileConfiguration().contains(name);
     }
 
     // Get item from cache
+    public ItemBuilder getBuilder(String name) {
+        return this.items.get(name);
+    }
+
     public ItemStack getItem(String name) {
-        return items.getOrDefault(name, null);
+        return getBuilder(name).build();
+    }
+
+    public ItemBuilder prepareBuilder(String name) {
+        return prepareBuilder(name, null);
+    }
+
+    public ItemBuilder prepareBuilder(String name, Player player) {
+        ItemBuilder builder = getBuilder(name);
+
+        // Parse displayname
+        builder.getDisplayName().setWorkingMessage(Utils.parsePlaceholders(builder.getDisplayName().getWorkingMessage(), player));
+
+        // Parse lore
+        builder.getLore().setWorkingMessage(Utils.parsePlaceholders(builder.getLore().getWorkingMessage(), player));
+
+        // Update unstackable uuid
+        if (builder.getNBT().containsKey("items_unstackable")) {
+            builder.removeNBT("items_unstackable").addNBT("items_unstackable", UUID.randomUUID().toString());
+        }
+
+        return builder;
+    }
+
+    public ItemStack prepareItem(String name, Player player) {
+        return prepareBuilder(name, player).build();
+    }
+
+    public void addItem(String name, ItemBuilder builder) {
+        this.items.put(name, builder);
+        saveItem(name);
     }
 
     // Add a new item to cache
     public void addItem(String name, ItemStack item) {
-        items.put(name, item);
+        addItem(name, new ItemBuilder(item));
     }
 
     // Remove an item from cache
     public void removeItem(String name) {
-        items.remove(name);
+        this.items.remove(name);
+
+        storage.reload();
+        storage.getFileConfiguration().set(name, null);
+        storage.save();
     }
 
-    // Get all attributes on an item
-    public Map<String, String> getAttributes(ItemStack item) {
-        Map<String, String> actionMap = new HashMap<>();
+    public Map<String, ItemBuilder> getItems() {
+        return Collections.unmodifiableMap(this.items);
+    }
 
-        if (ItemNBTEditor.hasNBT(item))
-            actionMap = ItemNBTEditor.getNBTTagMap(item);
+    // Item Manipulation
 
-        // Remove unwanted NBT
-        for (String key : new ArrayList<>(actionMap.keySet()))
-            if (!Main.inst.getActionNames().contains(key.toUpperCase()))
-                actionMap.remove(key);
+    public ItemStack setUnstackable(ItemStack item, boolean b) {
+        // Throw it back at 'em
+        if (item == null) return null;
 
-        return actionMap;
+        if (b) {
+            // Assign a new random UUID
+            String uniqueID = UUID.randomUUID().toString();
+            return ItemNBTEditor.writeNBT(item, "items_unstackable", uniqueID);
+        } else return ItemNBTEditor.removeNBT(item, "items_unstackable");
+    }
+
+    public boolean isUnstackable(ItemStack item) {
+        if (item == null) return false;
+
+        if (!ItemNBTEditor.hasNBT(item)) return false;
+
+        return ItemNBTEditor.hasNBTKey(item, "items_unstackable");
     }
 }
