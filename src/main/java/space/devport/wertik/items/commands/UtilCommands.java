@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import space.devport.utils.itemutil.ItemBuilder;
 import space.devport.utils.messageutil.StringUtil;
@@ -134,20 +133,14 @@ public class UtilCommands implements CommandExecutor {
                     return true;
                 }
 
-                ItemMeta meta = item.getItemMeta();
-
-                if (meta == null || !meta.hasLore()) {
+                if (builder.getLore().isEmptyAbsolute()) {
                     Language.NO_LORE.sendPrefixed(sender);
                     return true;
                 }
 
-                List<String> lore = meta.getLore();
-
-                if (lore != null)
-                    lore.remove(index);
-
-                meta.setLore(lore);
-                item.setItemMeta(meta);
+                List<String> lore = builder.getLore().getMessage();
+                lore.remove(index);
+                builder.getLore().setMessage(lore);
 
                 Utils.setItem(player, EquipmentSlot.HAND, builder.build());
                 Language.LINE_REMOVED.getPrefixed().send(sender);
