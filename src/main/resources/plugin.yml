@@ -34,6 +34,8 @@ commands:
     description: Remove lore line from your item.
   unstackable:
     description: Make item unstackable.
+  unplaceable:
+    description: Make item unplaceable.
 permissions:
   items.control:
     description: Allows commands

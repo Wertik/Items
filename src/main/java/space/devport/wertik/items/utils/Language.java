@@ -30,6 +30,7 @@ public enum Language {
     LINE_ADDED("Line-Added", "&7Line added to item lore."),
     LINE_REMOVED("Line-Removed", "&7Line removed from item lore."),
     NO_LORE("No-Lore", "&cItem doesn't have a lore."),
+    INDEX_OUT_OF_BOUNDS("Index-Out-Of-Bounds", "&cIndex &f%param% &cis out of bounds. &cMax: &7%max%"),
     FLAGS_LIST("Flags-List", "&7Flags: %flags%"),
     FLAG_ADDED("Flag-Added", "&7Flag added to item."),
     FLAG_REMOVED("Flag-Removed", "&7Flag removed from item."),
@@ -41,6 +42,7 @@ public enum Language {
     INVALID_ENCHANT("Invalid-Enchantment", "&cEnchantment is invalid."),
     ITEM_RENAMED("Item-Renamed", "&7Item renamed."),
     SET_UNSTACKABLE("Set-Unstackable", "&7Unstackable property set to &f%state%&7."),
+    SET_UNPLACEABLE("Set-Unplaceable", "&7Unplaceable property set to &f%state%&7."),
 
     /**
      * ITEM COMMANDS
@@ -49,8 +51,8 @@ public enum Language {
     ITEMS_HELP("Items-Help",
             "&8&m        &e Items &8&m        &r",
             "&e/%label% list &8- &7Lists saved items.",
-            "&e/%label% save (name) &8- &7Save all loaded items, or save item in hand under a name.",
-            "&e/%label% load (name) &8- &7Load all items, or by name.",
+            "&e/%label% save <name> &8- &7Save item in hand, or update existing one.",
+            "&e/%label% load (name) &8- &7Load all items, or a single one by name.",
             "&e/%label% remove <name> &8- &7Removes item by name.",
             "&e/%label% detail <name> &8- &7Displays info about an item in the db.",
             "&e/%label% drop <name> <worldName;x;y;z> (amount) &8- &7Drops item on a given location.",
@@ -72,7 +74,6 @@ public enum Language {
     ITEM_ADDED("Item-Added", "&7Item added under name &f%item%"),
     ITEM_UPDATED("Item-Updated", "&7Item &f%item% &7updated."),
     ITEM_REMOVED("Item-Removed", "&7Item &f%item% &7removed."),
-    ITEMS_SAVED("Items-Saved", "&7Items saved to storage."),
     ITEMS_LOADED("Items-Loaded", "&7Items loaded from storage."),
     ITEM_SAVED("Item-Saved", "&7Item &f%item% &7saved to storage."),
     ITEM_LOADED("Item-Loaded", "&7Item &f%item% &7loaded from storage."),

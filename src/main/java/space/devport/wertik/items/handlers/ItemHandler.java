@@ -153,4 +153,20 @@ public class ItemHandler {
 
         return ItemNBTEditor.hasNBTKey(item, "items_unstackable");
     }
+
+    public ItemStack setUnplaceable(ItemStack item, boolean b) {
+        if (item == null) return null;
+
+        if (b) {
+            return ItemNBTEditor.writeNBT(item, "items_unplaceable", "");
+        } else return ItemNBTEditor.removeNBT(item, "items_unplaceable");
+    }
+
+    public boolean isUnplaceable(ItemStack item) {
+        if (item == null) return false;
+
+        if (!ItemNBTEditor.hasNBT(item)) return false;
+
+        return ItemNBTEditor.hasNBTKey(item, "items_unplaceable");
+    }
 }

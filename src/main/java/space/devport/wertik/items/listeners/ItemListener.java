@@ -23,6 +23,14 @@ public class ItemListener implements Listener {
         // ignore physical action == button/plate interaction
         if (event.getAction() == Action.PHYSICAL) return;
 
+        ItemStack item = event.getItem();
+
+        // Check for block clicks
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK &&
+                ItemsPlugin.getInstance().getItemHandler().isUnplaceable(item)) {
+            event.setCancelled(true);
+        }
+
         String action = null;
         for (String a : ItemsPlugin.getInstance().getActionNames()) {
             if (event.getAction().toString().toLowerCase().contains(a)) {
@@ -34,7 +42,6 @@ public class ItemListener implements Listener {
         if (action == null) return;
 
         Player player = event.getPlayer();
-        ItemStack item = event.getItem();
 
         if (item == null) return;
 

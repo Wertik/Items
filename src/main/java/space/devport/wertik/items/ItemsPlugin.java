@@ -32,6 +32,7 @@ public class ItemsPlugin extends JavaPlugin {
     // TODO: Add the ability to re-parse placeholders on item on attribute item use
     // TODO: Add missing tab completion
     // TODO: Clickable chat editing/GUI
+    // TODO: Add Item Control (Player won't be able to get rid of a custom item)
 
     @Getter
     private static ItemsPlugin instance;

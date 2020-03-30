@@ -141,6 +141,15 @@ public class UtilCommands implements CommandExecutor {
                 }
 
                 List<String> workLore = builder.getLore().getMessage();
+
+                if (index >= workLore.size()) {
+                    Language.INDEX_OUT_OF_BOUNDS.getPrefixed()
+                            .fill("%param%", String.valueOf(index))
+                            .fill("%max%", String.valueOf(workLore.size() - 1))
+                            .send(sender);
+                    return true;
+                }
+
                 workLore.remove(index);
                 builder.getLore().setMessage(workLore);
 
@@ -281,6 +290,23 @@ public class UtilCommands implements CommandExecutor {
 
                 Utils.setItem(player, EquipmentSlot.HAND, ItemsPlugin.getInstance().getItemHandler().setUnstackable(item, b));
                 Language.SET_UNSTACKABLE.getPrefixed()
+                        .fill("%state%", String.valueOf(b))
+                        .send(sender);
+                break;
+            case "unplaceable":
+                if (args.length > 1) {
+                    Language.TOO_MANY_ARGUMENTS.getPrefixed()
+                            .fill("%usage%", "/unplaceable (true/false)")
+                            .send(sender);
+                }
+
+                if (args.length > 0)
+                    b = Boolean.parseBoolean(args[0]);
+                else
+                    b = !ItemsPlugin.getInstance().getItemHandler().isUnplaceable(item);
+
+                Utils.setItem(player, EquipmentSlot.HAND, ItemsPlugin.getInstance().getItemHandler().setUnplaceable(item, b));
+                Language.SET_UNPLACEABLE.getPrefixed()
                         .fill("%state%", String.valueOf(b))
                         .send(sender);
                 break;

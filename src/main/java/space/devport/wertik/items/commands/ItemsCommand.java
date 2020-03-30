@@ -272,37 +272,37 @@ public class ItemsCommand implements CommandExecutor {
                     Language.ITEMS_LOADED.getPrefixed().send(sender);
                     break;
                 case "save":
-                    if (args.length > 1) {
-                        if (args.length > 2) {
-                            Language.TOO_MANY_ARGUMENTS.getPrefixed()
-                                    .fill("%usage%", "/" + label + " save (name)")
-                                    .send(sender);
-                            return true;
-                        }
-
-                        if (!(sender instanceof Player)) {
-                            Language.ONLY_PLAYERS.sendPrefixed(sender);
-                            return true;
-                        }
-
-                        Player player = (Player) sender;
-
-                        if (Utils.getItem(player).getType().equals(Material.AIR)) {
-                            Language.CANNOT_HELP_WITH_AIR.sendPrefixed(sender);
-                            return true;
-                        }
-
-                        if (ItemsPlugin.getInstance().getItemHandler().getBuilder(args[1]) == null)
-                            Language.ITEM_SAVED.getPrefixed().fill("%item%", args[1]).send(sender);
-                        else
-                            Language.ITEM_UPDATED.getPrefixed().fill("%item%", args[1]).send(sender);
-
-                        ItemsPlugin.getInstance().getItemHandler().addItem(args[1], Utils.getItem(player));
+                    if (args.length > 2) {
+                        Language.TOO_MANY_ARGUMENTS.getPrefixed()
+                                .fill("%usage%", "/" + label + " save <name>")
+                                .send(sender);
                         return true;
                     }
 
-                    ItemsPlugin.getInstance().getItemHandler().saveItems();
-                    Language.ITEMS_SAVED.getPrefixed().send(sender);
+                    if (args.length < 2) {
+                        Language.NOT_ENOUGH_ARGUMENTS.getPrefixed()
+                                .fill("%usage%", "/" + label + " save <name>")
+                                .send(sender);
+                    }
+
+                    if (!(sender instanceof Player)) {
+                        Language.ONLY_PLAYERS.sendPrefixed(sender);
+                        return true;
+                    }
+
+                    Player player = (Player) sender;
+
+                    if (Utils.getItem(player).getType().equals(Material.AIR)) {
+                        Language.CANNOT_HELP_WITH_AIR.sendPrefixed(sender);
+                        return true;
+                    }
+
+                    if (ItemsPlugin.getInstance().getItemHandler().getBuilder(args[1]) == null)
+                        Language.ITEM_SAVED.getPrefixed().fill("%item%", args[1]).send(sender);
+                    else
+                        Language.ITEM_UPDATED.getPrefixed().fill("%item%", args[1]).send(sender);
+
+                    ItemsPlugin.getInstance().getItemHandler().addItem(args[1], Utils.getItem(player));
                     break;
                 case "help":
                 case "h":
