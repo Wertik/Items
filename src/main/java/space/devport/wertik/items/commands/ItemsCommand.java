@@ -35,7 +35,7 @@ public class ItemsCommand implements CommandExecutor {
         if (args.length < 1) {
             help(sender, label);
             return true;
-        } else if (args.length > 4) {
+        } else if (args.length > 5) {
             help(sender, label);
             return true;
         } else {
@@ -204,38 +204,57 @@ public class ItemsCommand implements CommandExecutor {
                         return true;
                     }
 
-                    Player target;
-                    if (args.length == 3 && !args[2].equalsIgnoreCase("-r")) {
-                        OfflinePlayer offlineTarget = Bukkit.getPlayer(args[2]);
+                    String argStr = String.join(" ", args);
+                    boolean raw = argStr.contains(" -r");
 
-                        if (offlineTarget == null || !offlineTarget.isOnline() || offlineTarget.getPlayer() == null) {
-                            Language.PLAYER_OFFLINE.getPrefixed().send(sender);
-                            return true;
+                    String[] newArgs = raw ? argStr.replace(" -r", "").split(" ") : args;
+
+                    Player target = null;
+                    OfflinePlayer offlineTarget;
+
+                    if (newArgs.length > 2) {
+                        offlineTarget = parsePlayer(newArgs[2]);
+
+                        if (offlineTarget != null) {
+                            target = offlineTarget.getPlayer();
+                        } else {
+                            if (newArgs.length > 3)
+                                offlineTarget = parsePlayer(newArgs[3]);
+
+                            if (offlineTarget != null)
+                                target = offlineTarget.getPlayer();
                         }
+                    }
 
-                        target = offlineTarget.getPlayer();
-                    } else {
+                    if (target == null) {
                         if (!(sender instanceof Player)) {
-                            Language.ONLY_PLAYERS.sendPrefixed(sender);
+                            Language.ONLY_PLAYERS.getPrefixed().send(sender);
                             return true;
                         }
 
                         target = (Player) sender;
                     }
 
-                    amount = 1;
+                    int amt = 0;
 
-                    if (args.length == 4 && !args[3].equalsIgnoreCase("-r"))
-                        try {
-                            amount = Integer.parseInt(args[3]);
-                        } catch (NumberFormatException e) {
-                            Language.NOT_A_NUMBER.getPrefixed()
-                                    .fill("%param%", args[3])
-                                    .send(sender);
-                            return true;
+                    if (newArgs.length > 2) {
+                        amt = parseAmount(newArgs[2]);
+                        if (amt <= 0) {
+                            if (newArgs.length > 3) {
+                                amt = parseAmount(newArgs[3]);
+                                if (amt <= 0) {
+                                    Language.NOT_A_NUMBER.getPrefixed()
+                                            .fill("%param%", newArgs[3])
+                                            .send(sender);
+                                    return true;
+                                }
+                            }
                         }
+                    }
 
-                    boolean raw = String.join(" ", args).contains(" -r");
+                    if (amt <= 0)
+                        amount = 1;
+                    else amount = amt;
 
                     // Raw item
                     if (raw) {
@@ -283,6 +302,7 @@ public class ItemsCommand implements CommandExecutor {
                         Language.NOT_ENOUGH_ARGUMENTS.getPrefixed()
                                 .fill("%usage%", "/" + label + " save <name>")
                                 .send(sender);
+                        return true;
                     }
 
                     if (!(sender instanceof Player)) {
@@ -292,7 +312,7 @@ public class ItemsCommand implements CommandExecutor {
 
                     Player player = (Player) sender;
 
-                    if (Utils.getItem(player).getType().equals(Material.AIR)) {
+                    if (Utils.getItem(player).getType() == Material.AIR) {
                         Language.CANNOT_HELP_WITH_AIR.sendPrefixed(sender);
                         return true;
                     }
@@ -311,6 +331,24 @@ public class ItemsCommand implements CommandExecutor {
             }
         }
         return false;
+    }
+
+    private int parseAmount(String arg) {
+        int amount = -1;
+        try {
+            amount = Integer.parseInt(arg);
+        } catch (NumberFormatException ignored) {
+        }
+        return amount;
+    }
+
+    private OfflinePlayer parsePlayer(String arg) {
+        OfflinePlayer offlineTarget = Bukkit.getPlayer(arg);
+
+        if (offlineTarget == null || !offlineTarget.isOnline() || offlineTarget.getPlayer() == null)
+            return null;
+
+        return offlineTarget;
     }
 
     private void help(CommandSender sender, String label) {

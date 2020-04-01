@@ -1,6 +1,7 @@
 name: Items
 author: Wertik1206
 version: ${project.version}
+api-version: 1.13
 main: space.devport.wertik.items.ItemsPlugin
 softdepend: [PlaceholderAPI]
 commands:
