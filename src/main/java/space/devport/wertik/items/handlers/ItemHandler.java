@@ -1,10 +1,11 @@
 package space.devport.wertik.items.handlers;
 
+import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import space.devport.utils.configutil.Configuration;
-import space.devport.utils.itemutil.ItemBuilder;
-import space.devport.utils.itemutil.ItemNBTEditor;
+import space.devport.utils.configuration.Configuration;
+import space.devport.utils.item.ItemBuilder;
+import space.devport.utils.item.ItemNBTEditor;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.utils.Utils;
 
@@ -15,9 +16,9 @@ import java.util.UUID;
 
 public class ItemHandler {
 
-    // System name, item
     private final Map<String, ItemBuilder> items = new HashMap<>();
 
+    @Getter
     private final Configuration storage;
 
     public ItemHandler() {
@@ -26,16 +27,13 @@ public class ItemHandler {
 
     // Load items from yaml
     public void loadItems() {
-        storage.reload();
+        storage.load();
         this.items.clear();
 
         for (String name : storage.getFileConfiguration().getKeys(false)) {
+            ItemBuilder item = storage.getItemBuilder(name);
 
-            ItemBuilder item = storage.loadItemBuilder(name);
-
-            // Filter 0 amount items
-            if (item.getAmount() > 0)
-                this.items.put(name, item);
+            this.items.put(name, item);
         }
     }
 
@@ -62,17 +60,17 @@ public class ItemHandler {
     }
 
     public void loadItem(String name) {
-        storage.reload();
+        storage.load();
 
-        if (!storage.getFileConfiguration().contains(name))
-            return;
+        ItemBuilder itemBuilder = storage.getItemBuilder(name);
 
-        addItem(name, storage.loadItemBuilder(name));
+        if (itemBuilder == null) return;
+
+        addItem(name, itemBuilder);
     }
 
     public boolean checkItemStorage(String name) {
-        storage.reload();
-
+        storage.load();
         return storage.getFileConfiguration().contains(name);
     }
 
@@ -93,7 +91,8 @@ public class ItemHandler {
         ItemBuilder builder = getBuilder(name);
 
         // Parse displayname
-        builder.getDisplayName().setWorkingMessage(Utils.parsePlaceholders(builder.getDisplayName().getWorkingMessage(), player));
+        // TODO: Sort this out or make it possible to parse custom placeholders in every message
+        builder.getDisplayName().set(Utils.parsePlaceholders(builder.getDisplayName().getWorkingMessage(), player));
 
         // Parse lore
         builder.getLore().setWorkingMessage(Utils.parsePlaceholders(builder.getLore().getWorkingMessage(), player));

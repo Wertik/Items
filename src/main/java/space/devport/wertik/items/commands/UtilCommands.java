@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import space.devport.utils.itemutil.ItemBuilder;
 import space.devport.utils.messageutil.StringUtil;
 import space.devport.wertik.items.ItemsPlugin;
-import space.devport.wertik.items.utils.Language;
 import space.devport.wertik.items.utils.Utils;
 
 import java.util.List;
@@ -36,7 +35,7 @@ public class UtilCommands implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        final ItemStack item = Utils.getItem(player);
+        final ItemStack item = Utils.getItemInHand(player);
         final ItemBuilder builder = new ItemBuilder(item);
 
         if (item.getType() == Material.AIR) {

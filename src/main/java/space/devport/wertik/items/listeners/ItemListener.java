@@ -12,7 +12,6 @@ import space.devport.utils.SpigotHelper;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.objects.Attribute;
 import space.devport.wertik.items.objects.Reward;
-import space.devport.wertik.items.utils.Language;
 import space.devport.wertik.items.utils.Utils;
 
 public class ItemListener implements Listener {

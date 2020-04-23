@@ -6,7 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
-import space.devport.utils.SpigotHelper;
+import space.devport.utils.item.ItemBuilder;
+import space.devport.utils.utility.reflection.SpigotHelper;
 import space.devport.wertik.items.ItemsPlugin;
 
 import java.util.List;
@@ -67,11 +68,15 @@ public class Utils {
         }
     }
 
-    public ItemStack getItem(Player player) {
+    public ItemStack getItemInHand(Player player) {
         if (SpigotHelper.getVersion().contains("1.7") || SpigotHelper.getVersion().contains("1.8"))
             return player.getItemInHand();
         else
             return player.getInventory().getItemInMainHand();
+    }
+
+    public ItemBuilder getBuilderInHand(Player player) {
+        return new ItemBuilder(getItemInHand(player));
     }
 
     public String parsePlaceholders(String string, Player player) {

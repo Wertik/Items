@@ -5,12 +5,14 @@ import space.devport.utils.commands.MainCommand;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 
-public class ItemsCommand extends MainCommand {
+public class AttributesCommand extends MainCommand {
 
-    public ItemsCommand(String name) {
+    public AttributesCommand(String name) {
         super(name);
-        this.aliases = new String[]{"i", "item"};
-        this.preconditions = new Preconditions().permissions("items.control");
+        this.aliases = new String[]{"att", "atts"};
+        this.preconditions = new Preconditions()
+                .permissions("items.control")
+                .playerOnly();
     }
 
     @Override

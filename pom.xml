@@ -89,15 +89,16 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>space.devport.utils</groupId>
-            <artifactId>DevportUtils</artifactId>
-            <version>1.1</version>
-        </dependency>
-        <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
             <version>2.10.5</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>space.devport.utils</groupId>
+            <artifactId>DevportUtils</artifactId>
+            <version>2.0.2</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
