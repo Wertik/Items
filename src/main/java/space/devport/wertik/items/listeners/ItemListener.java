@@ -35,6 +35,8 @@ public class ItemListener extends DevportListener {
 
         if (!ItemsPlugin.getInstance().getAttributeManager().hasAttribute(item)) return;
 
+        event.setCancelled(true);
+
         // Now get to attributes
 
         Player player = event.getPlayer();
@@ -46,8 +48,6 @@ public class ItemListener extends DevportListener {
 
         if (!ItemsPlugin.getInstance().getActionNames().contains(action))
             return;
-
-        event.setCancelled(true);
 
         Attribute attribute = ItemsPlugin.getInstance().getAttributeManager().getAttribute(item, action);
 
