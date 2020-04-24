@@ -9,7 +9,7 @@ import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
-import space.devport.wertik.items.handlers.ItemManager;
+import space.devport.wertik.items.system.ItemManager;
 import space.devport.wertik.items.utils.Utils;
 
 public class SaveItem extends SubCommand {

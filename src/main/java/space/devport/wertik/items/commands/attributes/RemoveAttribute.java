@@ -9,7 +9,7 @@ import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
-import space.devport.wertik.items.handlers.AttributeManager;
+import space.devport.wertik.items.system.AttributeManager;
 import space.devport.wertik.items.utils.Utils;
 
 public class RemoveAttribute extends SubCommand {

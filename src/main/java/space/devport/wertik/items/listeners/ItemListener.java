@@ -24,11 +24,16 @@ public class ItemListener extends DevportListener {
 
         ItemStack item = event.getItem();
 
-        // Check for block clicks
+        if (item == null ||
+                item.getType() == Material.AIR) return;
+
+        // Unplaceable check
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK &&
-                ItemsPlugin.getInstance().getItemManager().isUnplaceable(item)) {
+                ItemsPlugin.getInstance().getItemManager().hasExtra(item, "unplaceable")) {
             event.setCancelled(true);
         }
+
+        // Now get to attributes
 
         String action = null;
         for (String a : ItemsPlugin.getInstance().getActionNames()) {
@@ -42,12 +47,6 @@ public class ItemListener extends DevportListener {
 
         Player player = event.getPlayer();
 
-        if (item == null) return;
-
-        // Ignore air and non-special items
-        if (item.getType() == Material.AIR) return;
-
-        // Get attribute from item
         Attribute attribute = ItemsPlugin.getInstance().getAttributeManager().getAttribute(item, action);
 
         if (attribute == null) return;

@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.bukkit.plugin.PluginManager;
 import space.devport.utils.DevportPlugin;
 import space.devport.utils.commands.struct.CommandResult;
-import space.devport.wertik.items.commands.AttributesCommand;
+import space.devport.wertik.items.commands.attributes.AttributesCommand;
 import space.devport.wertik.items.commands.attributes.AddAttribute;
 import space.devport.wertik.items.commands.attributes.ClearAttributes;
 import space.devport.wertik.items.commands.attributes.ListAttributes;
@@ -28,9 +28,10 @@ import space.devport.wertik.items.commands.utility.lore.AddLore;
 import space.devport.wertik.items.commands.utility.lore.ClearLore;
 import space.devport.wertik.items.commands.utility.lore.Lore;
 import space.devport.wertik.items.commands.utility.lore.RemoveLore;
-import space.devport.wertik.items.handlers.AttributeManager;
-import space.devport.wertik.items.handlers.CooldownManager;
-import space.devport.wertik.items.handlers.ItemManager;
+import space.devport.wertik.items.listeners.CraftListener;
+import space.devport.wertik.items.system.AttributeManager;
+import space.devport.wertik.items.system.CooldownManager;
+import space.devport.wertik.items.system.ItemManager;
 import space.devport.wertik.items.listeners.ItemListener;
 
 import java.util.ArrayList;
@@ -49,13 +50,15 @@ public class ItemsPlugin extends DevportPlugin {
     // TODO: Add support for WorldGuard - disable specific items
     // TODO: Add the ability to re-parse placeholders on item on attribute item use
     // TODO: Clickable chat editing/GUI
-    // TODO: Add Item Control (Player won't be able to get rid of a custom item)
+    // TODO: Add Item Control ( Player won't be able to get rid of a custom item )
     // TODO: Add item tracking ( manipulate items that were already given to players, basically what MMO Items does )
+    // TODO: Add NBT manipulation commands
 
     /*
-     * Change log:
+     * Change log: 3.1.0
      * - Change material with a command
      * - Add missing tab completion
+     * - Add uncraftable
      */
 
     @Getter
@@ -113,6 +116,7 @@ public class ItemsPlugin extends DevportPlugin {
         consoleOutput.info("Loaded " + itemManager.getItems().size() + " item(s)..");
 
         new ItemListener();
+        new CraftListener();
 
         addMainCommand(new ItemsCommand("items")
                 .addSubCommand(new Detail("detail"))

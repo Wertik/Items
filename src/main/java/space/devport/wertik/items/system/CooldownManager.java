@@ -1,4 +1,4 @@
-package space.devport.wertik.items.handlers;
+package space.devport.wertik.items.system;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;

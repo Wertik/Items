@@ -9,10 +9,12 @@ import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
-import space.devport.wertik.items.handlers.AttributeManager;
+import space.devport.wertik.items.system.AttributeManager;
 import space.devport.wertik.items.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class AddAttribute extends SubCommand {
 
@@ -54,6 +56,21 @@ public class AddAttribute extends SubCommand {
         Utils.setItem(player, EquipmentSlot.HAND, attributeManager.setAttribute(item, args[2], args[1]));
         language.getPrefixed("Attribute-Added").replace("%attribute%", args[1]).send(sender);
         return CommandResult.SUCCESS;
+    }
+
+    @Override
+    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+
+        if (args.length == 1) {
+            if (!attributeManager.getAttributeCache().isEmpty())
+                suggestions.addAll(new ArrayList<>(attributeManager.getAttributeCache().keySet()));
+        } else if (args.length == 2) {
+            suggestions.addAll(ItemsPlugin.getInstance().getActionNames());
+        }
+
+        Collections.sort(suggestions);
+        return suggestions;
     }
 
     @Override

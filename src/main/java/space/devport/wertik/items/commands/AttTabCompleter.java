@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import space.devport.wertik.items.ItemsPlugin;
-import space.devport.wertik.items.handlers.AttributeManager;
+import space.devport.wertik.items.system.AttributeManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,51 +33,10 @@ public class AttTabCompleter implements TabCompleter {
 
         List<String> tabComplete = new ArrayList<>();
 
-        if (args.length == 1) {
-            String[] subs = {"add", "remove", "list", "clear", "help"};
-            if (!args[0].equals("")) {
-                for (String sub : subs)
-                    if (sub.toLowerCase().startsWith(args[0].toLowerCase()))
-                        tabComplete.add(sub);
-            } else
-                tabComplete.addAll(Arrays.asList(subs));
-
-            Collections.sort(tabComplete);
-
-            return tabComplete;
-        }
-
         switch (args[0].toLowerCase()) {
             case "add":
             case "a":
-                if (args.length == 2) {
-                    if (!attributeManager.getAttributeCache().isEmpty()) {
-                        if (!args[1].equals("")) {
-                            for (String attributeName : attributeManager.getAttributeCache().keySet())
-                                if (attributeName.toLowerCase().startsWith(args[1].toLowerCase()))
-                                    tabComplete.add(attributeName);
-                        } else
-                            tabComplete.addAll(attributeManager.getAttributeCache().keySet());
 
-                    } else {
-                        tabComplete.add("There are no attributes configured.");
-                    }
-
-                    Collections.sort(tabComplete);
-
-                    return tabComplete;
-                } else if (args.length == 3) {
-                    if (!args[2].equals("")) {
-                        for (String actionName : plugin.getActionNames())
-                            if (actionName.toLowerCase().startsWith(args[2].toLowerCase()))
-                                tabComplete.add(actionName.toLowerCase());
-                    } else
-                        tabComplete.addAll(plugin.getActionNames());
-
-                    Collections.sort(tabComplete);
-
-                    return tabComplete;
-                }
                 break;
             case "rem":
             case "remove":

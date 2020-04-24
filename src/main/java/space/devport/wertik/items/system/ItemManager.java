@@ -1,5 +1,6 @@
-package space.devport.wertik.items.handlers;
+package space.devport.wertik.items.system;
 
+import com.google.common.base.Strings;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -90,16 +91,13 @@ public class ItemManager {
     public ItemBuilder prepareBuilder(String name, Player player) {
         ItemBuilder builder = getBuilder(name);
 
-        // Parse displayname
-        // TODO: Sort this out or make it possible to parse custom placeholders in every message
-        builder.getDisplayName().set(Utils.parsePlaceholders(builder.getDisplayName().getOriginal(), player));
+        builder.getDisplayName().setMessage(Utils.parsePlaceholders(builder.getDisplayName().getOriginal(), player));
 
-        // Parse lore
-        builder.getLore().set(Utils.parsePlaceholders(builder.getLore().getOriginal(), player));
+        builder.getLore().setMessage(Utils.parsePlaceholders(builder.getLore().getMessage(), player));
 
-        // Update unstackable uuid
         if (builder.getNBT().containsKey("items_unstackable")) {
-            builder.removeNBT("items_unstackable").addNBT("items_unstackable", UUID.randomUUID().toString());
+            builder.removeNBT("items_unstackable")
+                    .addNBT("items_unstackable", UUID.randomUUID().toString());
         }
 
         return builder;
@@ -123,7 +121,7 @@ public class ItemManager {
     public void removeItem(String name) {
         this.items.remove(name);
 
-        storage.reload();
+        storage.load();
         storage.getFileConfiguration().set(name, null);
         storage.save();
     }
@@ -132,40 +130,18 @@ public class ItemManager {
         return Collections.unmodifiableMap(this.items);
     }
 
-    // Item Manipulation
-
-    public ItemStack setUnstackable(ItemStack item, boolean b) {
-        // Throw it back at 'em
-        if (item == null) return null;
-
-        if (b) {
-            // Assign a new random UUID
-            String uniqueID = UUID.randomUUID().toString();
-            return ItemNBTEditor.writeNBT(item, "items_unstackable", uniqueID);
-        } else return ItemNBTEditor.removeNBT(item, "items_unstackable");
+    public ItemStack setExtra(ItemStack item, String key, String... value) {
+        if (item == null || Strings.isNullOrEmpty(key)) return null;
+        return ItemNBTEditor.writeNBT(item, "items_" + key, value.length > 0 ? value[0] : "");
     }
 
-    public boolean isUnstackable(ItemStack item) {
-        if (item == null) return false;
-
-        if (!ItemNBTEditor.hasNBT(item)) return false;
-
-        return ItemNBTEditor.hasNBTKey(item, "items_unstackable");
+    public ItemStack removeExtra(ItemStack item, String key) {
+        if (item == null || Strings.isNullOrEmpty(key)) return null;
+        return ItemNBTEditor.removeNBT(item, key);
     }
 
-    public ItemStack setUnplaceable(ItemStack item, boolean b) {
-        if (item == null) return null;
-
-        if (b) {
-            return ItemNBTEditor.writeNBT(item, "items_unplaceable", "");
-        } else return ItemNBTEditor.removeNBT(item, "items_unplaceable");
-    }
-
-    public boolean isUnplaceable(ItemStack item) {
-        if (item == null) return false;
-
-        if (!ItemNBTEditor.hasNBT(item)) return false;
-
-        return ItemNBTEditor.hasNBTKey(item, "items_unplaceable");
+    public boolean hasExtra(ItemStack item, String key) {
+        if (item == null || !ItemNBTEditor.hasNBT(item) || Strings.isNullOrEmpty(key)) return false;
+        return ItemNBTEditor.hasNBTKey(item, "items_" + key);
     }
 }

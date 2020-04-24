@@ -5,7 +5,7 @@ import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.wertik.items.ItemsPlugin;
-import space.devport.wertik.items.handlers.ItemManager;
+import space.devport.wertik.items.system.ItemManager;
 import space.devport.wertik.items.utils.Utils;
 
 import java.util.ArrayList;

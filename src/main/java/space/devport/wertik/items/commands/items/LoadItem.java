@@ -6,7 +6,7 @@ import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
-import space.devport.wertik.items.handlers.ItemManager;
+import space.devport.wertik.items.system.ItemManager;
 
 public class LoadItem extends SubCommand {
 

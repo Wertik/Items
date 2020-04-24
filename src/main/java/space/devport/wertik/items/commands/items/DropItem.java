@@ -9,7 +9,9 @@ import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.utility.LocationUtil;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
-import space.devport.wertik.items.handlers.ItemManager;
+import space.devport.wertik.items.system.ItemManager;
+
+import java.util.UUID;
 
 public class DropItem extends SubCommand {
 
@@ -49,8 +51,8 @@ public class DropItem extends SubCommand {
 
         ItemStack giveItem = itemManager.getBuilder(args[1]).build();
 
-        if (itemManager.isUnstackable(giveItem))
-            giveItem = itemManager.setUnstackable(giveItem, true);
+        if (itemManager.hasExtra(giveItem, "unstackable"))
+            giveItem = itemManager.setExtra(giveItem, "unstackable", UUID.randomUUID().toString());
 
         giveItem.setAmount(amount);
 

@@ -1,4 +1,4 @@
-package space.devport.wertik.items.commands;
+package space.devport.wertik.items.commands.attributes;
 
 import org.bukkit.command.CommandSender;
 import space.devport.utils.commands.MainCommand;
@@ -18,6 +18,11 @@ public class AttributesCommand extends MainCommand {
     @Override
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
         return super.perform(sender, label, args);
+    }
+
+    @Override
+    public boolean registerTabCompleter() {
+        return true;
     }
 
     @Override
