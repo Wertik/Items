@@ -45,6 +45,8 @@ public class ItemsLanguage extends LanguageDefaults {
         addDefault("Item-Renamed", "&7Item renamed.");
         addDefault("Set-Unstackable", "&7Unstackable property set to &f%state%&7.");
         addDefault("Set-Unplaceable", "&7Unplaceable property set to &f%state%&7.");
+        addDefault("Invalid-Material", "&cMaterial &f%param% &cis not valid.");
+        addDefault("Material-Changed", "&7Material changed to &f%material%");
 
         /*
          * Item commands

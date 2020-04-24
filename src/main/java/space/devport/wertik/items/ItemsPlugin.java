@@ -12,6 +12,8 @@ import space.devport.wertik.items.commands.attributes.ClearAttributes;
 import space.devport.wertik.items.commands.attributes.ListAttributes;
 import space.devport.wertik.items.commands.attributes.RemoveAttribute;
 import space.devport.wertik.items.commands.items.*;
+import space.devport.wertik.items.commands.utility.SetName;
+import space.devport.wertik.items.commands.utility.SetType;
 import space.devport.wertik.items.commands.utility.enchants.AddEnchant;
 import space.devport.wertik.items.commands.utility.enchants.ClearEnchants;
 import space.devport.wertik.items.commands.utility.enchants.Enchants;
@@ -48,11 +50,15 @@ public class ItemsPlugin extends DevportPlugin {
     // TODO: Optional "transaction" logger
     // TODO: Add support for WorldGuard - disable specific items
     // TODO: Add the ability to re-parse placeholders on item on attribute item use
-    // TODO: Add missing tab completion
     // TODO: Clickable chat editing/GUI
     // TODO: Add Item Control (Player won't be able to get rid of a custom item)
-    // TODO: Change material with a command
     // TODO: Add item tracking ( manipulate items that were already given to players, basically what MMO Items does )
+
+    /*
+     * Change log:
+     * - Change material with a command
+     * - Add missing tab completion
+     */
 
     @Getter
     private static ItemsPlugin instance;
@@ -148,6 +154,10 @@ public class ItemsPlugin extends DevportPlugin {
                 .addSubCommand(new UnPlace("unplace"))
                 .addSubCommand(new UnStack("unstack"))
                 .addSubCommand(new UnCraft("uncraft")));
+
+        addMainCommand(new SetName("setname"));
+        addMainCommand(new SetType("settype"));
+        addMainCommand(new space.devport.wertik.items.commands.utility.Detail("detail"));
 
         getCommand("attribute").setTabCompleter(new AttTabCompleter());
 
