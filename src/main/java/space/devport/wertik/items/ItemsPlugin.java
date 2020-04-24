@@ -4,9 +4,7 @@ import lombok.Getter;
 import org.bukkit.plugin.PluginManager;
 import space.devport.utils.DevportPlugin;
 import space.devport.utils.commands.struct.CommandResult;
-import space.devport.wertik.items.commands.AttTabCompleter;
 import space.devport.wertik.items.commands.AttributesCommand;
-import space.devport.wertik.items.commands.UtilTabCompleter;
 import space.devport.wertik.items.commands.attributes.AddAttribute;
 import space.devport.wertik.items.commands.attributes.ClearAttributes;
 import space.devport.wertik.items.commands.attributes.ListAttributes;
@@ -114,10 +112,7 @@ public class ItemsPlugin extends DevportPlugin {
         itemManager.loadItems();
         consoleOutput.info("Loaded " + itemManager.getItems().size() + " item(s)..");
 
-        getServer().getPluginManager().registerEvents(new ItemListener(), this);
-
-        // Utils command executor and tab completer
-        UtilTabCompleter utilTabCompleter = new UtilTabCompleter();
+        new ItemListener();
 
         addMainCommand(new ItemsCommand("items")
                 .addSubCommand(new Detail("detail"))
@@ -158,14 +153,6 @@ public class ItemsPlugin extends DevportPlugin {
         addMainCommand(new SetName("setname"));
         addMainCommand(new SetType("settype"));
         addMainCommand(new space.devport.wertik.items.commands.utility.Detail("detail"));
-
-        getCommand("attribute").setTabCompleter(new AttTabCompleter());
-
-        // Utils command executor and tab completer
-        List<String> commands = new ArrayList<>(getDescription().getCommands().keySet()).subList(2, getDescription().getCommands().size());
-        for (String command : commands) {
-            getCommand(command).setTabCompleter(utilTabCompleter);
-        }
     }
 
     @Override

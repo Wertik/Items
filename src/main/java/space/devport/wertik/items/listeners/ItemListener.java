@@ -3,18 +3,18 @@ package space.devport.wertik.items.listeners;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import space.devport.utils.DevportListener;
 import space.devport.utils.utility.reflection.SpigotHelper;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.objects.Attribute;
 import space.devport.wertik.items.objects.Reward;
 import space.devport.wertik.items.utils.Utils;
 
-public class ItemListener implements Listener {
+public class ItemListener extends DevportListener {
 
     @EventHandler
     public void onUse(PlayerInteractEvent event) {
