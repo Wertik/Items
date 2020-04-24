@@ -17,7 +17,6 @@ public class Flags extends MainCommand {
 
     public Flags(String name) {
         super(name);
-        this.aliases = new String[]{"flag"};
         this.preconditions = new Preconditions().playerOnly().permissions("items.control");
     }
 

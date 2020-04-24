@@ -23,7 +23,7 @@ public class GiveItem extends SubCommand {
     @Override
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
 
-        if (CommandUtils.checkItemStored(sender, args[1])) return CommandResult.FAILURE;
+        if (CommandUtils.checkItemStored(sender, args[0])) return CommandResult.FAILURE;
 
         String argStr = String.join(" ", args);
         boolean raw = argStr.contains(" -r");
@@ -33,14 +33,14 @@ public class GiveItem extends SubCommand {
         Player target = null;
         OfflinePlayer offlineTarget;
 
-        if (newArgs.length > 2) {
-            offlineTarget = CommandUtils.parsePlayer(newArgs[2]);
+        if (newArgs.length > 1) {
+            offlineTarget = CommandUtils.parsePlayer(newArgs[1]);
 
             if (offlineTarget != null) {
                 target = offlineTarget.getPlayer();
             } else {
-                if (newArgs.length > 3)
-                    offlineTarget = CommandUtils.parsePlayer(newArgs[3]);
+                if (newArgs.length > 2)
+                    offlineTarget = CommandUtils.parsePlayer(newArgs[2]);
 
                 if (offlineTarget != null)
                     target = offlineTarget.getPlayer();
@@ -54,15 +54,16 @@ public class GiveItem extends SubCommand {
 
         int amt = 0;
 
-        if (newArgs.length > 2) {
-            amt = CommandUtils.parseAmount(newArgs[2]);
-            if (amt <= 0 && newArgs.length > 3) {
+        if (newArgs.length > 1) {
+            amt = CommandUtils.parseAmount(newArgs[1]);
 
-                amt = CommandUtils.parseAmount(newArgs[3]);
+            if (amt <= 0 && newArgs.length > 2) {
+
+                amt = CommandUtils.parseAmount(newArgs[2]);
 
                 if (amt <= 0) {
                     language.getPrefixed("Not-A-Number")
-                            .replace("%param%", newArgs[3])
+                            .replace("%param%", newArgs[1])
                             .send(sender);
                     return CommandResult.FAILURE;
                 }
@@ -70,23 +71,21 @@ public class GiveItem extends SubCommand {
         }
 
         int amount;
-        ItemStack giveItem;
-
         if (amt <= 0)
             amount = 1;
         else amount = amt;
 
-        // Raw item
+        ItemStack giveItem;
         if (raw) {
-            giveItem = itemManager.getItem(args[1]);
-        } else giveItem = itemManager.prepareItem(args[1], target);
+            giveItem = itemManager.getItem(args[0]);
+        } else giveItem = itemManager.prepareItem(args[0], target);
 
         for (int i = 0; i < amount; i++) target.getInventory().addItem(giveItem);
 
         language.getPrefixed(raw ? "Item-Given-Raw" : "Item-Given")
-                .replace("%item%", args[1])
+                .replace("%item%", args[0])
                 .replace("%player%", target.getName())
-                .replace("%amount%", "" + amount)
+                .replace("%amount%", amount)
                 .send(sender);
         return CommandResult.SUCCESS;
     }

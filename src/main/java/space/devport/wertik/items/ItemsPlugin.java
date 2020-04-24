@@ -52,6 +52,7 @@ public class ItemsPlugin extends DevportPlugin {
     // TODO: Add Item Control ( Player won't be able to get rid of a custom item )
     // TODO: Add item tracking ( manipulate items that were already given to players, basically what MMO Items does )
     // TODO: Redesign commands ( just colors and styling )
+    // TODO: Allow multiple attributes on one action
 
     /*
      * Change log: 3.1.0
@@ -184,6 +185,16 @@ public class ItemsPlugin extends DevportPlugin {
     @Override
     public boolean useLanguage() {
         return true;
+    }
+
+    @Override
+    public boolean useHolograms() {
+        return false;
+    }
+
+    @Override
+    public boolean useMenus() {
+        return false;
     }
 
     private void checkHooks() {

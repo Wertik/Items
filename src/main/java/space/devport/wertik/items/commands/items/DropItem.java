@@ -25,20 +25,20 @@ public class DropItem extends SubCommand {
     @Override
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
 
-        if (CommandUtils.checkItemStored(sender, args[1])) return CommandResult.FAILURE;
+        if (CommandUtils.checkItemStored(sender, args[0])) return CommandResult.FAILURE;
 
         int amount = 1;
 
-        if (args.length == 4) {
+        if (args.length == 3) {
             try {
-                amount = Integer.parseInt(args[3]);
+                amount = Integer.parseInt(args[2]);
             } catch (NumberFormatException e) {
                 language.sendPrefixed(sender, "Not-A-Number");
                 return CommandResult.FAILURE;
             }
         }
 
-        String[] locationString = args[2].split(";");
+        String[] locationString = args[1].split(";");
 
         for (int i = 1; i < locationString.length; i++) {
             try {
@@ -49,7 +49,7 @@ public class DropItem extends SubCommand {
             }
         }
 
-        ItemStack giveItem = itemManager.getBuilder(args[1]).build();
+        ItemStack giveItem = itemManager.getBuilder(args[0]).build();
 
         if (itemManager.hasExtra(giveItem, "unstackable"))
             giveItem = itemManager.setExtra(giveItem, "unstackable", UUID.randomUUID().toString());
@@ -66,7 +66,7 @@ public class DropItem extends SubCommand {
         location.getWorld().dropItemNaturally(location, giveItem);
 
         language.getPrefixed("Spawned-At")
-                .replace("%item%", args[1])
+                .replace("%item%", args[0])
                 .replace("%amount%", String.valueOf(amount))
                 .replace("%location%", LocationUtil.locationToString(location, ", "))
                 .send(sender);

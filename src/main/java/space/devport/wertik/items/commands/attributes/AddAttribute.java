@@ -35,7 +35,7 @@ public class AddAttribute extends SubCommand {
             return CommandResult.FAILURE;
         }
 
-        if (!attributeManager.getAttributeCache().containsKey(args[1])) {
+        if (!attributeManager.getAttributeCache().containsKey(args[0])) {
             language.getPrefixed("Attribute-Invalid")
                     .replace("%attribute%", args[1])
                     .replace("%valid%", Utils.listToString(new ArrayList<>(attributeManager.getAttributeCache().keySet()), "&7, &f", "&cNo attributes configured."))
@@ -43,18 +43,21 @@ public class AddAttribute extends SubCommand {
             return CommandResult.FAILURE;
         }
 
-        String action = args[2].toLowerCase();
+        String action = args[1].toLowerCase();
 
         if (!ItemsPlugin.getInstance().getActionNames().contains(action)) {
             language.getPrefixed("Click-Type-Invalid")
-                    .replace("%action%", args[2])
+                    .replace("%action%", args[1])
                     .replace("%valid%", String.join(", ", ItemsPlugin.getInstance().getActionNames()))
                     .send(sender);
             return CommandResult.FAILURE;
         }
 
-        Utils.setItem(player, EquipmentSlot.HAND, attributeManager.setAttribute(item, args[2], args[1]));
-        language.getPrefixed("Attribute-Added").replace("%attribute%", args[1]).send(sender);
+        Utils.setItem(player, EquipmentSlot.HAND, attributeManager.setAttribute(item, args[1], args[0]));
+
+        language.getPrefixed("Attribute-Added")
+                .replace("%attribute%", args[0])
+                .send(sender);
         return CommandResult.SUCCESS;
     }
 
@@ -62,10 +65,10 @@ public class AddAttribute extends SubCommand {
     public List<String> requestTabComplete(CommandSender sender, String[] args) {
         List<String> suggestions = new ArrayList<>();
 
-        if (args.length == 1) {
+        if (args.length == 0) {
             if (!attributeManager.getAttributeCache().isEmpty())
                 suggestions.addAll(new ArrayList<>(attributeManager.getAttributeCache().keySet()));
-        } else if (args.length == 2) {
+        } else if (args.length == 1) {
             suggestions.addAll(ItemsPlugin.getInstance().getActionNames());
         }
 

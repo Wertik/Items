@@ -50,7 +50,7 @@ public class SetType extends MainCommand {
         builder.type(material);
 
         Utils.setItem(player, EquipmentSlot.HAND, builder.build());
-        language.getPrefixed("Material.Changed")
+        language.getPrefixed("Material-Changed")
                 .replace("%material%", builder.getMaterial())
                 .send(sender);
         return CommandResult.SUCCESS;

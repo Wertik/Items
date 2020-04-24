@@ -2,6 +2,7 @@ package space.devport.wertik.items.commands.utility;
 
 import org.bukkit.command.CommandSender;
 import space.devport.utils.commands.MainCommand;
+import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.wertik.items.commands.CommandUtils;
@@ -19,6 +20,11 @@ public class Detail extends MainCommand {
 
         CommandUtils.sendDetail(sender);
         return CommandResult.SUCCESS;
+    }
+
+    @Override
+    public ArgumentRange getRange() {
+        return new ArgumentRange(0);
     }
 
     @Override

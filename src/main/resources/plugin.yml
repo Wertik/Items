@@ -9,21 +9,26 @@ commands:
     aliases: [i, item]
     description: Main command for item manipulation.
   attributes:
-    aliases: [att, attribute]
+    aliases: [att, attribute, atts]
     description: Main command for attribute manipulation.
   detail:
     description: View item details.
   setname:
     description: Set items display name.
   settype:
+    aliases: [setmaterial]
     description: Set items type.
   itemextra:
+    aliases: [ie, iextra, iteme]
     description: Manage extra item properties.
   lore:
+    aliases: [lores]
     description: Manage lore.
   enchants:
+    aliases: [enchant, enchs, ench]
     description: Manage enchantments.
   flags:
+    aliases: [flag]
     description: Manage flags.
   nbt:
     description: Manage NBT.

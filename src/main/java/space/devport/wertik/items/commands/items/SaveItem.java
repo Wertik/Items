@@ -29,25 +29,25 @@ public class SaveItem extends SubCommand {
 
         if (CommandUtils.checkAir(player, item)) return CommandResult.FAILURE;
 
-        itemManager.addItem(args[1], item);
-        language.getPrefixed(itemManager.checkItemStorage(args[1]) ? "Item-Updated" : "Item-Saved")
-                .replace("%item%", args[1])
+        itemManager.addItem(args[0], item);
+        language.getPrefixed(itemManager.checkItemStorage(args[0]) ? "Item-Updated" : "Item-Saved")
+                .replace("%item%", args[0])
                 .send(sender);
         return CommandResult.SUCCESS;
     }
 
     @Override
     public String getDefaultUsage() {
-        return null;
+        return "/%label% save <name>";
     }
 
     @Override
     public String getDefaultDescription() {
-        return null;
+        return "Save an item to the storage.";
     }
 
     @Override
     public ArgumentRange getRange() {
-        return null;
+        return new ArgumentRange(1);
     }
 }

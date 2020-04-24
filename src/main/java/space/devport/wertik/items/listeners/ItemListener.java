@@ -33,27 +33,25 @@ public class ItemListener extends DevportListener {
             event.setCancelled(true);
         }
 
+        if (!ItemsPlugin.getInstance().getAttributeManager().hasAttribute(item)) return;
+
         // Now get to attributes
 
         Player player = event.getPlayer();
 
-        String action = null;
-        for (String loopAction : ItemsPlugin.getInstance().getActionNames()) {
-            if (!event.getAction().toString().toLowerCase().contains(loopAction) ||
-                    loopAction.startsWith("shift_") && !player.isSneaking())
-                continue;
+        String action = event.getAction().toString().toLowerCase().replace("_block", "").replace("_air", "");
+        if (player.isSneaking()) action = "shift_" + action;
 
-            action = loopAction;
-            break;
-        }
+        ItemsPlugin.getInstance().getConsoleOutput().debug("Action: " + action);
 
-        if (action == null) return;
+        if (!ItemsPlugin.getInstance().getActionNames().contains(action))
+            return;
+
+        event.setCancelled(true);
 
         Attribute attribute = ItemsPlugin.getInstance().getAttributeManager().getAttribute(item, action);
 
         if (attribute == null) return;
-
-        event.setCancelled(true);
 
         // If the item is not usable, send a message and return
         if (!ItemsPlugin.getInstance().getCooldownManager().isUsable(player, attribute.getName())) {

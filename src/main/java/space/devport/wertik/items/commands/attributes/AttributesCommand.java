@@ -9,7 +9,6 @@ public class AttributesCommand extends MainCommand {
 
     public AttributesCommand(String name) {
         super(name);
-        this.aliases = new String[]{"att", "atts"};
         this.preconditions = new Preconditions()
                 .permissions("items.control")
                 .playerOnly();

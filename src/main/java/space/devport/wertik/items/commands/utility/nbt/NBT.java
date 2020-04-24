@@ -39,9 +39,15 @@ public class NBT extends MainCommand {
                 if (!ItemsPlugin.getInstance().getFilteredNBT().contains(entry.getKey()))
                     sender.sendMessage(StringUtil.color(" &8- &7" + entry.getKey() + " &f=&7 " + builder.getNBT().get(entry.getKey())));
             }
-        }
+        } else
+            sender.sendMessage(ItemsPlugin.getInstance().getPrefix() + StringUtil.color("&cNo NBT."));
 
         return CommandResult.SUCCESS;
+    }
+
+    @Override
+    public boolean checkRange() {
+        return false;
     }
 
     @Override

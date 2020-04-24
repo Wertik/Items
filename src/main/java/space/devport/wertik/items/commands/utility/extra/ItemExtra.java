@@ -22,6 +22,11 @@ public class ItemExtra extends MainCommand {
     }
 
     @Override
+    public boolean checkRange() {
+        return false;
+    }
+
+    @Override
     public String getDefaultUsage() {
         return "/%label%";
     }

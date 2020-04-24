@@ -35,12 +35,17 @@ public class SetName extends MainCommand {
     }
 
     @Override
+    public boolean checkRange() {
+        return false;
+    }
+
+    @Override
     public String getDefaultUsage() {
-        return null;
+        return "/%label% (name)";
     }
 
     @Override
     public String getDefaultDescription() {
-        return null;
+        return "Change the name of an item in hand.";
     }
 }

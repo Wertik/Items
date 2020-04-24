@@ -20,11 +20,11 @@ public class RemoveItem extends SubCommand {
     @Override
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
 
-        if (CommandUtils.checkItemStored(sender, args[1])) return CommandResult.FAILURE;
+        if (CommandUtils.checkItemStored(sender, args[0])) return CommandResult.FAILURE;
 
-        itemManager.removeItem(args[1]);
+        itemManager.removeItem(args[0]);
         language.getPrefixed("Item-Removed")
-                .replace("%item%", args[1])
+                .replace("%item%", args[0])
                 .send(sender);
         return CommandResult.SUCCESS;
     }

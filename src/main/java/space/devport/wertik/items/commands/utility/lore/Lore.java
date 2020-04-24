@@ -44,8 +44,13 @@ public class Lore extends MainCommand {
     }
 
     @Override
+    public boolean checkRange() {
+        return false;
+    }
+
+    @Override
     public String getDefaultUsage() {
-        return "/lore";
+        return "/%label%";
     }
 
     @Override

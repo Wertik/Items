@@ -30,6 +30,7 @@ public class LoadItem extends SubCommand {
             return CommandResult.SUCCESS;
         }
 
+        ItemsPlugin.getInstance().getItemManager().getStorage().load();
         ItemsPlugin.getInstance().getItemManager().loadItems();
         language.sendPrefixed(sender, "Items-Loaded");
         return CommandResult.SUCCESS;

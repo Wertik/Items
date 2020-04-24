@@ -26,10 +26,8 @@ public class ItemManager {
         storage = new Configuration(ItemsPlugin.getInstance(), "items");
     }
 
-    // Load items from yaml
     public void loadItems() {
-        storage.load();
-        this.items.clear();
+        items.clear();
 
         for (String name : storage.getFileConfiguration().getKeys(false)) {
             ItemBuilder item = storage.getItemBuilder(name);
@@ -88,6 +86,7 @@ public class ItemManager {
         return prepareBuilder(name, null);
     }
 
+    // TODO: Support player == null
     public ItemBuilder prepareBuilder(String name, Player player) {
         ItemBuilder builder = getBuilder(name);
 

@@ -24,10 +24,10 @@ public class Detail extends SubCommand {
     @Override
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
 
-        if (CommandUtils.checkItemStored(sender, args[1])) return CommandResult.FAILURE;
+        if (CommandUtils.checkItemStored(sender, args[0])) return CommandResult.FAILURE;
 
         Player player = (Player) sender;
-        ItemBuilder builder = Utils.getBuilderInHand(player);
+        ItemBuilder builder = itemManager.getBuilder(args[0]);
 
         // TODO: Somehow add to language and move to Command Utils
 

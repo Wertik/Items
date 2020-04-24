@@ -1,7 +1,8 @@
 package space.devport.wertik.items.listeners;
 
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import space.devport.utils.DevportListener;
@@ -17,16 +18,13 @@ public class CraftListener extends DevportListener {
     }
 
     @EventHandler
-    public void onClick(InventoryClickEvent event) {
+    public void onClick(CraftItemEvent event) {
         Inventory clickedInventory = event.getClickedInventory();
 
-        if (clickedInventory == null ||
-                !event.getAction().toString().toUpperCase().contains("DROP"))
-            return;
+        if (clickedInventory == null) return;
 
-        ItemStack item = event.getCursor();
-
-        if (itemManager.hasExtra(item, "uncraftable"))
-            event.setCancelled(true);
+        for (ItemStack item : clickedInventory.getContents())
+            if (itemManager.hasExtra(item, "uncraftable"))
+                event.setResult(Event.Result.DENY);
     }
 }

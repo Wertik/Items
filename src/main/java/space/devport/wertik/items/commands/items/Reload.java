@@ -20,16 +20,16 @@ public class Reload extends SubCommand {
 
     @Override
     public String getDefaultUsage() {
-        return null;
+        return "/%label% reload";
     }
 
     @Override
     public String getDefaultDescription() {
-        return null;
+        return "Reload plugin config and language.";
     }
 
     @Override
     public ArgumentRange getRange() {
-        return null;
+        return new ArgumentRange(0);
     }
 }

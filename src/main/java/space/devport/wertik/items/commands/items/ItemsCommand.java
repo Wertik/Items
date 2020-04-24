@@ -9,7 +9,6 @@ public class ItemsCommand extends MainCommand {
 
     public ItemsCommand(String name) {
         super(name);
-        this.aliases = new String[]{"i", "item"};
         this.preconditions = new Preconditions().permissions("items.control");
     }
 

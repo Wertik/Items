@@ -13,7 +13,6 @@ public class Enchants extends MainCommand {
 
     public Enchants(String name) {
         super(name);
-        this.aliases = new String[]{"enchs", "enchantments"};
         this.preconditions = new Preconditions().playerOnly().permissions("items.control");
     }
 

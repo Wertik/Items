@@ -11,6 +11,9 @@ public class ItemsLanguage extends LanguageDefaults {
          * General commands
          **/
 
+        addDefault("Commands.Help.Header", "&8&m        &r &e%pluginName% &7v&f%version% &8&m        ");
+        addDefault("Commands.Help.Sub-Command-Line", "&e%usage% &8- &7%description%");
+
         addDefault("No-Permissions", "&cYou don't have permission to do this.");
         addDefault("Only-Players", "&cAction has to be done in-game.");
         addDefault("Player-Offline", "&cThat player is not online.");

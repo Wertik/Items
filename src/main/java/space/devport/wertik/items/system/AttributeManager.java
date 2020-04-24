@@ -118,6 +118,10 @@ public class AttributeManager {
         return null;
     }
 
+    public boolean hasAttribute(ItemStack item) {
+        return ItemsPlugin.getInstance().getActionNames().stream().anyMatch(key -> ItemNBTEditor.hasNBTKey(item, key));
+    }
+
     // items_uses : "<attribute>:<uses>;<attribute>:<uses>"
     public ItemStack addUse(ItemStack item, String attribute) {
         if (!ItemNBTEditor.hasNBTKey(item, "items_uses"))
