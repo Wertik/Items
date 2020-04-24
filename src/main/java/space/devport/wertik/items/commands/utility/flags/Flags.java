@@ -17,7 +17,9 @@ public class Flags extends MainCommand {
 
     public Flags(String name) {
         super(name);
-        this.preconditions = new Preconditions().playerOnly().permissions("items.control");
+        this.preconditions = new Preconditions()
+                .playerOnly()
+                .permissions("items.utility.flags");
     }
 
     @Override

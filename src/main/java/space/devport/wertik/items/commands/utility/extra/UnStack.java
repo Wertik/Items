@@ -11,6 +11,9 @@ import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.system.ItemManager;
 import space.devport.wertik.items.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class UnStack extends SubCommand {
@@ -40,6 +43,11 @@ public class UnStack extends SubCommand {
                 .replace("%state%", String.valueOf(unStack))
                 .send(sender);
         return CommandResult.SUCCESS;
+    }
+
+    @Override
+    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+        return args.length == 1 ? Arrays.asList("true", "false") : new ArrayList<>();
     }
 
     @Override

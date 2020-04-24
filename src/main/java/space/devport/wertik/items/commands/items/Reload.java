@@ -4,12 +4,14 @@ import org.bukkit.command.CommandSender;
 import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
+import space.devport.utils.commands.struct.Preconditions;
 import space.devport.wertik.items.ItemsPlugin;
 
 public class Reload extends SubCommand {
 
     public Reload(String name) {
         super(name);
+        this.preconditions = new Preconditions().permissions("items.reload");
     }
 
     @Override

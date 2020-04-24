@@ -15,7 +15,9 @@ public class SetName extends MainCommand {
 
     public SetName(String name) {
         super(name);
-        this.preconditions = new Preconditions().playerOnly();
+        this.preconditions = new Preconditions()
+                .playerOnly()
+                .permissions("items.utility.setname");
     }
 
     @Override

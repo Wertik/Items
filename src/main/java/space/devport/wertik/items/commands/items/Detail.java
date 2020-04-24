@@ -1,16 +1,15 @@
 package space.devport.wertik.items.commands.items;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
+import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
 import space.devport.utils.text.StringUtil;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
 import space.devport.wertik.items.system.ItemManager;
-import space.devport.wertik.items.utils.Utils;
 
 public class Detail extends SubCommand {
 
@@ -18,6 +17,7 @@ public class Detail extends SubCommand {
 
     public Detail(String name) {
         super(name);
+        this.preconditions = new Preconditions().permissions("items.manage.detail");
         itemManager = ItemsPlugin.getInstance().getItemManager();
     }
 
@@ -26,7 +26,6 @@ public class Detail extends SubCommand {
 
         if (CommandUtils.checkItemStored(sender, args[0])) return CommandResult.FAILURE;
 
-        Player player = (Player) sender;
         ItemBuilder builder = itemManager.getBuilder(args[0]);
 
         // TODO: Somehow add to language and move to Command Utils

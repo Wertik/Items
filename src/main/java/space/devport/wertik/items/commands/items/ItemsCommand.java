@@ -9,7 +9,7 @@ public class ItemsCommand extends MainCommand {
 
     public ItemsCommand(String name) {
         super(name);
-        this.preconditions = new Preconditions().permissions("items.control");
+        this.preconditions = new Preconditions().permissions("items.manage");
     }
 
     @Override

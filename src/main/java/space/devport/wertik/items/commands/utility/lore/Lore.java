@@ -16,7 +16,7 @@ public class Lore extends MainCommand {
         super(name);
         this.preconditions = new Preconditions()
                 .playerOnly()
-                .permissions("items.control");
+                .permissions("items.utility.lore");
     }
 
     @Override

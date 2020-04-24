@@ -34,4 +34,83 @@ commands:
     description: Manage NBT.
 permissions:
   items.control:
-    description: Allows commands
+    description: Allows all commands.
+    children:
+      - items.manage
+      - items.utility
+      - items.attributes
+
+  items.reload:
+    description: Allows /items reload
+
+  items.manage:
+    description: Allows to manage items
+    children:
+      - items.manage.detail
+      - items.manage.drop
+      - items.manage.give
+      - items.manage.list
+      - items.manage.load
+      - items.manage.remove
+      - items.manage.save
+
+  items.manage.detail:
+    description: Allows /items detail
+  items.manage.drop:
+    description: Allows /items drop
+  items.manage.give:
+    description: Allows /items give
+  items.manage.list:
+    description: Allows /items list
+  items.manage.load:
+    description: Allows /items load
+  items.manage.remove:
+    description: Allows /items remove
+  items.manage.save:
+    description: Allows /items save
+
+  items.attributes:
+    description: Allows to manage attributes
+    children:
+      - items.attributes.add
+      - items.attributes.remove
+      - items.attributes.list
+      - items.attributes.clear
+
+  items.attributes.add:
+    description: Allows /attributes add
+  items.attributes.remove:
+    description: Allows /attributes remove
+  items.attributes.list:
+    description: Allows /attributes list
+  items.attributes.clear:
+    description: Allows /attributes clear
+
+  items.utility:
+    description: Allows utility commands
+    children:
+      - items.utility.enchants
+      - items.utility.flags
+      - items.utility.nbt
+      - items.utility.extra
+      - items.utility.lore
+      - items.utility.setname
+      - items.utility.settype
+      - items.utility.detail
+
+  items.utility.enchants:
+    description: Allows /enchants
+  items.utility.flags:
+    description: Allows /flags
+  items.utility.nbt:
+    description: Allows /nbt
+  items.utility.lore:
+    description: Allows /lore
+  items.utility.extra:
+    description: Allows /itemextra
+  items.utility.setname:
+    description: Allows /setname
+  items.utility.settype:
+    description: Allows /settype
+  items.utility.detail:
+    description: Allows /detail

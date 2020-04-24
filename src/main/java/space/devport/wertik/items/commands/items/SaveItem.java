@@ -19,7 +19,9 @@ public class SaveItem extends SubCommand {
     public SaveItem(String name) {
         super(name);
         itemManager = ItemsPlugin.getInstance().getItemManager();
-        this.preconditions = new Preconditions().playerOnly();
+        this.preconditions = new Preconditions()
+                .playerOnly()
+                .permissions("items.manage.give");
     }
 
     @Override

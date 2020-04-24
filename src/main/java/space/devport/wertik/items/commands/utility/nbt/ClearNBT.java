@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
+import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemNBTEditor;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.utils.Utils;
@@ -15,6 +16,7 @@ public class ClearNBT extends SubCommand {
 
     public ClearNBT(String name) {
         super(name);
+        this.preconditions = new Preconditions().permissions("items.utility.nbt.clear");
     }
 
     @Override

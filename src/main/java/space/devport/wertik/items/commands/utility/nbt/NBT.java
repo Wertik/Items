@@ -17,7 +17,7 @@ public class NBT extends MainCommand {
 
     public NBT(String name) {
         super(name);
-        this.preconditions = new Preconditions().playerOnly().permissions("items.control");
+        this.preconditions = new Preconditions().playerOnly().permissions("items.utility.nbt");
     }
 
     @Override

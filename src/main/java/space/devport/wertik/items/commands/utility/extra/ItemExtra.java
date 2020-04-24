@@ -12,7 +12,7 @@ public class ItemExtra extends MainCommand {
         super(name);
         this.preconditions = new Preconditions()
                 .playerOnly()
-                .permissions("items.control");
+                .permissions("items.utility.extra");
     }
 
     @Override

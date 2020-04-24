@@ -10,7 +10,7 @@ public class AttributesCommand extends MainCommand {
     public AttributesCommand(String name) {
         super(name);
         this.preconditions = new Preconditions()
-                .permissions("items.control")
+                .permissions("items.attributes")
                 .playerOnly();
     }
 

@@ -17,7 +17,9 @@ public class SetType extends MainCommand {
 
     public SetType(String name) {
         super(name);
-        this.preconditions = new Preconditions().playerOnly().permissions("items.control");
+        this.preconditions = new Preconditions()
+                .playerOnly()
+                .permissions("items.utility.settype");
     }
 
     @Override

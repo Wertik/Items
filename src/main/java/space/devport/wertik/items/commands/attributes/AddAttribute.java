@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
+import space.devport.utils.commands.struct.Preconditions;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
 import space.devport.wertik.items.system.AttributeManager;
@@ -22,6 +23,7 @@ public class AddAttribute extends SubCommand {
 
     public AddAttribute(String name) {
         super(name);
+        this.preconditions = new Preconditions().permissions("items.attributes.add");
         attributeManager = ItemsPlugin.getInstance().getAttributeManager();
     }
 

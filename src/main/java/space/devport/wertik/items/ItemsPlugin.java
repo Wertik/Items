@@ -44,24 +44,25 @@ public class ItemsPlugin extends DevportPlugin {
     /* Global TO-DO */
     // TODO: Allow saving items to different files and folders (like BossShopPro)
     // TODO: Add all remaining strings to language
-    // TODO: Full permissions
     // TODO: Optional "transaction" logger
-    // TODO: Add support for WorldGuard - disable specific items
+    // TODO: Add support for WorldGuard - disable some items in a region
     // TODO: Add the ability to re-parse placeholders on an item
-    // TODO: Json chat or GUI item editing
-    // TODO: Add Item Control ( Player won't be able to get rid of a custom item )
-    // TODO: Add item tracking ( manipulate items that were already given to players, basically what MMO Items does )
+    // TODO: Json chat item editing
+    // TODO: Add Item Control ( for lobbies, lock an item in place, or just deny "losing it" )
+    // TODO: Use item tracking ( you'll be able to update items already given to players )
     // TODO: Redesign commands ( just colors and styling )
     // TODO: Allow multiple attributes on one action
 
     /*
      * Change log: 3.1.0
+     * - Redid the whole command system ( a few commands have changed, none were removed )
      * - Added `/settype <material>` command to change the material of an item
      * - Added missing tab completion
-     * - Added uncraftable item extra
+     * - Added uncraftable item extra ( prevents players crafting with marked items )
      * - Added shift clicks ( shift_right_click and shift_left_click )
-     * - Added NBT manipulation commands
-     * - Moved all commands to our DevportUtils Library/API.
+     * - Added NBT manipulation commands ( /nbt )
+     * - Moved the whole plugin to a newer version of DevportUtils Lib.
+     * - Added Full permissions ( you can find them here: https://github.com/Wertik/Items/blob/master/src/main/resources/plugin.yml )
      */
 
     @Getter

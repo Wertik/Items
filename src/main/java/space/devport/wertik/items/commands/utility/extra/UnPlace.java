@@ -11,6 +11,10 @@ import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.system.ItemManager;
 import space.devport.wertik.items.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class UnPlace extends SubCommand {
 
     private final ItemManager itemManager;
@@ -39,6 +43,11 @@ public class UnPlace extends SubCommand {
                 .replace("%state%", String.valueOf(unPlace))
                 .send(sender);
         return CommandResult.SUCCESS;
+    }
+
+    @Override
+    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+        return args.length == 1 ? Arrays.asList("true", "false") : new ArrayList<>();
     }
 
     @Override

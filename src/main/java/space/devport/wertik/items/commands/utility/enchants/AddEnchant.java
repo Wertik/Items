@@ -7,6 +7,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
+import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
 import space.devport.wertik.items.utils.Utils;
 
@@ -14,6 +15,7 @@ public class AddEnchant extends SubCommand {
 
     public AddEnchant(String name) {
         super(name);
+        this.preconditions = new Preconditions().permissions("items.utility.enchants.add");
     }
 
     @Override

@@ -11,7 +11,9 @@ public class Detail extends MainCommand {
 
     public Detail(String name) {
         super(name);
-        this.preconditions = new Preconditions().playerOnly();
+        this.preconditions = new Preconditions()
+                .playerOnly()
+                .permissions("items.utility.detail");
     }
 
     @Override

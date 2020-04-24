@@ -4,6 +4,7 @@ import org.bukkit.command.CommandSender;
 import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
+import space.devport.utils.commands.struct.Preconditions;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
 import space.devport.wertik.items.system.ItemManager;
@@ -14,6 +15,7 @@ public class LoadItem extends SubCommand {
 
     public LoadItem(String name) {
         super(name);
+        this.preconditions = new Preconditions().permissions("items.manage.load");
         itemManager = ItemsPlugin.getInstance().getItemManager();
     }
 
