@@ -39,7 +39,7 @@ public class AddAttribute extends SubCommand {
 
         if (!attributeManager.getAttributeCache().containsKey(args[0])) {
             language.getPrefixed("Attribute-Invalid")
-                    .replace("%attribute%", args[1])
+                    .replace("%attribute%", args[0])
                     .replace("%valid%", Utils.listToString(new ArrayList<>(attributeManager.getAttributeCache().keySet()), "&7, &f", "&cNo attributes configured."))
                     .send(sender);
             return CommandResult.FAILURE;

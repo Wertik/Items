@@ -35,20 +35,20 @@ public class RemoveAttribute extends SubCommand {
 
         if (CommandUtils.checkAir(player, item)) return CommandResult.FAILURE;
 
-        if (!attributeManager.getAttributes(item).containsKey(args[1].toLowerCase()) &&
-                !attributeManager.getAttributes(item).containsValue(args[1].toLowerCase())) {
+        if (!attributeManager.getAttributes(item).containsKey(args[0].toLowerCase()) &&
+                !attributeManager.getAttributes(item).containsValue(args[0].toLowerCase())) {
 
             language.getPrefixed("Attribute-Invalid-Param")
-                    .replace("%param%", args[1])
+                    .replace("%param%", args[0])
                     .replace("%usage%", "/" + label + " remove <name/clickType>")
                     .send(sender);
             return CommandResult.FAILURE;
         }
 
-        String param = args[1].toLowerCase();
+        String param = args[0].toLowerCase();
 
         if (attributeManager.getAttributes(item).containsKey(param)) {
-            Utils.setItem(player, EquipmentSlot.HAND, attributeManager.removeAttribute(item, param));
+            Utils.setItem(player, EquipmentSlot.HAND, attributeManager.removeAction(item, param));
             language.getPrefixed("Attribute-Removed").replace("%attribute%", param).send(sender);
             return CommandResult.SUCCESS;
         }

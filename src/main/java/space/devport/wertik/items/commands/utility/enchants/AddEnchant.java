@@ -63,7 +63,7 @@ public class AddEnchant extends SubCommand {
         List<String> suggestions = new ArrayList<>();
 
         if (args.length == 0) {
-            suggestions = Arrays.stream(Enchantment.values()).map(Enchantment::toString).collect(Collectors.toList());
+            suggestions = Arrays.stream(Enchantment.values()).map(Enchantment::getName).collect(Collectors.toList());
         }
 
         Collections.sort(suggestions);

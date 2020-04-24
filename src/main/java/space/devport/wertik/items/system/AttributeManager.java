@@ -80,28 +80,25 @@ public class AttributeManager {
         return ItemNBTEditor.writeNBT(item, action.toLowerCase(), attribute);
     }
 
-    // Remove attribute by action
     public ItemStack removeAction(ItemStack item, String action) {
-        return ItemNBTEditor.removeNBT(item, action.toLowerCase());
-    }
-
-    // Remove attribute from all actions
-    public ItemStack removeAttribute(ItemStack item, String attribute) {
-        Map<String, String> nbt = getAttributes(item);
-
-        for (String key : nbt.keySet()) {
-            if (nbt.get(key).equalsIgnoreCase(attribute)) {
+        for (String key : getAttributes(item).keySet()) {
+            if (key.equalsIgnoreCase(action))
                 item = ItemNBTEditor.removeNBT(item, key);
-            }
         }
-
         return item;
     }
 
-    // Clear all attributes
+    public ItemStack removeAttribute(ItemStack item, String attribute) {
+        for (Map.Entry<String, String> entry : getAttributes(item).entrySet()) {
+            if (entry.getValue().equalsIgnoreCase(attribute))
+                item = ItemNBTEditor.removeNBT(item, entry.getKey());
+        }
+        return item;
+    }
+
     public ItemStack clearAttributes(ItemStack item) {
-        for (String action : ItemsPlugin.getInstance().getActionNames()) {
-            item = removeAttribute(item, action);
+        for (String action : getAttributes(item).keySet()) {
+            item = ItemNBTEditor.removeNBT(item, action);
         }
 
         return item;

@@ -53,7 +53,7 @@ public class RemoveEnchant extends SubCommand {
 
         if (args.length == 0) {
             ItemBuilder builder = Utils.getBuilderInHand((Player) sender);
-            suggestions = builder.getEnchants().keySet().stream().map(Enchantment::toString).collect(Collectors.toList());
+            suggestions = builder.getEnchants().keySet().stream().map(Enchantment::getName).collect(Collectors.toList());
         }
 
         Collections.sort(suggestions);

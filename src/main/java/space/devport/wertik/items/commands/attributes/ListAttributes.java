@@ -13,6 +13,8 @@ import space.devport.wertik.items.system.AttributeManager;
 import space.devport.wertik.items.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ListAttributes extends SubCommand {
 
@@ -29,8 +31,8 @@ public class ListAttributes extends SubCommand {
 
         Player player = (Player) sender;
 
-        if (args.length == 2) {
-            if (args[1].equalsIgnoreCase("hand") || args[1].equalsIgnoreCase("h")) {
+        if (args.length == 1) {
+            if (args[0].equalsIgnoreCase("hand") || args[0].equalsIgnoreCase("h")) {
                 ItemStack item = Utils.getItemInHand(player);
 
                 if (CommandUtils.checkAir(player, item)) return CommandResult.FAILURE;
@@ -46,6 +48,11 @@ public class ListAttributes extends SubCommand {
                 .replace("%attributes%", Utils.listToString(new ArrayList<>(attributeManager.getAttributeCache().keySet()), "&7, &f", "&cNo attributes saved."))
                 .send(sender);
         return CommandResult.SUCCESS;
+    }
+
+    @Override
+    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+        return args.length == 0 ? Collections.singletonList("hand") : new ArrayList<>();
     }
 
     @Override
