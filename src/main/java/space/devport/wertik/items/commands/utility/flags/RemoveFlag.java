@@ -54,7 +54,7 @@ public class RemoveFlag extends SubCommand {
     public List<String> requestTabComplete(CommandSender sender, String[] args) {
         List<String> suggestions = new ArrayList<>();
 
-        if (args.length == 1) {
+        if (args.length == 0) {
             Player player = (Player) sender;
             ItemBuilder item = Utils.getBuilderInHand(player);
 

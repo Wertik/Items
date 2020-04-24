@@ -11,6 +11,12 @@ import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
 import space.devport.wertik.items.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class AddEnchant extends SubCommand {
 
     public AddEnchant(String name) {
@@ -50,6 +56,18 @@ public class AddEnchant extends SubCommand {
         Utils.setItem((Player) sender, EquipmentSlot.HAND, builder.build());
         language.sendPrefixed(sender, "Enchant-Added");
         return CommandResult.SUCCESS;
+    }
+
+    @Override
+    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+
+        if (args.length == 0) {
+            suggestions = Arrays.stream(Enchantment.values()).map(Enchantment::toString).collect(Collectors.toList());
+        }
+
+        Collections.sort(suggestions);
+        return suggestions;
     }
 
     @Override

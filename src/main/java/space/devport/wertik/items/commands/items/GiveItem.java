@@ -1,5 +1,6 @@
 package space.devport.wertik.items.commands.items;
 
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,6 +12,11 @@ import space.devport.utils.commands.struct.Preconditions;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
 import space.devport.wertik.items.system.ItemManager;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GiveItem extends SubCommand {
 
@@ -91,6 +97,20 @@ public class GiveItem extends SubCommand {
                 .replace("%amount%", amount)
                 .send(sender);
         return CommandResult.SUCCESS;
+    }
+
+    @Override
+    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+
+        if (args.length == 0) {
+            suggestions.addAll(itemManager.getItems().keySet());
+        } else if (args.length == 1) {
+            suggestions.addAll(Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList()));
+        }
+
+        Collections.sort(suggestions);
+        return suggestions;
     }
 
     @Override

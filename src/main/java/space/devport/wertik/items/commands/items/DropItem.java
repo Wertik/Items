@@ -12,6 +12,9 @@ import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
 import space.devport.wertik.items.system.ItemManager;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 public class DropItem extends SubCommand {
@@ -73,6 +76,18 @@ public class DropItem extends SubCommand {
                 .replace("%location%", LocationUtil.locationToString(location, ", "))
                 .send(sender);
         return CommandResult.SUCCESS;
+    }
+
+    @Override
+    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+
+        if (args.length == 0) {
+            suggestions.addAll(itemManager.getItems().keySet());
+        }
+
+        Collections.sort(suggestions);
+        return suggestions;
     }
 
     @Override

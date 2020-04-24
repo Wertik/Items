@@ -11,6 +11,11 @@ import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
 import space.devport.wertik.items.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class RemoveEnchant extends SubCommand {
 
     public RemoveEnchant(String name) {
@@ -40,6 +45,19 @@ public class RemoveEnchant extends SubCommand {
         Utils.setItem((Player) sender, EquipmentSlot.HAND, builder.build());
         language.sendPrefixed(sender, "Enchant-Removed");
         return CommandResult.SUCCESS;
+    }
+
+    @Override
+    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+
+        if (args.length == 0) {
+            ItemBuilder builder = Utils.getBuilderInHand((Player) sender);
+            suggestions = builder.getEnchants().keySet().stream().map(Enchantment::toString).collect(Collectors.toList());
+        }
+
+        Collections.sort(suggestions);
+        return suggestions;
     }
 
     @Override

@@ -52,7 +52,7 @@ public class AddFlag extends SubCommand {
     public List<String> requestTabComplete(CommandSender sender, String[] args) {
         List<String> suggestions = new ArrayList<>();
 
-        if (args.length == 1) {
+        if (args.length == 0) {
             suggestions = Arrays.stream(ItemFlag.values()).map(ItemFlag::toString).collect(Collectors.toList());
         }
 

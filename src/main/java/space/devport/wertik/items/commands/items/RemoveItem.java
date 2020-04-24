@@ -9,6 +9,10 @@ import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
 import space.devport.wertik.items.system.ItemManager;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class RemoveItem extends SubCommand {
 
     private final ItemManager itemManager;
@@ -29,6 +33,18 @@ public class RemoveItem extends SubCommand {
                 .replace("%item%", args[0])
                 .send(sender);
         return CommandResult.SUCCESS;
+    }
+
+    @Override
+    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+
+        if (args.length == 0) {
+            suggestions.addAll(itemManager.getItems().keySet());
+        }
+
+        Collections.sort(suggestions);
+        return suggestions;
     }
 
     @Override

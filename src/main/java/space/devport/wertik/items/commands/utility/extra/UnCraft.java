@@ -46,7 +46,7 @@ public class UnCraft extends SubCommand {
 
     @Override
     public List<String> requestTabComplete(CommandSender sender, String[] args) {
-        return args.length == 1 ? Arrays.asList("true", "false") : new ArrayList<>();
+        return args.length == 0 ? Arrays.asList("true", "false") : new ArrayList<>();
     }
 
     @Override
