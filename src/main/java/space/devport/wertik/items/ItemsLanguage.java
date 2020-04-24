@@ -26,27 +26,36 @@ public class ItemsLanguage extends LanguageDefaults {
          * Utility commands
          * */
 
+        addDefault("NBT-Added", "&7Added &f%key% &7= &f%value% &7to the item.");
+        addDefault("NBT-Removed", "&7Removed &f%key% &7from the item.");
+        addDefault("NBT-Cleared", "&7All custom NBT data cleared.");
+        addDefault("No-Key", "&cThis item doesn't have the key &f%key%");
+        addDefault("No-NBT", "&cThis item doesn't have any NBT data.");
+
         addDefault("Line-Added", "&7Line added to item lore.");
         addDefault("Line-Removed", "&7Line removed from item lore.");
         addDefault("Lore-Cleared", "&7Lore cleared.");
         addDefault("No-Lore", "&cItem doesn't have a lore.");
         addDefault("Index-Out-Of-Bounds", "&cIndex &f%param% &cis out of bounds. Max: &7%max%");
+
         addDefault("Flags-List", "&7Flags: %flags%");
         addDefault("Flag-Added", "&7Flag added to item.");
         addDefault("Flag-Removed", "&7Flag removed from item.");
         addDefault("Flags-Cleared", "&7Flags cleared.");
         addDefault("Flag-Invalid", "&cFlag &f%flag% &cis invalid.");
         addDefault("No-Flag", "&cItem doesn't have this flag.");
+
         addDefault("Enchants-List", "&7Enchants: &f%enchants%");
         addDefault("Enchant-Added", "&7Enchant added to item.");
         addDefault("Enchant-Removed", "&7Enchant removed from item.");
         addDefault("Enchants-Cleared", "&7Enchants cleared from item.");
         addDefault("Invalid-Enchant", "&cEnchantment is invalid.");
-        addDefault("Item-Renamed", "&7Item renamed.");
 
         addDefault("Set-Unstackable", "&7Unstackable property set to &f%state%&7.");
         addDefault("Set-Unplaceable", "&7Unplaceable property set to &f%state%&7.");
         addDefault("Set-Uncraftable", "&7Uncraftable property set to &f%state%&7.");
+
+        addDefault("Item-Renamed", "&7Item renamed.");
 
         addDefault("Invalid-Material", "&cMaterial &f%param% &cis not valid.");
         addDefault("Material-Changed", "&7Material changed to &f%material%");

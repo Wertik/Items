@@ -35,17 +35,19 @@ public class ItemListener extends DevportListener {
 
         // Now get to attributes
 
+        Player player = event.getPlayer();
+
         String action = null;
-        for (String a : ItemsPlugin.getInstance().getActionNames()) {
-            if (event.getAction().toString().toLowerCase().contains(a)) {
-                action = a;
-                break;
-            }
+        for (String loopAction : ItemsPlugin.getInstance().getActionNames()) {
+            if (!event.getAction().toString().toLowerCase().contains(loopAction) ||
+                    loopAction.startsWith("shift_") && !player.isSneaking())
+                continue;
+
+            action = loopAction;
+            break;
         }
 
         if (action == null) return;
-
-        Player player = event.getPlayer();
 
         Attribute attribute = ItemsPlugin.getInstance().getAttributeManager().getAttribute(item, action);
 

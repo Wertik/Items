@@ -4,11 +4,7 @@ import lombok.Getter;
 import org.bukkit.plugin.PluginManager;
 import space.devport.utils.DevportPlugin;
 import space.devport.utils.commands.struct.CommandResult;
-import space.devport.wertik.items.commands.attributes.AttributesCommand;
-import space.devport.wertik.items.commands.attributes.AddAttribute;
-import space.devport.wertik.items.commands.attributes.ClearAttributes;
-import space.devport.wertik.items.commands.attributes.ListAttributes;
-import space.devport.wertik.items.commands.attributes.RemoveAttribute;
+import space.devport.wertik.items.commands.attributes.*;
 import space.devport.wertik.items.commands.items.*;
 import space.devport.wertik.items.commands.utility.SetName;
 import space.devport.wertik.items.commands.utility.SetType;
@@ -28,11 +24,15 @@ import space.devport.wertik.items.commands.utility.lore.AddLore;
 import space.devport.wertik.items.commands.utility.lore.ClearLore;
 import space.devport.wertik.items.commands.utility.lore.Lore;
 import space.devport.wertik.items.commands.utility.lore.RemoveLore;
+import space.devport.wertik.items.commands.utility.nbt.AddNBT;
+import space.devport.wertik.items.commands.utility.nbt.ClearNBT;
+import space.devport.wertik.items.commands.utility.nbt.NBT;
+import space.devport.wertik.items.commands.utility.nbt.RemoveNBT;
 import space.devport.wertik.items.listeners.CraftListener;
+import space.devport.wertik.items.listeners.ItemListener;
 import space.devport.wertik.items.system.AttributeManager;
 import space.devport.wertik.items.system.CooldownManager;
 import space.devport.wertik.items.system.ItemManager;
-import space.devport.wertik.items.listeners.ItemListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,21 +44,23 @@ public class ItemsPlugin extends DevportPlugin {
     /* Global TO-DO */
     // TODO: Allow saving items to different files and folders (like BossShopPro)
     // TODO: Add all remaining strings to language
-    // TODO: Add sneak click
     // TODO: Full permissions
     // TODO: Optional "transaction" logger
     // TODO: Add support for WorldGuard - disable specific items
-    // TODO: Add the ability to re-parse placeholders on item on attribute item use
-    // TODO: Clickable chat editing/GUI
+    // TODO: Add the ability to re-parse placeholders on an item
+    // TODO: Json chat or GUI item editing
     // TODO: Add Item Control ( Player won't be able to get rid of a custom item )
     // TODO: Add item tracking ( manipulate items that were already given to players, basically what MMO Items does )
-    // TODO: Add NBT manipulation commands
+    // TODO: Redesign commands ( just colors and styling )
 
     /*
      * Change log: 3.1.0
-     * - Change material with a command
-     * - Add missing tab completion
-     * - Add uncraftable
+     * - Added `/settype <material>` command to change the material of an item
+     * - Added missing tab completion
+     * - Added uncraftable extra
+     * - Added shift clicks ( shift_right_click and shift_left_click )
+     * - Added NBT manipulation commands
+     * - Moved all commands to our DevportUtils Library/API.
      */
 
     @Getter
@@ -153,6 +155,11 @@ public class ItemsPlugin extends DevportPlugin {
                 .addSubCommand(new UnPlace("unplace"))
                 .addSubCommand(new UnStack("unstack"))
                 .addSubCommand(new UnCraft("uncraft")));
+
+        addMainCommand(new NBT("nbt")
+                .addSubCommand(new AddNBT("add"))
+                .addSubCommand(new RemoveNBT("remove"))
+                .addSubCommand(new ClearNBT("clear")));
 
         addMainCommand(new SetName("setname"));
         addMainCommand(new SetType("settype"));

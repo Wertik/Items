@@ -25,6 +25,8 @@ commands:
     description: Manage enchantments.
   flags:
     description: Manage flags.
+  nbt:
+    description: Manage NBT.
 permissions:
   items.control:
     description: Allows commands
