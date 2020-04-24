@@ -36,7 +36,7 @@ public class NBT extends MainCommand {
             sender.sendMessage(StringUtil.color("&eNBT:"));
 
             for (Map.Entry<String, String> entry : builder.getNBT().entrySet()) {
-                if (!ItemsPlugin.getInstance().getFilteredNBT().contains(entry.getKey()))
+                if (!ItemBuilder.getFilteredNBT().contains(entry.getKey()))
                     sender.sendMessage(StringUtil.color(" &8- &7" + entry.getKey() + " &f=&7 " + builder.getNBT().get(entry.getKey())));
             }
         } else

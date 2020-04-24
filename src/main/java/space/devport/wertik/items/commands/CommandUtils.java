@@ -81,7 +81,7 @@ public class CommandUtils {
         // Enchants
         if (!builder.getEnchants().isEmpty()) {
             sender.sendMessage(StringUtil.color("&eEnchants:"));
-            builder.getEnchants().forEach((enchantment, level) -> sender.sendMessage(StringUtil.color(" &8- &7" + enchantment.toString() + "&f;&7" + level)));
+            builder.getEnchants().forEach((enchantment, level) -> sender.sendMessage(StringUtil.color(" &8- &7" + enchantment.getName() + "&f;&7" + level)));
         }
 
         // Flags
@@ -95,7 +95,7 @@ public class CommandUtils {
             sender.sendMessage(StringUtil.color("&eNBT:"));
 
             for (String key : builder.getNBT().keySet()) {
-                if (!ItemsPlugin.getInstance().getFilteredNBT().contains(key))
+                if (!ItemBuilder.getFilteredNBT().contains(key))
                     sender.sendMessage(StringUtil.color(" &8- &7" + key + "&f:&7" + builder.getNBT().get(key)));
             }
         }

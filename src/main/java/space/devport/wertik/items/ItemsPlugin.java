@@ -70,8 +70,6 @@ public class ItemsPlugin extends DevportPlugin {
 
     @Getter
     private final List<String> actionNames = new ArrayList<>(Arrays.asList("right_click", "left_click", "shift_left_click", "shift_right_click"));
-    @Getter
-    private final List<String> filteredNBT = new ArrayList<>(Arrays.asList("Enchantments", "Damage", "display"));
 
     @Getter
     private ItemManager itemManager;

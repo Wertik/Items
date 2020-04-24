@@ -8,8 +8,8 @@ import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
+import space.devport.utils.item.ItemBuilder;
 import space.devport.utils.item.ItemNBTEditor;
-import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.utils.Utils;
 
 public class ClearNBT extends SubCommand {
@@ -30,7 +30,7 @@ public class ClearNBT extends SubCommand {
         }
 
         for (String key : ItemNBTEditor.getNBTTagMap(item).keySet()) {
-            if (!ItemsPlugin.getInstance().getFilteredNBT().contains(key))
+            if (!ItemBuilder.getFilteredNBT().contains(key))
                 item = ItemNBTEditor.removeNBT(item, key);
         }
 

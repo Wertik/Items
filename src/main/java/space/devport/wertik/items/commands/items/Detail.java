@@ -65,7 +65,7 @@ public class Detail extends SubCommand {
             sender.sendMessage(StringUtil.color("&eNBT:"));
 
             for (String key : builder.getNBT().keySet()) {
-                if (!ItemsPlugin.getInstance().getFilteredNBT().contains(key))
+                if (!ItemBuilder.getFilteredNBT().contains(key))
                     sender.sendMessage(StringUtil.color(" &8- &7" + key + "&f:&7" + builder.getNBT().get(key)));
             }
         }

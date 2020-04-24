@@ -82,6 +82,6 @@ public class AddEnchant extends SubCommand {
 
     @Override
     public ArgumentRange getRange() {
-        return new ArgumentRange(0, 1);
+        return new ArgumentRange(1, 2);
     }
 }
