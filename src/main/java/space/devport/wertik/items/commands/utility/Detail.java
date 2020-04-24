@@ -23,11 +23,11 @@ public class Detail extends MainCommand {
 
     @Override
     public String getDefaultUsage() {
-        return null;
+        return "/%label%";
     }
 
     @Override
     public String getDefaultDescription() {
-        return null;
+        return "Display details about item in hand.";
     }
 }
