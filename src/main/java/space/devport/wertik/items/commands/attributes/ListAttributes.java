@@ -8,18 +8,18 @@ import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
-import space.devport.wertik.items.handlers.AttributeHandler;
+import space.devport.wertik.items.handlers.AttributeManager;
 import space.devport.wertik.items.utils.Utils;
 
 import java.util.ArrayList;
 
-public class List extends SubCommand {
+public class ListAttributes extends SubCommand {
 
-    private final AttributeHandler attributeHandler;
+    private final AttributeManager attributeManager;
 
-    public List(String name) {
+    public ListAttributes(String name) {
         super(name);
-        attributeHandler = ItemsPlugin.getInstance().getAttributeHandler();
+        attributeManager = ItemsPlugin.getInstance().getAttributeManager();
     }
 
     @Override
@@ -34,14 +34,14 @@ public class List extends SubCommand {
                 if (CommandUtils.checkAir(player, item)) return CommandResult.FAILURE;
 
                 language.getPrefixed("Attributes")
-                        .replace("%attributes%", "\n &7" + Utils.mapToString(attributeHandler.getAttributes(item), "\n &7", "&8 - &7", "&cNo attributes saved."))
+                        .replace("%attributes%", "\n &7" + Utils.mapToString(attributeManager.getAttributes(item), "\n &7", "&8 - &7", "&cNo attributes saved."))
                         .send(sender);
                 return CommandResult.SUCCESS;
             }
         }
 
         language.getPrefixed("Attributes")
-                .replace("%attributes%", Utils.listToString(new ArrayList<>(attributeHandler.getAttributeCache().keySet()), "&7, &f", "&cNo attributes saved."))
+                .replace("%attributes%", Utils.listToString(new ArrayList<>(attributeManager.getAttributeCache().keySet()), "&7, &f", "&cNo attributes saved."))
                 .send(sender);
         return CommandResult.SUCCESS;
     }

@@ -28,16 +28,19 @@ public class ItemsLanguage extends LanguageDefaults {
 
         addDefault("Line-Added", "&7Line added to item lore.");
         addDefault("Line-Removed", "&7Line removed from item lore.");
+        addDefault("Lore-Cleared", "&7Lore cleared.");
         addDefault("No-Lore", "&cItem doesn't have a lore.");
         addDefault("Index-Out-Of-Bounds", "&cIndex &f%param% &cis out of bounds. Max: &7%max%");
         addDefault("Flags-List", "&7Flags: %flags%");
         addDefault("Flag-Added", "&7Flag added to item.");
         addDefault("Flag-Removed", "&7Flag removed from item.");
+        addDefault("Flags-Cleared", "&7Flags cleared.");
         addDefault("Flag-Invalid", "&cFlag &f%flag% &cis invalid.");
         addDefault("No-Flag", "&cItem doesn't have this flag.");
         addDefault("Enchants-List", "&7Enchants: &f%enchants%");
         addDefault("Enchant-Added", "&7Enchant added to item.");
         addDefault("Enchant-Removed", "&7Enchant removed from item.");
+        addDefault("Enchants-Cleared", "&7Enchants cleared from item.");
         addDefault("Invalid-Enchant", "&cEnchantment is invalid.");
         addDefault("Item-Renamed", "&7Item renamed.");
         addDefault("Set-Unstackable", "&7Unstackable property set to &f%state%&7.");
@@ -82,7 +85,7 @@ public class ItemsLanguage extends LanguageDefaults {
          * Use limit
          * */
 
-        addDefault("Item-use-Limit", "&cYou have reached this items maximum amount of uses.");
+        addDefault("Item-Use-Limit", "&cYou have reached this items maximum amount of uses.");
         addDefault("Unlimited", "&7Unlimited");
     }
 }

@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import space.devport.wertik.items.ItemsPlugin;
-import space.devport.wertik.items.handlers.AttributeHandler;
+import space.devport.wertik.items.handlers.AttributeManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,12 +18,12 @@ import java.util.List;
 public class AttTabCompleter implements TabCompleter {
 
     private final ItemsPlugin plugin;
-    private final AttributeHandler attributeHandler;
+    private final AttributeManager attributeManager;
 
     public AttTabCompleter() {
         plugin = ItemsPlugin.getInstance();
 
-        attributeHandler = plugin.getAttributeHandler();
+        attributeManager = plugin.getAttributeManager();
     }
 
     @Override
@@ -51,13 +51,13 @@ public class AttTabCompleter implements TabCompleter {
             case "add":
             case "a":
                 if (args.length == 2) {
-                    if (!attributeHandler.getAttributeCache().isEmpty()) {
+                    if (!attributeManager.getAttributeCache().isEmpty()) {
                         if (!args[1].equals("")) {
-                            for (String attributeName : attributeHandler.getAttributeCache().keySet())
+                            for (String attributeName : attributeManager.getAttributeCache().keySet())
                                 if (attributeName.toLowerCase().startsWith(args[1].toLowerCase()))
                                     tabComplete.add(attributeName);
                         } else
-                            tabComplete.addAll(attributeHandler.getAttributeCache().keySet());
+                            tabComplete.addAll(attributeManager.getAttributeCache().keySet());
 
                     } else {
                         tabComplete.add("There are no attributes configured.");
@@ -84,17 +84,17 @@ public class AttTabCompleter implements TabCompleter {
             case "r":
                 if (args.length == 2) {
                     if (!args[1].equals("")) {
-                        if (!attributeHandler.getAttributes(item).isEmpty())
-                            for (String attributeName : attributeHandler.getAttributes(item).keySet()) {
+                        if (!attributeManager.getAttributes(item).isEmpty())
+                            for (String attributeName : attributeManager.getAttributes(item).keySet()) {
                                 if (attributeName.toLowerCase().startsWith(args[1].toLowerCase()))
                                     tabComplete.add(attributeName);
-                                if (attributeHandler.getAttributes(item).get(attributeName).toLowerCase().startsWith(args[1].toLowerCase()))
-                                    tabComplete.add(attributeHandler.getAttributes(item).get(attributeName));
+                                if (attributeManager.getAttributes(item).get(attributeName).toLowerCase().startsWith(args[1].toLowerCase()))
+                                    tabComplete.add(attributeManager.getAttributes(item).get(attributeName));
                             }
                     } else {
-                        if (!attributeHandler.getAttributes(item).isEmpty()) {
-                            tabComplete.addAll(attributeHandler.getAttributes(item).keySet());
-                            tabComplete.addAll(attributeHandler.getAttributes(item).values());
+                        if (!attributeManager.getAttributes(item).isEmpty()) {
+                            tabComplete.addAll(attributeManager.getAttributes(item).keySet());
+                            tabComplete.addAll(attributeManager.getAttributes(item).values());
                         }
                     }
 

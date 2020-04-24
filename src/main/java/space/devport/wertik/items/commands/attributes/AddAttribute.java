@@ -9,18 +9,18 @@ import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
-import space.devport.wertik.items.handlers.AttributeHandler;
+import space.devport.wertik.items.handlers.AttributeManager;
 import space.devport.wertik.items.utils.Utils;
 
 import java.util.ArrayList;
 
-public class Add extends SubCommand {
+public class AddAttribute extends SubCommand {
 
-    private final AttributeHandler attributeHandler;
+    private final AttributeManager attributeManager;
 
-    public Add(String name) {
+    public AddAttribute(String name) {
         super(name);
-        attributeHandler = ItemsPlugin.getInstance().getAttributeHandler();
+        attributeManager = ItemsPlugin.getInstance().getAttributeManager();
     }
 
     @Override
@@ -33,10 +33,10 @@ public class Add extends SubCommand {
             return CommandResult.FAILURE;
         }
 
-        if (!attributeHandler.getAttributeCache().containsKey(args[1])) {
+        if (!attributeManager.getAttributeCache().containsKey(args[1])) {
             language.getPrefixed("Attribute-Invalid")
                     .replace("%attribute%", args[1])
-                    .replace("%valid%", Utils.listToString(new ArrayList<>(attributeHandler.getAttributeCache().keySet()), "&7, &f", "&cNo attributes configured."))
+                    .replace("%valid%", Utils.listToString(new ArrayList<>(attributeManager.getAttributeCache().keySet()), "&7, &f", "&cNo attributes configured."))
                     .send(sender);
             return CommandResult.FAILURE;
         }
@@ -51,7 +51,7 @@ public class Add extends SubCommand {
             return CommandResult.FAILURE;
         }
 
-        Utils.setItem(player, EquipmentSlot.HAND, attributeHandler.setAttribute(item, args[2], args[1]));
+        Utils.setItem(player, EquipmentSlot.HAND, attributeManager.setAttribute(item, args[2], args[1]));
         language.getPrefixed("Attribute-Added").replace("%attribute%", args[1]).send(sender);
         return CommandResult.SUCCESS;
     }

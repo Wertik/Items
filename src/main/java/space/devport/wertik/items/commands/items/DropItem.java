@@ -9,15 +9,15 @@ import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.utility.LocationUtil;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
-import space.devport.wertik.items.handlers.ItemHandler;
+import space.devport.wertik.items.handlers.ItemManager;
 
-public class Drop extends SubCommand {
+public class DropItem extends SubCommand {
 
-    private final ItemHandler itemHandler;
+    private final ItemManager itemManager;
 
-    public Drop(String name) {
+    public DropItem(String name) {
         super(name);
-        itemHandler = ItemsPlugin.getInstance().getItemHandler();
+        itemManager = ItemsPlugin.getInstance().getItemManager();
     }
 
     @Override
@@ -47,10 +47,10 @@ public class Drop extends SubCommand {
             }
         }
 
-        ItemStack giveItem = itemHandler.getBuilder(args[1]).build();
+        ItemStack giveItem = itemManager.getBuilder(args[1]).build();
 
-        if (itemHandler.isUnstackable(giveItem))
-            giveItem = itemHandler.setUnstackable(giveItem, true);
+        if (itemManager.isUnstackable(giveItem))
+            giveItem = itemManager.setUnstackable(giveItem, true);
 
         giveItem.setAmount(amount);
 

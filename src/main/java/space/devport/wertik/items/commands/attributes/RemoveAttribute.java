@@ -9,16 +9,16 @@ import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
-import space.devport.wertik.items.handlers.AttributeHandler;
+import space.devport.wertik.items.handlers.AttributeManager;
 import space.devport.wertik.items.utils.Utils;
 
-public class Remove extends SubCommand {
+public class RemoveAttribute extends SubCommand {
 
-    private final AttributeHandler attributeHandler;
+    private final AttributeManager attributeManager;
 
-    public Remove(String name) {
+    public RemoveAttribute(String name) {
         super(name);
-        attributeHandler = ItemsPlugin.getInstance().getAttributeHandler();
+        attributeManager = ItemsPlugin.getInstance().getAttributeManager();
     }
 
     @Override
@@ -29,8 +29,8 @@ public class Remove extends SubCommand {
 
         if (CommandUtils.checkAir(player, item)) return CommandResult.FAILURE;
 
-        if (!attributeHandler.getAttributes(item).containsKey(args[1].toLowerCase()) &&
-                !attributeHandler.getAttributes(item).containsValue(args[1].toLowerCase())) {
+        if (!attributeManager.getAttributes(item).containsKey(args[1].toLowerCase()) &&
+                !attributeManager.getAttributes(item).containsValue(args[1].toLowerCase())) {
 
             language.getPrefixed("Attribute-Invalid-Param")
                     .replace("%param%", args[1])
@@ -41,14 +41,14 @@ public class Remove extends SubCommand {
 
         String param = args[1].toLowerCase();
 
-        if (attributeHandler.getAttributes(item).containsKey(param)) {
-            Utils.setItem(player, EquipmentSlot.HAND, attributeHandler.removeAttribute(item, param));
+        if (attributeManager.getAttributes(item).containsKey(param)) {
+            Utils.setItem(player, EquipmentSlot.HAND, attributeManager.removeAttribute(item, param));
             language.getPrefixed("Attribute-Removed").replace("%attribute%", param).send(sender);
             return CommandResult.SUCCESS;
         }
 
-        if (attributeHandler.getAttributes(item).containsValue(param)) {
-            Utils.setItem(player, EquipmentSlot.HAND, attributeHandler.removeAttribute(item, param));
+        if (attributeManager.getAttributes(item).containsValue(param)) {
+            Utils.setItem(player, EquipmentSlot.HAND, attributeManager.removeAttribute(item, param));
             language.getPrefixed("Attribute-Removed").replace("%attribute%", param).send(sender);
             return CommandResult.SUCCESS;
         }

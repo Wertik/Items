@@ -6,15 +6,15 @@ import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
-import space.devport.wertik.items.handlers.ItemHandler;
+import space.devport.wertik.items.handlers.ItemManager;
 
-public class Load extends SubCommand {
+public class LoadItem extends SubCommand {
 
-    private final ItemHandler itemHandler;
+    private final ItemManager itemManager;
 
-    public Load(String name) {
+    public LoadItem(String name) {
         super(name);
-        itemHandler = ItemsPlugin.getInstance().getItemHandler();
+        itemManager = ItemsPlugin.getInstance().getItemManager();
     }
 
     @Override
@@ -22,7 +22,7 @@ public class Load extends SubCommand {
         if (args.length > 1) {
             if (CommandUtils.checkItemStored(sender, args[1])) return CommandResult.FAILURE;
 
-            itemHandler.loadItem(args[1]);
+            itemManager.loadItem(args[1]);
 
             language.getPrefixed("Item-Loaded")
                     .replace("%item%", args[1])
@@ -30,7 +30,7 @@ public class Load extends SubCommand {
             return CommandResult.SUCCESS;
         }
 
-        ItemsPlugin.getInstance().getItemHandler().loadItems();
+        ItemsPlugin.getInstance().getItemManager().loadItems();
         language.sendPrefixed(sender, "Items-Loaded");
         return CommandResult.SUCCESS;
     }

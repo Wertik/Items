@@ -14,14 +14,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ItemHandler {
+public class ItemManager {
 
     private final Map<String, ItemBuilder> items = new HashMap<>();
 
     @Getter
     private final Configuration storage;
 
-    public ItemHandler() {
+    public ItemManager() {
         storage = new Configuration(ItemsPlugin.getInstance(), "items");
     }
 
@@ -92,10 +92,10 @@ public class ItemHandler {
 
         // Parse displayname
         // TODO: Sort this out or make it possible to parse custom placeholders in every message
-        builder.getDisplayName().set(Utils.parsePlaceholders(builder.getDisplayName().getWorkingMessage(), player));
+        builder.getDisplayName().set(Utils.parsePlaceholders(builder.getDisplayName().getOriginal(), player));
 
         // Parse lore
-        builder.getLore().setWorkingMessage(Utils.parsePlaceholders(builder.getLore().getWorkingMessage(), player));
+        builder.getLore().set(Utils.parsePlaceholders(builder.getLore().getOriginal(), player));
 
         // Update unstackable uuid
         if (builder.getNBT().containsKey("items_unstackable")) {

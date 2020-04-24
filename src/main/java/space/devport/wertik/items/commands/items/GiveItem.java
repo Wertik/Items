@@ -9,15 +9,15 @@ import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
-import space.devport.wertik.items.handlers.ItemHandler;
+import space.devport.wertik.items.handlers.ItemManager;
 
-public class Give extends SubCommand {
+public class GiveItem extends SubCommand {
 
-    private final ItemHandler itemHandler;
+    private final ItemManager itemManager;
 
-    public Give(String name) {
+    public GiveItem(String name) {
         super(name);
-        itemHandler = ItemsPlugin.getInstance().getItemHandler();
+        itemManager = ItemsPlugin.getInstance().getItemManager();
     }
 
     @Override
@@ -78,8 +78,8 @@ public class Give extends SubCommand {
 
         // Raw item
         if (raw) {
-            giveItem = itemHandler.getItem(args[1]);
-        } else giveItem = itemHandler.prepareItem(args[1], target);
+            giveItem = itemManager.getItem(args[1]);
+        } else giveItem = itemManager.prepareItem(args[1], target);
 
         for (int i = 0; i < amount; i++) target.getInventory().addItem(giveItem);
 

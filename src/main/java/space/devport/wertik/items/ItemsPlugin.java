@@ -4,13 +4,33 @@ import lombok.Getter;
 import org.bukkit.plugin.PluginManager;
 import space.devport.utils.DevportPlugin;
 import space.devport.utils.commands.struct.CommandResult;
-import space.devport.wertik.items.commands.*;
-import space.devport.wertik.items.commands.attributes.Add;
-import space.devport.wertik.items.commands.attributes.Clear;
-import space.devport.wertik.items.commands.attributes.Remove;
-import space.devport.wertik.items.handlers.AttributeHandler;
-import space.devport.wertik.items.handlers.CooldownHandler;
-import space.devport.wertik.items.handlers.ItemHandler;
+import space.devport.wertik.items.commands.AttTabCompleter;
+import space.devport.wertik.items.commands.AttributesCommand;
+import space.devport.wertik.items.commands.UtilTabCompleter;
+import space.devport.wertik.items.commands.attributes.AddAttribute;
+import space.devport.wertik.items.commands.attributes.ClearAttributes;
+import space.devport.wertik.items.commands.attributes.ListAttributes;
+import space.devport.wertik.items.commands.attributes.RemoveAttribute;
+import space.devport.wertik.items.commands.items.*;
+import space.devport.wertik.items.commands.utility.enchants.AddEnchant;
+import space.devport.wertik.items.commands.utility.enchants.ClearEnchants;
+import space.devport.wertik.items.commands.utility.enchants.Enchants;
+import space.devport.wertik.items.commands.utility.enchants.RemoveEnchant;
+import space.devport.wertik.items.commands.utility.extra.ItemExtra;
+import space.devport.wertik.items.commands.utility.extra.UnCraft;
+import space.devport.wertik.items.commands.utility.extra.UnPlace;
+import space.devport.wertik.items.commands.utility.extra.UnStack;
+import space.devport.wertik.items.commands.utility.flags.AddFlag;
+import space.devport.wertik.items.commands.utility.flags.ClearFlags;
+import space.devport.wertik.items.commands.utility.flags.Flags;
+import space.devport.wertik.items.commands.utility.flags.RemoveFlag;
+import space.devport.wertik.items.commands.utility.lore.AddLore;
+import space.devport.wertik.items.commands.utility.lore.ClearLore;
+import space.devport.wertik.items.commands.utility.lore.Lore;
+import space.devport.wertik.items.commands.utility.lore.RemoveLore;
+import space.devport.wertik.items.handlers.AttributeManager;
+import space.devport.wertik.items.handlers.CooldownManager;
+import space.devport.wertik.items.handlers.ItemManager;
 import space.devport.wertik.items.listeners.ItemListener;
 
 import java.util.ArrayList;
@@ -43,11 +63,11 @@ public class ItemsPlugin extends DevportPlugin {
     private final List<String> filteredNBT = new ArrayList<>(Arrays.asList("Enchantments", "Damage", "display"));
 
     @Getter
-    private ItemHandler itemHandler;
+    private ItemManager itemManager;
     @Getter
-    private AttributeHandler attributeHandler;
+    private AttributeManager attributeManager;
     @Getter
-    private CooldownHandler cooldownHandler;
+    private CooldownManager cooldownManager;
 
     @Getter
     private Random random;
@@ -76,56 +96,81 @@ public class ItemsPlugin extends DevportPlugin {
         checkHooks();
 
         // Load attributes
-        attributeHandler = new AttributeHandler();
-        attributeHandler.load();
-        consoleOutput.info("Loaded " + attributeHandler.getAttributeCache().size() + " attribute(s)..");
+        attributeManager = new AttributeManager();
+        attributeManager.load();
+        consoleOutput.info("Loaded " + attributeManager.getAttributeCache().size() + " attribute(s)..");
 
         // Initialize a cooldown handler
-        cooldownHandler = new CooldownHandler();
+        cooldownManager = new CooldownManager();
 
         // Load items
-        itemHandler = new ItemHandler();
-        itemHandler.loadItems();
-        consoleOutput.info("Loaded " + itemHandler.getItems().size() + " item(s)..");
+        itemManager = new ItemManager();
+        itemManager.loadItems();
+        consoleOutput.info("Loaded " + itemManager.getItems().size() + " item(s)..");
 
         getServer().getPluginManager().registerEvents(new ItemListener(), this);
 
         // Utils command executor and tab completer
-        UtilCommands utilCommands = new UtilCommands();
         UtilTabCompleter utilTabCompleter = new UtilTabCompleter();
 
-        getCommand("items").setExecutor(new ItemsCommand());
+        addMainCommand(new ItemsCommand("items")
+                .addSubCommand(new Detail("detail"))
+                .addSubCommand(new DropItem("drop"))
+                .addSubCommand(new GiveItem("give"))
+                .addSubCommand(new ListItems("list"))
+                .addSubCommand(new LoadItem("load"))
+                .addSubCommand(new Reload("reload"))
+                .addSubCommand(new RemoveItem("remove"))
+                .addSubCommand(new SaveItem("save")));
 
-        addMainCommand(new AttributesCommand("attribute")
-                .addSubCommand(new Add("add"))
-                .addSubCommand(new Remove("remove"))
-                .addSubCommand(new space.devport.wertik.items.commands.attributes.List("list"))
-                .addSubCommand(new Clear("clear")));
+        addMainCommand(new AttributesCommand("attributes")
+                .addSubCommand(new AddAttribute("add"))
+                .addSubCommand(new RemoveAttribute("remove"))
+                .addSubCommand(new ListAttributes("list"))
+                .addSubCommand(new ClearAttributes("clear")));
+
+        addMainCommand(new Lore("lore")
+                .addSubCommand(new AddLore("add"))
+                .addSubCommand(new RemoveLore("remove"))
+                .addSubCommand(new ClearLore("clear")));
+
+        addMainCommand(new Flags("flags")
+                .addSubCommand(new AddFlag("add"))
+                .addSubCommand(new RemoveFlag("remove"))
+                .addSubCommand(new ClearFlags("clear")));
+
+        addMainCommand(new Enchants("enchants")
+                .addSubCommand(new AddEnchant("add"))
+                .addSubCommand(new RemoveEnchant("remove"))
+                .addSubCommand(new ClearEnchants("clear")));
+
+        addMainCommand(new ItemExtra("itemextra")
+                .addSubCommand(new UnPlace("unplace"))
+                .addSubCommand(new UnStack("unstack"))
+                .addSubCommand(new UnCraft("uncraft")));
 
         getCommand("attribute").setTabCompleter(new AttTabCompleter());
 
         // Utils command executor and tab completer
         List<String> commands = new ArrayList<>(getDescription().getCommands().keySet()).subList(2, getDescription().getCommands().size());
-
         for (String command : commands) {
-            getCommand(command).setExecutor(utilCommands);
             getCommand(command).setTabCompleter(utilTabCompleter);
         }
     }
 
     @Override
     public void onPluginDisable() {
-        itemHandler.saveItems();
+        itemManager.saveItems();
     }
 
     @Override
     public void onReload() {
         checkHooks();
 
-        attributeHandler.load();
-        consoleOutput.info("Loaded " + attributeHandler.getAttributeCache().size() + " attribute(s)..");
+        attributeManager.load();
+        consoleOutput.info("Loaded " + attributeManager.getAttributeCache().size() + " attribute(s)..");
 
-        cooldownHandler.getCooldownCache().clear();
+        cooldownManager.getCooldownCache().clear();
     }
 
     @Override

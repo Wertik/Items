@@ -4,9 +4,10 @@ import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-import space.devport.utils.configutil.Configuration;
-import space.devport.utils.itemutil.ItemNBTEditor;
-import space.devport.utils.messageutil.MessageBuilder;
+import space.devport.utils.configuration.Configuration;
+import space.devport.utils.item.ItemNBTEditor;
+import space.devport.utils.text.message.CachedMessage;
+import space.devport.utils.text.message.Message;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.objects.Attribute;
 import space.devport.wertik.items.objects.Reward;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AttributeHandler {
+public class AttributeManager {
 
     @Getter
     private final Map<String, Attribute> attributeCache = new HashMap<>();
@@ -51,8 +52,8 @@ public class AttributeHandler {
             reward.setCommands(storage.getStringList(name + ".commands", new ArrayList<>()));
 
             // Messages
-            reward.setBroadcast(storage.loadMessageBuilder(name + ".broadcast", new MessageBuilder()));
-            reward.setInform(storage.loadMessageBuilder(name + ".inform", new MessageBuilder()));
+            reward.setBroadcast(new CachedMessage(storage.getMessage(name + ".broadcast", new Message())));
+            reward.setInform(new CachedMessage(storage.getMessage(name + ".inform", new Message())));
 
             attribute.setReward(reward);
 
@@ -110,7 +111,7 @@ public class AttributeHandler {
     public Attribute getAttribute(ItemStack item, String action) {
         for (String key : ItemNBTEditor.getNBTTagMap(item).keySet()) {
             if (key.equalsIgnoreCase(action)) {
-                return ItemsPlugin.getInstance().getAttributeHandler().getAttribute(ItemNBTEditor.getNBT(item, key));
+                return ItemsPlugin.getInstance().getAttributeManager().getAttribute(ItemNBTEditor.getNBT(item, key));
             }
         }
 

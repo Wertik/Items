@@ -9,16 +9,16 @@ import space.devport.utils.item.ItemBuilder;
 import space.devport.utils.text.StringUtil;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
-import space.devport.wertik.items.handlers.ItemHandler;
+import space.devport.wertik.items.handlers.ItemManager;
 import space.devport.wertik.items.utils.Utils;
 
 public class Detail extends SubCommand {
 
-    private final ItemHandler itemHandler;
+    private final ItemManager itemManager;
 
     public Detail(String name) {
         super(name);
-        itemHandler = ItemsPlugin.getInstance().getItemHandler();
+        itemManager = ItemsPlugin.getInstance().getItemManager();
     }
 
     @Override
@@ -29,7 +29,7 @@ public class Detail extends SubCommand {
         Player player = (Player) sender;
         ItemBuilder builder = Utils.getBuilderInHand(player);
 
-        // TODO: Somehow add to language
+        // TODO: Somehow add to language and move to Command Utils
 
         sender.sendMessage(StringUtil.color("&eName: &f" + (builder.getDisplayName().isEmpty() ? builder.getMaterial().toString() : builder.getDisplayName().toString())));
         sender.sendMessage(StringUtil.color("&eMaterial: &f" + builder.getMaterial().name()));

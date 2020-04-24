@@ -1,35 +1,33 @@
-package space.devport.wertik.items.commands;
+package space.devport.wertik.items.commands.utility;
 
 import org.bukkit.command.CommandSender;
 import space.devport.utils.commands.MainCommand;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
+import space.devport.wertik.items.commands.CommandUtils;
 
-public class ItemsCommand extends MainCommand {
+public class Detail extends MainCommand {
 
-    public ItemsCommand(String name) {
+    public Detail(String name) {
         super(name);
-        this.aliases = new String[]{"i", "item"};
-        this.preconditions = new Preconditions().permissions("items.control");
+        this.preconditions = new Preconditions().playerOnly();
     }
 
     @Override
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
-        return super.perform(sender, label, args);
-    }
+        if (CommandUtils.checkAir(sender)) return CommandResult.FAILURE;
 
-    @Override
-    public boolean checkRange() {
-        return false;
+        CommandUtils.sendDetail(sender);
+        return CommandResult.SUCCESS;
     }
 
     @Override
     public String getDefaultUsage() {
-        return "/%label%";
+        return null;
     }
 
     @Override
     public String getDefaultDescription() {
-        return "Displays this.";
+        return null;
     }
 }

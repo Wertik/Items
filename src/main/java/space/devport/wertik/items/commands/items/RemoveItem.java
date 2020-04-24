@@ -6,15 +6,15 @@ import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
-import space.devport.wertik.items.handlers.ItemHandler;
+import space.devport.wertik.items.handlers.ItemManager;
 
-public class Remove extends SubCommand {
+public class RemoveItem extends SubCommand {
 
-    private final ItemHandler itemHandler;
+    private final ItemManager itemManager;
 
-    public Remove(String name) {
+    public RemoveItem(String name) {
         super(name);
-        itemHandler = ItemsPlugin.getInstance().getItemHandler();
+        itemManager = ItemsPlugin.getInstance().getItemManager();
     }
 
     @Override
@@ -22,7 +22,7 @@ public class Remove extends SubCommand {
 
         if (CommandUtils.checkItemStored(sender, args[1])) return CommandResult.FAILURE;
 
-        itemHandler.removeItem(args[1]);
+        itemManager.removeItem(args[1]);
         language.getPrefixed("Item-Removed")
                 .replace("%item%", args[1])
                 .send(sender);

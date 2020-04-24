@@ -6,37 +6,23 @@ main: space.devport.wertik.items.ItemsPlugin
 softdepend: [PlaceholderAPI]
 commands:
   items:
-    aliases: [i]
-    description: Main command for handling items.
-  attribute:
-    aliases: [att]
+    aliases: [i, item]
+    description: Main command for item manipulation.
+  attributes:
+    aliases: [att, attribute]
     description: Main command for attribute manipulation.
   detail:
     description: View item details.
   setname:
     description: Set items display name.
-  addench:
-    description: Add enchant to your item.
-  enchs:
-    description: Display enchants on your item
-  remench:
-    description: Remove enchant from your item.
-  flags:
-    description: View item flags.
-  addflag:
-    description: Add an ItemFlag to your item.
-  remflag:
-    description: Remove an item flag from your item.
+  itemextra:
+    description: Manage extra item properties.
   lore:
-    description: View item lore.
-  addlore:
-    description: Add lore line to your item.
-  remlore:
-    description: Remove lore line from your item.
-  unstackable:
-    description: Make item unstackable.
-  unplaceable:
-    description: Make item unplaceable.
+    description: Manage lore.
+  enchants:
+    description: Manage enchantments.
+  flags:
+    description: Manage flags.
 permissions:
   items.control:
     description: Allows commands

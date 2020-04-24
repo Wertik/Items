@@ -5,24 +5,24 @@ import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.wertik.items.ItemsPlugin;
-import space.devport.wertik.items.handlers.ItemHandler;
+import space.devport.wertik.items.handlers.ItemManager;
 import space.devport.wertik.items.utils.Utils;
 
 import java.util.ArrayList;
 
-public class List extends SubCommand {
+public class ListItems extends SubCommand {
 
-    private final ItemHandler itemHandler;
+    private final ItemManager itemManager;
 
-    public List(String name) {
+    public ListItems(String name) {
         super(name);
-        itemHandler = ItemsPlugin.getInstance().getItemHandler();
+        itemManager = ItemsPlugin.getInstance().getItemManager();
     }
 
     @Override
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
         language.getPrefixed("Items-List")
-                .replace("%items%", Utils.listToString(new ArrayList<>(itemHandler.getItems().keySet()), "&7, &f", "&cNo items saved."))
+                .replace("%items%", Utils.listToString(new ArrayList<>(itemManager.getItems().keySet()), "&7, &f", "&cNo items saved."))
                 .send(sender);
         return CommandResult.SUCCESS;
     }
