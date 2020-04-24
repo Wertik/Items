@@ -10,6 +10,11 @@ import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.item.ItemBuilder;
 import space.devport.wertik.items.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class RemoveFlag extends SubCommand {
 
     public RemoveFlag(String name) {
@@ -41,6 +46,21 @@ public class RemoveFlag extends SubCommand {
 
         language.sendPrefixed(sender, "Flag-Removed");
         return CommandResult.SUCCESS;
+    }
+
+    @Override
+    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+
+        if (args.length == 1) {
+            Player player = (Player) sender;
+            ItemBuilder item = Utils.getBuilderInHand(player);
+
+            suggestions = item.getFlags().stream().map(ItemFlag::toString).collect(Collectors.toList());
+        }
+
+        Collections.sort(suggestions);
+        return suggestions;
     }
 
     @Override

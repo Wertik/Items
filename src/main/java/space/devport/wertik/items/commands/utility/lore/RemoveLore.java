@@ -9,6 +9,8 @@ import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.item.ItemBuilder;
 import space.devport.wertik.items.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RemoveLore extends SubCommand {
@@ -54,6 +56,20 @@ public class RemoveLore extends SubCommand {
         Utils.setItem(player, EquipmentSlot.HAND, builder.build());
         language.sendPrefixed(sender, "Line-Removed");
         return CommandResult.SUCCESS;
+    }
+
+    @Override
+    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+
+        if (args.length == 1) {
+            Player player = (Player) sender;
+            ItemBuilder builder = Utils.getBuilderInHand(player);
+            for (int i = 0; i < builder.getLore().getOriginal().size(); i++) suggestions.add(String.valueOf(i));
+        }
+
+        Collections.sort(suggestions);
+        return suggestions;
     }
 
     @Override

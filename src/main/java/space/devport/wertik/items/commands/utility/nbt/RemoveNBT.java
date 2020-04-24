@@ -7,8 +7,13 @@ import org.bukkit.inventory.ItemStack;
 import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
+import space.devport.utils.item.ItemBuilder;
 import space.devport.utils.item.ItemNBTEditor;
 import space.devport.wertik.items.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class RemoveNBT extends SubCommand {
 
@@ -38,6 +43,21 @@ public class RemoveNBT extends SubCommand {
                 .replace("%key%", "'" + args[0] + "'")
                 .send(sender);
         return CommandResult.SUCCESS;
+    }
+
+    @Override
+    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+
+        if (args.length == 1) {
+            Player player = (Player) sender;
+            ItemBuilder builder = Utils.getBuilderInHand(player);
+
+            suggestions.addAll(builder.getNBT().keySet());
+        }
+
+        Collections.sort(suggestions);
+        return suggestions;
     }
 
     @Override

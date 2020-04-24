@@ -10,6 +10,12 @@ import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.item.ItemBuilder;
 import space.devport.wertik.items.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class AddFlag extends SubCommand {
 
     public AddFlag(String name) {
@@ -38,6 +44,18 @@ public class AddFlag extends SubCommand {
         Utils.setItem(player, EquipmentSlot.HAND, builder.build());
         language.sendPrefixed(sender, "Flag-Added");
         return CommandResult.SUCCESS;
+    }
+
+    @Override
+    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+
+        if (args.length == 1) {
+            suggestions = Arrays.stream(ItemFlag.values()).map(ItemFlag::toString).collect(Collectors.toList());
+        }
+
+        Collections.sort(suggestions);
+        return suggestions;
     }
 
     @Override

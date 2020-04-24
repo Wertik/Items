@@ -12,6 +12,10 @@ import space.devport.wertik.items.commands.CommandUtils;
 import space.devport.wertik.items.system.AttributeManager;
 import space.devport.wertik.items.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class RemoveAttribute extends SubCommand {
 
     private final AttributeManager attributeManager;
@@ -55,6 +59,22 @@ public class RemoveAttribute extends SubCommand {
 
         language.sendPrefixed(sender, "Could-Not-Remove-Attribute");
         return CommandResult.FAILURE;
+    }
+
+    @Override
+    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+
+        if (args.length == 1) {
+            Player player = (Player) sender;
+            ItemStack item = Utils.getItemInHand(player);
+
+            suggestions.addAll(attributeManager.getAttributes(item).keySet());
+            suggestions.addAll(attributeManager.getAttributes(item).values());
+        }
+
+        Collections.sort(suggestions);
+        return suggestions;
     }
 
     @Override

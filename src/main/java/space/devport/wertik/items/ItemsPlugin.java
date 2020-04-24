@@ -58,7 +58,7 @@ public class ItemsPlugin extends DevportPlugin {
      * Change log: 3.1.0
      * - Added `/settype <material>` command to change the material of an item
      * - Added missing tab completion
-     * - Added uncraftable extra
+     * - Added uncraftable item extra
      * - Added shift clicks ( shift_right_click and shift_left_click )
      * - Added NBT manipulation commands
      * - Moved all commands to our DevportUtils Library/API.
