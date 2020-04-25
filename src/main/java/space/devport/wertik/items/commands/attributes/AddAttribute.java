@@ -40,7 +40,10 @@ public class AddAttribute extends SubCommand {
         if (!attributeManager.getAttributeCache().containsKey(args[0])) {
             language.getPrefixed("Attribute-Invalid")
                     .replace("%attribute%", args[0])
-                    .replace("%valid%", Utils.listToString(new ArrayList<>(attributeManager.getAttributeCache().keySet()), "&7, &f", "&cNo attributes configured."))
+                    .replace("%valid%",
+                            Utils.listToString(new ArrayList<>(attributeManager.getAttributeCache().keySet()),
+                                    language.get("List-Splitter").color().toString(),
+                                    language.get("No-Attributes").color().toString()))
                     .send(sender);
             return CommandResult.FAILURE;
         }

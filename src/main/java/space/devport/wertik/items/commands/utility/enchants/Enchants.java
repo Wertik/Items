@@ -1,13 +1,17 @@
 package space.devport.wertik.items.commands.utility.enchants;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import space.devport.utils.commands.MainCommand;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
+import space.devport.utils.text.message.Message;
 import space.devport.wertik.items.commands.CommandUtils;
 import space.devport.wertik.items.utils.Utils;
+
+import java.util.Map;
 
 public class Enchants extends MainCommand {
 
@@ -25,9 +29,20 @@ public class Enchants extends MainCommand {
 
         ItemBuilder builder = Utils.getBuilderInHand((Player) sender);
 
-        language.getPrefixed("Enchants-List")
-                .replace("%enchants%", Utils.mapToString(builder.getEnchants(), "&7, &f", "&f:", "&cNo enchants."))
-                .send(sender);
+        if (builder.getEnchants().isEmpty()) {
+            language.sendPrefixed(sender, "No-Enchants");
+            return CommandResult.FAILURE;
+        }
+
+        Message enchants = new Message(language.getPrefixed("Enchants-List"));
+
+        for (Map.Entry<Enchantment, Integer> entry : builder.getEnchants().entrySet()) {
+            enchants.append(language.get("Enchants-List-Line")
+                    .replace("%enchantment%", entry.getKey().getName())
+                    .replace("%level%", entry.getKey()));
+        }
+
+        enchants.send(sender);
         return CommandResult.SUCCESS;
     }
 

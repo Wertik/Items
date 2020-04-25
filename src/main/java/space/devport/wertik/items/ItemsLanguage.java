@@ -8,6 +8,12 @@ public class ItemsLanguage extends LanguageDefaults {
     public void setDefaults() {
 
         /*
+         * General
+         **/
+
+        addDefault("List-Splitter", "&f, &7");
+
+        /*
          * General commands
          **/
 
@@ -29,11 +35,17 @@ public class ItemsLanguage extends LanguageDefaults {
          * Utility commands
          * */
 
+        addDefault("NBT-List", "&7NBT:");
+        addDefault("NBT-List-Line", " &8- &7%key% &f= &7%value%");
+
+        addDefault("No-NBT", "&cThis item doesn't have any NBT data.");
+        addDefault("No-Key", "&cThis item doesn't have the key &f%key%");
         addDefault("NBT-Added", "&7Added &f%key% &7= &f%value% &7to the item.");
         addDefault("NBT-Removed", "&7Removed &f%key% &7from the item.");
         addDefault("NBT-Cleared", "&7All custom NBT data cleared.");
-        addDefault("No-Key", "&cThis item doesn't have the key &f%key%");
-        addDefault("No-NBT", "&cThis item doesn't have any NBT data.");
+
+        addDefault("Lore-List", "&7Lore:");
+        addDefault("Lore-List-Line", "&f%index% &8- &r%line%");
 
         addDefault("Line-Added", "&7Line added to item lore.");
         addDefault("Line-Removed", "&7Line removed from item lore.");
@@ -42,6 +54,8 @@ public class ItemsLanguage extends LanguageDefaults {
         addDefault("Index-Out-Of-Bounds", "&cIndex &f%param% &cis out of bounds. Max: &7%max%");
 
         addDefault("Flags-List", "&7Flags: %flags%");
+
+        addDefault("No-Flags", "&cNo flags.");
         addDefault("Flag-Added", "&7Flag added to item.");
         addDefault("Flag-Removed", "&7Flag removed from item.");
         addDefault("Flags-Cleared", "&7Flags cleared.");
@@ -49,6 +63,9 @@ public class ItemsLanguage extends LanguageDefaults {
         addDefault("No-Flag", "&cItem doesn't have this flag.");
 
         addDefault("Enchants-List", "&7Enchants: &f%enchants%");
+        addDefault("Enchants-List-Line", "&8- &7%enchantment% &f%level%");
+
+        addDefault("No-Enchants", "&cThis item has no enchantments.");
         addDefault("Enchant-Added", "&7Enchant added to item.");
         addDefault("Enchant-Removed", "&7Enchant removed from item.");
         addDefault("Enchants-Cleared", "&7Enchants cleared from item.");
@@ -67,6 +84,7 @@ public class ItemsLanguage extends LanguageDefaults {
          * Item commands
          * */
 
+        addDefault("No-Items-Saved", "&cNo items saved.");
         addDefault("Spawned-At", "&7Item &f%item%&7x&f%amount% &7spawned &8@ &7%location%");
         addDefault("Items-List", "&7Items: %items%");
         addDefault("Item-Updated", "&7Item &f%item% &7updated.");
@@ -82,6 +100,9 @@ public class ItemsLanguage extends LanguageDefaults {
          * Attribute commands
          * */
 
+        addDefault("Attributes-List", "&7Attributes:");
+        addDefault("Attributes-List-Line", "&8- &7%action% &f= &7%attribute%");
+        addDefault("No-Attributes", "&cNo attributes.");
         addDefault("Attributes", "&7Attributes: %attributes%");
         addDefault("Attribute-Added", "&7Attribute &f%attribute% &7added to item.");
         addDefault("Attribute-Removed", "&7Attribute &f%attribute% &7removed from item.");

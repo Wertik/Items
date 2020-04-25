@@ -33,7 +33,10 @@ public class Flags extends MainCommand {
 
         List<String> flags = builder.getFlags().stream().map(ItemFlag::name).collect(Collectors.toList());
         language.getPrefixed("Flags-List")
-                .replace("%flags%", Utils.listToString(flags, "&7, &f", "&cNo flags."))
+                .replace("%flags%",
+                        Utils.listToString(flags,
+                                language.get("List-Splitter").color().toString(),
+                                language.get("No-Flags").color().toString()))
                 .send(sender);
         return CommandResult.SUCCESS;
     }

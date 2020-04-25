@@ -7,6 +7,7 @@ import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
+import space.devport.utils.text.message.Message;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
 import space.devport.wertik.items.system.AttributeManager;
@@ -15,6 +16,7 @@ import space.devport.wertik.items.utils.Utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class ListAttributes extends SubCommand {
 
@@ -37,15 +39,24 @@ public class ListAttributes extends SubCommand {
 
                 if (CommandUtils.checkAir(player, item)) return CommandResult.FAILURE;
 
-                language.getPrefixed("Attributes")
-                        .replace("%attributes%", "\n &7" + Utils.mapToString(attributeManager.getAttributes(item), "\n &7", "&8 - &7", "&cNo attributes saved."))
-                        .send(sender);
+                Message attributes = new Message(language.getPrefixed("Attributes-List"));
+
+                for (Map.Entry<String, String> entry : attributeManager.getAttributes(item).entrySet()) {
+                    attributes.append(language.get("Attributes-List-Line")
+                            .replace("%action%", entry.getKey())
+                            .replace("%attribute%", entry.getValue()));
+                }
+
+                attributes.send(sender);
                 return CommandResult.SUCCESS;
             }
         }
 
         language.getPrefixed("Attributes")
-                .replace("%attributes%", Utils.listToString(new ArrayList<>(attributeManager.getAttributeCache().keySet()), "&7, &f", "&cNo attributes saved."))
+                .replace("%attributes%",
+                        Utils.listToString(new ArrayList<>(attributeManager.getAttributeCache().keySet()),
+                                language.get("List-Splitter").color().toString(),
+                                language.get("No-Attributes").color().toString()))
                 .send(sender);
         return CommandResult.SUCCESS;
     }

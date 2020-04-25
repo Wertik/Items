@@ -6,8 +6,7 @@ import space.devport.utils.commands.MainCommand;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
-import space.devport.utils.text.StringUtil;
-import space.devport.wertik.items.ItemsPlugin;
+import space.devport.utils.text.message.Message;
 import space.devport.wertik.items.commands.CommandUtils;
 import space.devport.wertik.items.utils.Utils;
 
@@ -32,16 +31,20 @@ public class NBT extends MainCommand {
         ItemBuilder builder = Utils.getBuilderInHand(player);
 
         // NBT
-        if (!builder.getNBT().isEmpty()) {
-            sender.sendMessage(StringUtil.color("&eNBT:"));
+        if (builder.getNBT().isEmpty()) {
+            language.sendPrefixed(sender, "No-NBT");
+            return CommandResult.FAILURE;
+        }
 
-            for (Map.Entry<String, String> entry : builder.getNBT().entrySet()) {
-                if (!ItemBuilder.getFilteredNBT().contains(entry.getKey()))
-                    sender.sendMessage(StringUtil.color(" &8- &7" + entry.getKey() + " &f=&7 " + builder.getNBT().get(entry.getKey())));
-            }
-        } else
-            sender.sendMessage(ItemsPlugin.getInstance().getPrefix() + StringUtil.color("&cNo NBT."));
+        Message nbt = new Message(language.getPrefixed("NBT-List"));
 
+        for (Map.Entry<String, String> entry : builder.getNBT().entrySet()) {
+            nbt.append(language.get("NBT-List-Line")
+                    .replace("%key%", entry.getKey())
+                    .replace("%value%", entry.getValue()));
+        }
+
+        nbt.send(sender);
         return CommandResult.SUCCESS;
     }
 

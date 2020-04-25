@@ -6,7 +6,7 @@ import space.devport.utils.commands.MainCommand;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
-import space.devport.utils.text.StringUtil;
+import space.devport.utils.text.message.Message;
 import space.devport.wertik.items.commands.CommandUtils;
 import space.devport.wertik.items.utils.Utils;
 
@@ -29,17 +29,21 @@ public class Lore extends MainCommand {
         ItemBuilder builder = Utils.getBuilderInHand((Player) sender);
 
         if (builder.getLore().getMessage().isEmpty()) {
-            sender.sendMessage(StringUtil.color("&eLore: &cNo lore."));
+            language.sendPrefixed(sender, "No-Lore");
             return CommandResult.FAILURE;
         }
 
-        sender.sendMessage(StringUtil.color("&eLore:"));
+        Message lore = new Message(language.getPrefixed("Lore-List"));
+
         int i = 0;
         for (String line : builder.getLore().getMessage()) {
-            sender.sendMessage(StringUtil.color("&f " + i + " &8- &r" + line));
+            lore.append(language.get("Lore-List-Line")
+                    .replace("%index%", i)
+                    .replace("%line%", line));
             i++;
         }
 
+        lore.send(sender);
         return CommandResult.SUCCESS;
     }
 

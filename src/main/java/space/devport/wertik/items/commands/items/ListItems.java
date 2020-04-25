@@ -24,7 +24,10 @@ public class ListItems extends SubCommand {
     @Override
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
         language.getPrefixed("Items-List")
-                .replace("%items%", Utils.listToString(new ArrayList<>(itemManager.getItems().keySet()), "&7, &f", "&cNo items saved."))
+                .replace("%items%",
+                        Utils.listToString(new ArrayList<>(itemManager.getItems().keySet()),
+                                language.get("List-Splitter").color().toString(),
+                                language.get("No-Items-Saved").color().toString()))
                 .send(sender);
         return CommandResult.SUCCESS;
     }
