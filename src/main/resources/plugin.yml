@@ -39,6 +39,7 @@ permissions:
       - items.manage
       - items.utility
       - items.attributes
+      - items.reload
 
   items.reload:
     description: Allows /items reload
