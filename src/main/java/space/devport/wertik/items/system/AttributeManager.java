@@ -1,12 +1,13 @@
-package space.devport.wertik.items.handlers;
+package space.devport.wertik.items.system;
 
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-import space.devport.utils.configutil.Configuration;
-import space.devport.utils.itemutil.ItemNBTEditor;
-import space.devport.utils.messageutil.MessageBuilder;
+import space.devport.utils.configuration.Configuration;
+import space.devport.utils.item.ItemNBTEditor;
+import space.devport.utils.text.message.CachedMessage;
+import space.devport.utils.text.message.Message;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.objects.Attribute;
 import space.devport.wertik.items.objects.Reward;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AttributeHandler {
+public class AttributeManager {
 
     @Getter
     private final Map<String, Attribute> attributeCache = new HashMap<>();
@@ -51,8 +52,8 @@ public class AttributeHandler {
             reward.setCommands(storage.getStringList(name + ".commands", new ArrayList<>()));
 
             // Messages
-            reward.setBroadcast(storage.loadMessageBuilder(name + ".broadcast", new MessageBuilder()));
-            reward.setInform(storage.loadMessageBuilder(name + ".inform", new MessageBuilder()));
+            reward.setBroadcast(new CachedMessage(storage.getMessage(name + ".broadcast", new Message())));
+            reward.setInform(new CachedMessage(storage.getMessage(name + ".inform", new Message())));
 
             attribute.setReward(reward);
 
@@ -79,28 +80,25 @@ public class AttributeHandler {
         return ItemNBTEditor.writeNBT(item, action.toLowerCase(), attribute);
     }
 
-    // Remove attribute by action
     public ItemStack removeAction(ItemStack item, String action) {
-        return ItemNBTEditor.removeNBT(item, action.toLowerCase());
-    }
-
-    // Remove attribute from all actions
-    public ItemStack removeAttribute(ItemStack item, String attribute) {
-        Map<String, String> nbt = getAttributes(item);
-
-        for (String key : nbt.keySet()) {
-            if (nbt.get(key).equalsIgnoreCase(attribute)) {
+        for (String key : getAttributes(item).keySet()) {
+            if (key.equalsIgnoreCase(action))
                 item = ItemNBTEditor.removeNBT(item, key);
-            }
         }
-
         return item;
     }
 
-    // Clear all attributes
+    public ItemStack removeAttribute(ItemStack item, String attribute) {
+        for (Map.Entry<String, String> entry : getAttributes(item).entrySet()) {
+            if (entry.getValue().equalsIgnoreCase(attribute))
+                item = ItemNBTEditor.removeNBT(item, entry.getKey());
+        }
+        return item;
+    }
+
     public ItemStack clearAttributes(ItemStack item) {
-        for (String action : ItemsPlugin.getInstance().getActionNames()) {
-            item = removeAttribute(item, action);
+        for (String action : getAttributes(item).keySet()) {
+            item = ItemNBTEditor.removeNBT(item, action);
         }
 
         return item;
@@ -110,11 +108,15 @@ public class AttributeHandler {
     public Attribute getAttribute(ItemStack item, String action) {
         for (String key : ItemNBTEditor.getNBTTagMap(item).keySet()) {
             if (key.equalsIgnoreCase(action)) {
-                return ItemsPlugin.getInstance().getAttributeHandler().getAttribute(ItemNBTEditor.getNBT(item, key));
+                return ItemsPlugin.getInstance().getAttributeManager().getAttribute(ItemNBTEditor.getNBT(item, key));
             }
         }
 
         return null;
+    }
+
+    public boolean hasAttribute(ItemStack item) {
+        return ItemsPlugin.getInstance().getActionNames().stream().anyMatch(key -> ItemNBTEditor.hasNBTKey(item, key));
     }
 
     // items_uses : "<attribute>:<uses>;<attribute>:<uses>"

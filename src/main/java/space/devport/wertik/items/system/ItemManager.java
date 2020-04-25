@@ -1,10 +1,12 @@
-package space.devport.wertik.items.handlers;
+package space.devport.wertik.items.system;
 
+import com.google.common.base.Strings;
+import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import space.devport.utils.configutil.Configuration;
-import space.devport.utils.itemutil.ItemBuilder;
-import space.devport.utils.itemutil.ItemNBTEditor;
+import space.devport.utils.configuration.Configuration;
+import space.devport.utils.item.ItemBuilder;
+import space.devport.utils.item.ItemNBTEditor;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.utils.Utils;
 
@@ -13,29 +15,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ItemHandler {
+public class ItemManager {
 
-    // System name, item
     private final Map<String, ItemBuilder> items = new HashMap<>();
 
+    @Getter
     private final Configuration storage;
 
-    public ItemHandler() {
+    public ItemManager() {
         storage = new Configuration(ItemsPlugin.getInstance(), "items");
     }
 
-    // Load items from yaml
     public void loadItems() {
-        storage.reload();
-        this.items.clear();
+        items.clear();
 
         for (String name : storage.getFileConfiguration().getKeys(false)) {
+            ItemBuilder item = storage.getItemBuilder(name);
 
-            ItemBuilder item = storage.loadItemBuilder(name);
-
-            // Filter 0 amount items
-            if (item.getAmount() > 0)
-                this.items.put(name, item);
+            this.items.put(name, item);
         }
     }
 
@@ -62,17 +59,17 @@ public class ItemHandler {
     }
 
     public void loadItem(String name) {
-        storage.reload();
+        storage.load();
 
-        if (!storage.getFileConfiguration().contains(name))
-            return;
+        ItemBuilder itemBuilder = storage.getItemBuilder(name);
 
-        addItem(name, storage.loadItemBuilder(name));
+        if (itemBuilder == null) return;
+
+        addItem(name, itemBuilder);
     }
 
     public boolean checkItemStorage(String name) {
-        storage.reload();
-
+        storage.load();
         return storage.getFileConfiguration().contains(name);
     }
 
@@ -89,18 +86,17 @@ public class ItemHandler {
         return prepareBuilder(name, null);
     }
 
+    // TODO: Support player == null
     public ItemBuilder prepareBuilder(String name, Player player) {
         ItemBuilder builder = getBuilder(name);
 
-        // Parse displayname
-        builder.getDisplayName().setWorkingMessage(Utils.parsePlaceholders(builder.getDisplayName().getWorkingMessage(), player));
+        builder.getDisplayName().setMessage(Utils.parsePlaceholders(builder.getDisplayName().getOriginal(), player));
 
-        // Parse lore
-        builder.getLore().setWorkingMessage(Utils.parsePlaceholders(builder.getLore().getWorkingMessage(), player));
+        builder.getLore().setMessage(Utils.parsePlaceholders(builder.getLore().getMessage(), player));
 
-        // Update unstackable uuid
         if (builder.getNBT().containsKey("items_unstackable")) {
-            builder.removeNBT("items_unstackable").addNBT("items_unstackable", UUID.randomUUID().toString());
+            builder.removeNBT("items_unstackable")
+                    .addNBT("items_unstackable", UUID.randomUUID().toString());
         }
 
         return builder;
@@ -124,7 +120,7 @@ public class ItemHandler {
     public void removeItem(String name) {
         this.items.remove(name);
 
-        storage.reload();
+        storage.load();
         storage.getFileConfiguration().set(name, null);
         storage.save();
     }
@@ -133,40 +129,18 @@ public class ItemHandler {
         return Collections.unmodifiableMap(this.items);
     }
 
-    // Item Manipulation
-
-    public ItemStack setUnstackable(ItemStack item, boolean b) {
-        // Throw it back at 'em
-        if (item == null) return null;
-
-        if (b) {
-            // Assign a new random UUID
-            String uniqueID = UUID.randomUUID().toString();
-            return ItemNBTEditor.writeNBT(item, "items_unstackable", uniqueID);
-        } else return ItemNBTEditor.removeNBT(item, "items_unstackable");
+    public ItemStack setExtra(ItemStack item, String key, String... value) {
+        if (item == null || Strings.isNullOrEmpty(key)) return null;
+        return ItemNBTEditor.writeNBT(item, "items_" + key, value.length > 0 ? value[0] : "");
     }
 
-    public boolean isUnstackable(ItemStack item) {
-        if (item == null) return false;
-
-        if (!ItemNBTEditor.hasNBT(item)) return false;
-
-        return ItemNBTEditor.hasNBTKey(item, "items_unstackable");
+    public ItemStack removeExtra(ItemStack item, String key) {
+        if (item == null || Strings.isNullOrEmpty(key)) return null;
+        return ItemNBTEditor.removeNBT(item, key);
     }
 
-    public ItemStack setUnplaceable(ItemStack item, boolean b) {
-        if (item == null) return null;
-
-        if (b) {
-            return ItemNBTEditor.writeNBT(item, "items_unplaceable", "");
-        } else return ItemNBTEditor.removeNBT(item, "items_unplaceable");
-    }
-
-    public boolean isUnplaceable(ItemStack item) {
-        if (item == null) return false;
-
-        if (!ItemNBTEditor.hasNBT(item)) return false;
-
-        return ItemNBTEditor.hasNBTKey(item, "items_unplaceable");
+    public boolean hasExtra(ItemStack item, String key) {
+        if (item == null || !ItemNBTEditor.hasNBT(item) || Strings.isNullOrEmpty(key)) return false;
+        return ItemNBTEditor.hasNBTKey(item, "items_" + key);
     }
 }

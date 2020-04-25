@@ -4,8 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import space.devport.utils.messageutil.MessageBuilder;
-import space.devport.utils.messageutil.ParseFormat;
+import space.devport.utils.text.Placeholders;
+import space.devport.utils.text.message.CachedMessage;
 import space.devport.wertik.items.ItemsPlugin;
 
 import java.util.ArrayList;
@@ -15,22 +15,16 @@ import java.util.List;
 @NoArgsConstructor
 public class Reward {
 
-    // Commands executed
     private List<String> commands = new ArrayList<>();
 
-    // Message brodcasted to server
-    private MessageBuilder broadcast = new MessageBuilder();
+    private CachedMessage broadcast = new CachedMessage();
 
-    // Message sent to player
-    private MessageBuilder inform = new MessageBuilder();
+    private CachedMessage inform = new CachedMessage();
 
-    // ParseFormat containing placeholders
-    private ParseFormat format = new ParseFormat();
+    private Placeholders placeholders = new Placeholders();
 
-    // Reward a player
     public void give(Player player) {
 
-        // Parse commands
         if (!commands.isEmpty()) {
             List<String> randomCommands = new ArrayList<>();
 
@@ -50,11 +44,11 @@ public class Reward {
         }
 
         // Inform
-        inform.copyPlaceholders(format).send(player);
+        inform.parseWith(placeholders).send(player);
         inform.pull();
 
         // Broadcast
-        broadcast.copyPlaceholders(format);
+        broadcast.parseWith(placeholders);
         for (Player loopPlayer : Bukkit.getOnlinePlayers()) {
             broadcast.send(loopPlayer);
             broadcast.pull();
@@ -64,10 +58,10 @@ public class Reward {
     // Parses a command
     private void parseCommand(Player player, String cmd) {
 
-        format.fill("%player%", player.getName());
+        placeholders.add("%player%", player.getName());
 
         // Parse placeholders
-        cmd = format.parse(cmd).trim();
+        cmd = placeholders.parse(cmd).trim();
 
         // Execute only once
         if (cmd.startsWith("op!"))

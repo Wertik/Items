@@ -1,4 +1,4 @@
-package space.devport.wertik.items.handlers;
+package space.devport.wertik.items.system;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -7,13 +7,11 @@ import org.bukkit.entity.Player;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.objects.Attribute;
 import space.devport.wertik.items.objects.Cooldown;
-import space.devport.wertik.items.utils.Language;
 
 import java.util.*;
 
-public class CooldownHandler {
+public class CooldownManager {
 
-    // UUID, Cooldowns
     @Getter
     private final Map<UUID, List<Cooldown>> cooldownCache = new HashMap<>();
 
@@ -73,7 +71,7 @@ public class CooldownHandler {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uniqueID);
 
         if (offlinePlayer.isOnline() && offlinePlayer.getPlayer() != null)
-            Language.COOLDOWN_EXPIRED.get().send(offlinePlayer.getPlayer());
+            ItemsPlugin.getInstance().getLanguageManager().sendPrefixed(offlinePlayer.getPlayer(), "Cooldown-Expired");
     }
 
     public Cooldown getCooldown(Player player, String attributeName) {

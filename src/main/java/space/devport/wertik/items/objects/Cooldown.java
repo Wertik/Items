@@ -29,6 +29,6 @@ public class Cooldown extends BukkitRunnable {
 
     @Override
     public void run() {
-        ItemsPlugin.getInstance().getCooldownHandler().removeCooldown(player, attributeName);
+        ItemsPlugin.getInstance().getCooldownManager().removeCooldown(player, attributeName);
     }
 }
