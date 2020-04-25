@@ -24,7 +24,7 @@ public class CraftListener extends DevportListener {
         if (clickedInventory == null) return;
 
         for (ItemStack item : clickedInventory.getContents())
-            if (itemManager.hasExtra(item, "uncraftable"))
+            if (itemManager.hasExtra(item, "uncraftable") || ItemsPlugin.getInstance().getAttributeManager().hasAttribute(item))
                 event.setResult(Event.Result.DENY);
     }
 }
