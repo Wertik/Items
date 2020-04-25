@@ -43,7 +43,6 @@ public class ItemsPlugin extends DevportPlugin {
 
     /* Global TO-DO */
     // TODO: Allow saving items to different files and folders (like BossShopPro)
-    // TODO: Add all remaining strings to language
     // TODO: Optional "transaction" logger
     // TODO: Add support for WorldGuard - disable some items in a region
     // TODO: Add the ability to re-parse placeholders on an item
@@ -55,7 +54,7 @@ public class ItemsPlugin extends DevportPlugin {
 
     /*
      * Change log: 3.1.0
-     * - Redid the whole command system ( a few commands have changed, none were removed )
+     * - Redid the whole command system ( a few commands have changed - /lore, /flags, /enchants, /itemextra )
      * - Added `/settype <material>` command to change the material of an item
      * - Added missing tab completion
      * - Added uncraftable item extra ( prevents players crafting with marked items )
@@ -63,6 +62,7 @@ public class ItemsPlugin extends DevportPlugin {
      * - Added NBT manipulation commands ( /nbt )
      * - Moved the whole plugin to a newer version of DevportUtils Lib.
      * - Added Full permissions ( you can find them here: https://github.com/Wertik/Items/blob/master/src/main/resources/plugin.yml )
+     * - Added all remaining strings to language ( please inform me if I forgot something )
      */
 
     @Getter
