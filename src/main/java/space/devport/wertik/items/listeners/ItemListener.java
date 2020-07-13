@@ -8,6 +8,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import space.devport.utils.DevportListener;
+import space.devport.utils.utility.reflection.ServerVersion;
 import space.devport.utils.utility.reflection.SpigotHelper;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.objects.Attribute;
@@ -64,7 +65,7 @@ public class ItemListener extends DevportListener {
             return;
         }
 
-        EquipmentSlot hand = SpigotHelper.getVersion().contains("1.8") || SpigotHelper.getVersion().contains("1.7") ? null : event.getHand();
+        EquipmentSlot hand = ServerVersion.isBelowCurrent(ServerVersion.v1_8) ? null : event.getHand();
 
         int uses = ItemsPlugin.getInstance().getAttributeManager().getUses(item, attribute.getName());
 
