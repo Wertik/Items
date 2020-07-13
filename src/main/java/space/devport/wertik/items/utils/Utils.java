@@ -7,6 +7,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import space.devport.utils.item.ItemBuilder;
+import space.devport.utils.utility.reflection.ServerVersion;
 import space.devport.utils.utility.reflection.SpigotHelper;
 import space.devport.wertik.items.ItemsPlugin;
 
@@ -58,13 +59,13 @@ public class Utils {
     }
 
     public void setItem(Player player, @Nullable EquipmentSlot hand, ItemStack item) {
-        if (SpigotHelper.getVersion().contains("1.7") || SpigotHelper.getVersion().contains("1.8"))
+        if (ServerVersion.isBelowCurrent(ServerVersion.v1_8))
             player.setItemInHand(item);
         else {
-            if (hand == EquipmentSlot.HAND)
-                player.getInventory().setItemInMainHand(item);
-            else
+            if (hand == null)
                 player.getInventory().setItemInOffHand(item);
+            else
+                player.getInventory().setItem(hand, item);
         }
     }
 
