@@ -25,7 +25,8 @@ public class GiveItem extends SubCommand {
     public GiveItem(String name) {
         super(name);
         this.preconditions = new Preconditions().permissions("items.manage.give");
-        this.aliases = new String[]{"get"};
+
+        setAliases("get");
         itemManager = ItemsPlugin.getInstance().getItemManager();
     }
 

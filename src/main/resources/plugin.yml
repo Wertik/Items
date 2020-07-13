@@ -6,7 +6,7 @@ main: space.devport.wertik.items.ItemsPlugin
 softdepend: [PlaceholderAPI]
 commands:
   items:
-    aliases: [i, item]
+    aliases: [i, item, testitems]
     description: Main command for item manipulation.
   attributes:
     aliases: [att, attribute, atts]

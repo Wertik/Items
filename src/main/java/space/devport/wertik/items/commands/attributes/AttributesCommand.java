@@ -20,16 +20,6 @@ public class AttributesCommand extends MainCommand {
     }
 
     @Override
-    public boolean registerTabCompleter() {
-        return true;
-    }
-
-    @Override
-    public boolean checkRange() {
-        return false;
-    }
-
-    @Override
     public String getDefaultUsage() {
         return "/%label%";
     }

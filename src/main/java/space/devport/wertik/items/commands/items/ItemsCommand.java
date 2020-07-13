@@ -18,11 +18,6 @@ public class ItemsCommand extends MainCommand {
     }
 
     @Override
-    public boolean checkRange() {
-        return false;
-    }
-
-    @Override
     public String getDefaultUsage() {
         return "/%label%";
     }
