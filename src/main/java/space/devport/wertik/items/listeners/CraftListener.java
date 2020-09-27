@@ -7,14 +7,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import space.devport.utils.DevportListener;
 import space.devport.wertik.items.ItemsPlugin;
-import space.devport.wertik.items.system.ItemManager;
 
 public class CraftListener extends DevportListener {
 
-    private final ItemManager itemManager;
+    private final ItemsPlugin plugin;
 
-    public CraftListener() {
-        itemManager = ItemsPlugin.getInstance().getItemManager();
+    public CraftListener(ItemsPlugin plugin) {
+        super(plugin);
+        this.plugin = plugin;
     }
 
     @EventHandler
@@ -24,7 +24,7 @@ public class CraftListener extends DevportListener {
         if (clickedInventory == null) return;
 
         for (ItemStack item : clickedInventory.getContents())
-            if (itemManager.hasExtra(item, "uncraftable") || ItemsPlugin.getInstance().getAttributeManager().hasAttribute(item))
+            if (plugin.getItemManager().hasExtra(item, "uncraftable") || plugin.getAttributeManager().hasAttribute(item))
                 event.setResult(Event.Result.DENY);
     }
 }

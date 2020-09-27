@@ -3,13 +3,13 @@ package space.devport.wertik.items.commands.items;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
-import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.utility.LocationUtil;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
+import space.devport.wertik.items.commands.ItemsSubCommand;
 import space.devport.wertik.items.system.ItemManager;
 
 import java.util.ArrayList;
@@ -17,14 +17,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class DropItem extends SubCommand {
+public class DropItem extends ItemsSubCommand {
 
     private final ItemManager itemManager;
 
-    public DropItem(String name) {
-        super(name);
+    public DropItem(ItemsPlugin plugin) {
+        super("drop", plugin);
         this.preconditions = new Preconditions().permissions("items.manage.drop");
-        itemManager = ItemsPlugin.getInstance().getItemManager();
+        itemManager = plugin.getItemManager();
     }
 
     @Override

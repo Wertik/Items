@@ -1,22 +1,22 @@
 package space.devport.wertik.items.commands.items;
 
 import org.bukkit.command.CommandSender;
-import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.wertik.items.ItemsPlugin;
+import space.devport.wertik.items.commands.ItemsSubCommand;
 
-public class Reload extends SubCommand {
+public class Reload extends ItemsSubCommand {
 
-    public Reload(String name) {
-        super(name);
+    public Reload(ItemsPlugin plugin) {
+        super("reload", plugin);
         this.preconditions = new Preconditions().permissions("items.reload");
     }
 
     @Override
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
-        ItemsPlugin.getInstance().reload(sender);
+        plugin.reload(sender);
         return CommandResult.SUCCESS;
     }
 

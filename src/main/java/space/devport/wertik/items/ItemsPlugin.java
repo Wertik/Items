@@ -3,7 +3,7 @@ package space.devport.wertik.items;
 import lombok.Getter;
 import org.bukkit.plugin.PluginManager;
 import space.devport.utils.DevportPlugin;
-import space.devport.utils.commands.struct.CommandResult;
+import space.devport.utils.UsageFlag;
 import space.devport.wertik.items.commands.attributes.*;
 import space.devport.wertik.items.commands.items.*;
 import space.devport.wertik.items.commands.utility.SetName;
@@ -52,21 +52,9 @@ public class ItemsPlugin extends DevportPlugin {
     // TODO: Redesign commands ( just colors and styling )
     // TODO: Allow multiple attributes on one action
 
-    /*
-     * Change log: 3.1.0
-     * - Redid the whole command system ( a few commands have changed - /lore, /flags, /enchants, /itemextra )
-     * - Added `/settype <material>` command to change the material of an item
-     * - Added missing tab completion
-     * - Added uncraftable item extra ( prevents players crafting with marked items )
-     * - Added shift clicks ( shift_right_click and shift_left_click )
-     * - Added NBT manipulation commands ( /nbt )
-     * - Moved the whole plugin to a newer version of DevportUtils Lib.
-     * - Added Full permissions ( you can find them here: https://github.com/Wertik/Items/blob/master/src/main/resources/plugin.yml )
-     * - Added all remaining strings to language ( please inform me if I forgot something )
-     */
-
-    @Getter
-    private static ItemsPlugin instance;
+    public static ItemsPlugin getInstance() {
+        return getPlugin(ItemsPlugin.class);
+    }
 
     @Getter
     private final List<String> actionNames = new ArrayList<>(Arrays.asList("right_click", "left_click", "shift_left_click", "shift_right_click"));
@@ -84,57 +72,50 @@ public class ItemsPlugin extends DevportPlugin {
     public boolean usePlaceholderAPI = false;
 
     @Override
+    public UsageFlag[] usageFlags() {
+        return new UsageFlag[]{UsageFlag.COMMANDS, UsageFlag.CONFIGURATION, UsageFlag.LANGUAGE};
+    }
+
+    @Override
     public void onPluginEnable() {
-        instance = this;
-        setInstance(this);
 
-        setReloadMessagePath("Reload-Done");
-        getLanguageManager().setSetInternalDefaults(false);
-
-        CommandResult.NO_PERMISSION.setPath("No-Permissions");
-        CommandResult.NO_CONSOLE.setPath("Only-Players");
-        CommandResult.TOO_MANY_ARGS.setPath("Too-Many-Arguments");
-        CommandResult.NOT_ENOUGH_ARGS.setPath("Not-Enough-Arguments");
-        CommandResult.NO_PLAYER.setPath("Only-Console");
-        CommandResult.NOT_OPERATOR.setPath("Only-Operator");
-
-        new ItemsLanguage();
+        new ItemsLanguage(this);
 
         random = new Random();
 
         checkHooks();
 
         // Load attributes
-        attributeManager = new AttributeManager();
+        attributeManager = new AttributeManager(this);
         attributeManager.load();
         consoleOutput.info("Loaded " + attributeManager.getAttributeCache().size() + " attribute(s)..");
 
         // Initialize a cooldown handler
-        cooldownManager = new CooldownManager();
+        cooldownManager = new CooldownManager(this);
 
         // Load items
-        itemManager = new ItemManager();
+        itemManager = new ItemManager(this);
         itemManager.loadItems();
         consoleOutput.info("Loaded " + itemManager.getItems().size() + " item(s)..");
 
-        new ItemListener();
-        new CraftListener();
+        new ItemListener(this);
+        new CraftListener(this);
 
         addMainCommand(new ItemsCommand("items")
-                .addSubCommand(new Detail("detail"))
-                .addSubCommand(new DropItem("drop"))
-                .addSubCommand(new GiveItem("give"))
-                .addSubCommand(new ListItems("list"))
-                .addSubCommand(new LoadItem("load"))
-                .addSubCommand(new Reload("reload"))
-                .addSubCommand(new RemoveItem("remove"))
-                .addSubCommand(new SaveItem("save")));
+                .addSubCommand(new Detail(this))
+                .addSubCommand(new DropItem(this))
+                .addSubCommand(new GiveItem(this))
+                .addSubCommand(new ListItems(this))
+                .addSubCommand(new LoadItem(this))
+                .addSubCommand(new Reload(this))
+                .addSubCommand(new RemoveItem(this))
+                .addSubCommand(new SaveItem(this)));
 
         addMainCommand(new AttributesCommand("attributes")
-                .addSubCommand(new AddAttribute("add"))
-                .addSubCommand(new RemoveAttribute("remove"))
-                .addSubCommand(new ListAttributes("list"))
-                .addSubCommand(new ClearAttributes("clear")));
+                .addSubCommand(new AddAttribute(this))
+                .addSubCommand(new RemoveAttribute(this))
+                .addSubCommand(new ListAttributes(this))
+                .addSubCommand(new ClearAttributes(this)));
 
         addMainCommand(new Lore("lore")
                 .addSubCommand(new AddLore("add"))
@@ -179,21 +160,6 @@ public class ItemsPlugin extends DevportPlugin {
         consoleOutput.info("Loaded " + attributeManager.getAttributeCache().size() + " attribute(s)..");
 
         cooldownManager.getCooldownCache().clear();
-    }
-
-    @Override
-    public boolean useLanguage() {
-        return true;
-    }
-
-    @Override
-    public boolean useHolograms() {
-        return false;
-    }
-
-    @Override
-    public boolean useMenus() {
-        return false;
     }
 
     private void checkHooks() {

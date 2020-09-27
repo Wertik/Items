@@ -1,13 +1,13 @@
 package space.devport.wertik.items.commands.utility.enchants;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import space.devport.utils.commands.MainCommand;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
 import space.devport.utils.text.message.Message;
+import space.devport.utils.xseries.XEnchantment;
 import space.devport.wertik.items.commands.CommandUtils;
 import space.devport.wertik.items.utils.Utils;
 
@@ -36,9 +36,9 @@ public class Enchants extends MainCommand {
 
         Message enchants = new Message(language.getPrefixed("Enchants-List"));
 
-        for (Map.Entry<Enchantment, Integer> entry : builder.getEnchants().entrySet()) {
+        for (Map.Entry<XEnchantment, Integer> entry : builder.getEnchants().entrySet()) {
             enchants.append(language.get("Enchants-List-Line")
-                    .replace("%enchantment%", entry.getKey().getName())
+                    .replace("%enchantment%", entry.getKey().name())
                     .replace("%level%", entry.getKey()));
         }
 

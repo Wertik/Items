@@ -17,13 +17,16 @@ import java.util.UUID;
 
 public class ItemManager {
 
+    private final ItemsPlugin plugin;
+
     private final Map<String, ItemBuilder> items = new HashMap<>();
 
     @Getter
     private final Configuration storage;
 
-    public ItemManager() {
-        storage = new Configuration(ItemsPlugin.getInstance(), "items");
+    public ItemManager(ItemsPlugin plugin) {
+        this.plugin = plugin;
+        storage = new Configuration(plugin, "items");
     }
 
     public void loadItems() {

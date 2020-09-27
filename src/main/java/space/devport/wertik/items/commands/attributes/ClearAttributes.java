@@ -4,23 +4,23 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
+import space.devport.wertik.items.commands.ItemsSubCommand;
 import space.devport.wertik.items.system.AttributeManager;
 import space.devport.wertik.items.utils.Utils;
 
-public class ClearAttributes extends SubCommand {
+public class ClearAttributes extends ItemsSubCommand {
 
     private final AttributeManager attributeManager;
 
-    public ClearAttributes(String name) {
-        super(name);
+    public ClearAttributes(ItemsPlugin plugin) {
+        super("clear", plugin);
         this.preconditions = new Preconditions().permissions("items.attributes.clear");
-        attributeManager = ItemsPlugin.getInstance().getAttributeManager();
+        attributeManager = plugin.getAttributeManager();
     }
 
     @Override

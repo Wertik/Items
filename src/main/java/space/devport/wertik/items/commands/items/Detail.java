@@ -1,7 +1,6 @@
 package space.devport.wertik.items.commands.items;
 
 import org.bukkit.command.CommandSender;
-import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
@@ -9,20 +8,21 @@ import space.devport.utils.item.ItemBuilder;
 import space.devport.utils.text.StringUtil;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
+import space.devport.wertik.items.commands.ItemsSubCommand;
 import space.devport.wertik.items.system.ItemManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Detail extends SubCommand {
+public class Detail extends ItemsSubCommand {
 
     private final ItemManager itemManager;
 
-    public Detail(String name) {
-        super(name);
+    public Detail(ItemsPlugin plugin) {
+        super("detail", plugin);
         this.preconditions = new Preconditions().permissions("items.manage.detail");
-        itemManager = ItemsPlugin.getInstance().getItemManager();
+        itemManager = plugin.getItemManager();
     }
 
     @Override
@@ -65,7 +65,7 @@ public class Detail extends SubCommand {
             sender.sendMessage(StringUtil.color("&eNBT:"));
 
             for (String key : builder.getNBT().keySet()) {
-                if (!ItemBuilder.getFilteredNBT().contains(key))
+                if (!ItemBuilder.FILTERED_NBT.contains(key))
                     sender.sendMessage(StringUtil.color(" &8- &7" + key + "&f:&7" + builder.getNBT().get(key)));
             }
         }

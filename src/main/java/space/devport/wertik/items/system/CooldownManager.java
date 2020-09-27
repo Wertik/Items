@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import space.devport.utils.text.language.LanguageManager;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.objects.Attribute;
 import space.devport.wertik.items.objects.Cooldown;
@@ -12,8 +13,14 @@ import java.util.*;
 
 public class CooldownManager {
 
+    private final ItemsPlugin plugin;
+
     @Getter
     private final Map<UUID, List<Cooldown>> cooldownCache = new HashMap<>();
+
+    public CooldownManager(ItemsPlugin plugin) {
+        this.plugin = plugin;
+    }
 
     public void addCooldown(Player player, Attribute attribute) {
         addCooldown(player.getUniqueId(), attribute);
@@ -35,7 +42,7 @@ public class CooldownManager {
 
         this.cooldownCache.put(uniqueID, cooldowns);
 
-        cooldown.runTaskLaterAsynchronously(ItemsPlugin.getInstance(), attribute.getCooldown() * 20);
+        cooldown.runTaskLaterAsynchronously(plugin, attribute.getCooldown() * 20);
     }
 
     public void removeCooldown(Player player, String attributeName) {
@@ -71,7 +78,7 @@ public class CooldownManager {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uniqueID);
 
         if (offlinePlayer.isOnline() && offlinePlayer.getPlayer() != null)
-            ItemsPlugin.getInstance().getLanguageManager().sendPrefixed(offlinePlayer.getPlayer(), "Cooldown-Expired");
+            plugin.getManager(LanguageManager.class).sendPrefixed(offlinePlayer.getPlayer(), "Cooldown-Expired");
     }
 
     public Cooldown getCooldown(Player player, String attributeName) {

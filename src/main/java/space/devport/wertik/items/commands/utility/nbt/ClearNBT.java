@@ -30,7 +30,7 @@ public class ClearNBT extends SubCommand {
         }
 
         for (String key : ItemNBTEditor.getNBTTagMap(item).keySet()) {
-            if (!ItemBuilder.getFilteredNBT().contains(key))
+            if (!ItemBuilder.FILTERED_NBT.contains(key))
                 item = ItemNBTEditor.removeNBT(item, key);
         }
 

@@ -9,6 +9,7 @@ import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
+import space.devport.utils.xseries.XEnchantment;
 import space.devport.wertik.items.utils.Utils;
 
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class RemoveEnchant extends SubCommand {
 
         if (args.length == 0) {
             ItemBuilder builder = Utils.getBuilderInHand((Player) sender);
-            suggestions = builder.getEnchants().keySet().stream().map(Enchantment::getName).collect(Collectors.toList());
+            suggestions = builder.getEnchants().keySet().stream().map(XEnchantment::name).collect(Collectors.toList());
         }
 
         Collections.sort(suggestions);

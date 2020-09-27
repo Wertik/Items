@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import space.devport.utils.item.ItemBuilder;
 import space.devport.utils.text.StringUtil;
+import space.devport.utils.text.language.LanguageManager;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.utils.Utils;
 
@@ -16,7 +17,7 @@ import space.devport.wertik.items.utils.Utils;
 public class CommandUtils {
     public boolean checkAir(CommandSender sender, ItemStack item) {
         if (item.getType() == Material.AIR) {
-            ItemsPlugin.getInstance().getLanguageManager().sendPrefixed(sender, "Cannot-Help-With-Air");
+            ItemsPlugin.getInstance().getManager(LanguageManager.class).sendPrefixed(sender, "Cannot-Help-With-Air");
             return true;
         } else return false;
     }
@@ -31,7 +32,7 @@ public class CommandUtils {
 
     public boolean checkItemStored(CommandSender sender, String name) {
         if (!ItemsPlugin.getInstance().getItemManager().getItems().containsKey(name)) {
-            ItemsPlugin.getInstance().getLanguageManager()
+            ItemsPlugin.getInstance().getManager(LanguageManager.class)
                     .getPrefixed("Item-Not-Valid")
                     .replace("%item%", name)
                     .send(sender);
@@ -81,7 +82,7 @@ public class CommandUtils {
         // Enchants
         if (!builder.getEnchants().isEmpty()) {
             sender.sendMessage(StringUtil.color("&eEnchants:"));
-            builder.getEnchants().forEach((enchantment, level) -> sender.sendMessage(StringUtil.color(" &8- &7" + enchantment.getName() + "&f;&7" + level)));
+            builder.getEnchants().forEach((enchantment, level) -> sender.sendMessage(StringUtil.color(" &8- &7" + enchantment.name() + "&f;&7" + level)));
         }
 
         // Flags
@@ -95,8 +96,8 @@ public class CommandUtils {
             sender.sendMessage(StringUtil.color("&eNBT:"));
 
             for (String key : builder.getNBT().keySet()) {
-                if (!ItemBuilder.getFilteredNBT().contains(key))
-                    sender.sendMessage(StringUtil.color(" &8- &7" + key + "&f:&7" + builder.getNBT().get(key)));
+                if (!ItemBuilder.FILTERED_NBT.contains(key))
+                    sender.sendMessage(StringUtil.color(" &8- &7" + key + "&f:&7" + builder.getNBT().get(key).toString()));
             }
         }
     }

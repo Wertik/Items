@@ -3,13 +3,13 @@ package space.devport.wertik.items.commands.attributes;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.text.message.Message;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
+import space.devport.wertik.items.commands.ItemsSubCommand;
 import space.devport.wertik.items.system.AttributeManager;
 import space.devport.wertik.items.utils.Utils;
 
@@ -18,14 +18,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class ListAttributes extends SubCommand {
+public class ListAttributes extends ItemsSubCommand {
 
     private final AttributeManager attributeManager;
 
-    public ListAttributes(String name) {
-        super(name);
+    public ListAttributes(ItemsPlugin plugin) {
+        super("list", plugin);
         this.preconditions = new Preconditions().permissions("items.attributes.list");
-        attributeManager = ItemsPlugin.getInstance().getAttributeManager();
+        attributeManager = plugin.getAttributeManager();
     }
 
     @Override

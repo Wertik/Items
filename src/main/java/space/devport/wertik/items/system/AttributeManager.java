@@ -18,6 +18,8 @@ import java.util.Map;
 
 public class AttributeManager {
 
+    private final ItemsPlugin plugin;
+
     @Getter
     private final Map<String, Attribute> attributeCache = new HashMap<>();
 
@@ -25,10 +27,14 @@ public class AttributeManager {
         return this.attributeCache.get(attributeName);
     }
 
+    public AttributeManager(ItemsPlugin plugin) {
+        this.plugin = plugin;
+    }
+
     public void load() {
 
         attributeCache.clear();
-        Configuration storage = new Configuration(ItemsPlugin.getInstance(), "attributes");
+        Configuration storage = new Configuration(plugin, "attributes");
 
         FileConfiguration yaml = storage.getFileConfiguration();
 
@@ -64,6 +70,7 @@ public class AttributeManager {
 
     // Get all attributes on an item
     public Map<String, String> getAttributes(ItemStack item) {
+
         Map<String, String> actionMap = ItemNBTEditor.hasNBT(item) ? ItemNBTEditor.getNBTTagMap(item) : new HashMap<>();
 
         // Remove unwanted NBT data
@@ -108,15 +115,14 @@ public class AttributeManager {
     public Attribute getAttribute(ItemStack item, String action) {
         for (String key : ItemNBTEditor.getNBTTagMap(item).keySet()) {
             if (key.equalsIgnoreCase(action)) {
-                return ItemsPlugin.getInstance().getAttributeManager().getAttribute(ItemNBTEditor.getNBT(item, key));
+                return plugin.getAttributeManager().getAttribute(ItemNBTEditor.getString(item, key));
             }
         }
-
         return null;
     }
 
     public boolean hasAttribute(ItemStack item) {
-        return ItemsPlugin.getInstance().getActionNames().stream().anyMatch(key -> ItemNBTEditor.hasNBTKey(item, key));
+        return plugin.getActionNames().stream().anyMatch(key -> ItemNBTEditor.hasNBTKey(item, key));
     }
 
     // items_uses : "<attribute>:<uses>;<attribute>:<uses>"
@@ -133,7 +139,7 @@ public class AttributeManager {
         if (!ItemNBTEditor.hasNBTKey(item, "items_uses"))
             return usesMap;
 
-        String dataString = ItemNBTEditor.getNBT(item, "items_uses");
+        String dataString = ItemNBTEditor.getString(item, "items_uses");
 
         if (!dataString.contains(":"))
             return usesMap;
@@ -167,10 +173,10 @@ public class AttributeManager {
 
             if (!getUses(item).containsKey(attributeName)) {
                 // Append the attribute uses
-                item = ItemNBTEditor.writeNBT(item, "items_uses", ItemNBTEditor.getNBT(item, "items_uses") + ";" + attributeName + ":" + uses);
+                item = ItemNBTEditor.writeNBT(item, "items_uses", ItemNBTEditor.getString(item, "items_uses") + ";" + attributeName + ":" + uses);
             } else {
                 // Replace with new value
-                item = ItemNBTEditor.writeNBT(item, "items_uses", ItemNBTEditor.getNBT(item, "items_uses")
+                item = ItemNBTEditor.writeNBT(item, "items_uses", ItemNBTEditor.getString(item, "items_uses")
                         .replace(attributeName + ":" + getUses(item, attributeName), attributeName + ":" + uses));
             }
         } else {

@@ -5,12 +5,12 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
+import space.devport.wertik.items.commands.ItemsSubCommand;
 import space.devport.wertik.items.system.ItemManager;
 
 import java.util.ArrayList;
@@ -18,16 +18,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class GiveItem extends SubCommand {
+public class GiveItem extends ItemsSubCommand {
 
     private final ItemManager itemManager;
 
-    public GiveItem(String name) {
-        super(name);
+    public GiveItem(ItemsPlugin plugin) {
+        super("give", plugin);
         this.preconditions = new Preconditions().permissions("items.manage.give");
-
         setAliases("get");
-        itemManager = ItemsPlugin.getInstance().getItemManager();
+        itemManager = plugin.getItemManager();
     }
 
     @Override

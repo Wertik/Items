@@ -4,12 +4,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
+import space.devport.wertik.items.commands.ItemsSubCommand;
 import space.devport.wertik.items.system.AttributeManager;
 import space.devport.wertik.items.utils.Utils;
 
@@ -17,14 +17,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class RemoveAttribute extends SubCommand {
+public class RemoveAttribute extends ItemsSubCommand {
 
     private final AttributeManager attributeManager;
 
-    public RemoveAttribute(String name) {
-        super(name);
+    public RemoveAttribute(ItemsPlugin plugin) {
+        super("remove", plugin);
         this.preconditions = new Preconditions().permissions("items.attributes.remove");
-        attributeManager = ItemsPlugin.getInstance().getAttributeManager();
+        attributeManager = plugin.getAttributeManager();
     }
 
     @Override

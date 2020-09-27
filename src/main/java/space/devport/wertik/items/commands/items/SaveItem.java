@@ -3,12 +3,12 @@ package space.devport.wertik.items.commands.items;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
+import space.devport.wertik.items.commands.ItemsSubCommand;
 import space.devport.wertik.items.system.ItemManager;
 import space.devport.wertik.items.utils.Utils;
 
@@ -16,13 +16,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class SaveItem extends SubCommand {
+public class SaveItem extends ItemsSubCommand {
 
     private final ItemManager itemManager;
 
-    public SaveItem(String name) {
-        super(name);
-        itemManager = ItemsPlugin.getInstance().getItemManager();
+    public SaveItem(ItemsPlugin plugin) {
+        super("save", plugin);
+        itemManager = plugin.getItemManager();
         this.preconditions = new Preconditions()
                 .playerOnly()
                 .permissions("items.manage.give");

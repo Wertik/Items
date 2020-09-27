@@ -6,19 +6,20 @@ import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.wertik.items.ItemsPlugin;
+import space.devport.wertik.items.commands.ItemsSubCommand;
 import space.devport.wertik.items.system.ItemManager;
 import space.devport.wertik.items.utils.Utils;
 
 import java.util.ArrayList;
 
-public class ListItems extends SubCommand {
+public class ListItems extends ItemsSubCommand {
 
     private final ItemManager itemManager;
 
-    public ListItems(String name) {
-        super(name);
+    public ListItems(ItemsPlugin plugin) {
+        super("list", plugin);
         this.preconditions = new Preconditions().permissions("items.manage.list");
-        itemManager = ItemsPlugin.getInstance().getItemManager();
+        itemManager = plugin.getItemManager();
     }
 
     @Override

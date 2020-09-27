@@ -1,26 +1,26 @@
 package space.devport.wertik.items.commands.items;
 
 import org.bukkit.command.CommandSender;
-import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
+import space.devport.wertik.items.commands.ItemsSubCommand;
 import space.devport.wertik.items.system.ItemManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class LoadItem extends SubCommand {
+public class LoadItem extends ItemsSubCommand {
 
     private final ItemManager itemManager;
 
-    public LoadItem(String name) {
-        super(name);
+    public LoadItem(ItemsPlugin plugin) {
+        super("load", plugin);
         this.preconditions = new Preconditions().permissions("items.manage.load");
-        itemManager = ItemsPlugin.getInstance().getItemManager();
+        itemManager = plugin.getItemManager();
     }
 
     @Override
@@ -36,8 +36,8 @@ public class LoadItem extends SubCommand {
             return CommandResult.SUCCESS;
         }
 
-        ItemsPlugin.getInstance().getItemManager().getStorage().load();
-        ItemsPlugin.getInstance().getItemManager().loadItems();
+        itemManager.getStorage().load();
+        itemManager.loadItems();
         language.sendPrefixed(sender, "Items-Loaded");
         return CommandResult.SUCCESS;
     }
