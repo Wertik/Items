@@ -5,13 +5,14 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
 import space.devport.wertik.items.commands.ItemsSubCommand;
-import space.devport.wertik.items.system.ItemManager;
+import space.devport.wertik.items.system.item.ItemManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -100,7 +101,7 @@ public class GiveItem extends ItemsSubCommand {
     }
 
     @Override
-    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+    public @NotNull List<String> requestTabComplete(CommandSender sender, String[] args) {
         List<String> suggestions = new ArrayList<>();
 
         if (args.length == 0) {

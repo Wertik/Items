@@ -1,4 +1,4 @@
-package space.devport.wertik.items.system;
+package space.devport.wertik.items.system.attribute;
 
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
@@ -9,8 +9,8 @@ import space.devport.utils.item.ItemNBTEditor;
 import space.devport.utils.text.message.CachedMessage;
 import space.devport.utils.text.message.Message;
 import space.devport.wertik.items.ItemsPlugin;
-import space.devport.wertik.items.objects.Attribute;
-import space.devport.wertik.items.objects.Reward;
+import space.devport.wertik.items.system.attribute.struct.Attribute;
+import space.devport.wertik.items.system.attribute.struct.Reward;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,7 +75,7 @@ public class AttributeManager {
 
         // Remove unwanted NBT data
         for (String key : new ArrayList<>(actionMap.keySet())) {
-            if (!ItemsPlugin.getInstance().getActionNames().contains(key.toLowerCase())) {
+            if (!ItemsPlugin.ACTIONS.contains(key.toLowerCase())) {
                 actionMap.remove(key);
             }
         }
@@ -122,7 +122,8 @@ public class AttributeManager {
     }
 
     public boolean hasAttribute(ItemStack item) {
-        return plugin.getActionNames().stream().anyMatch(key -> ItemNBTEditor.hasNBTKey(item, key));
+        return ItemsPlugin.ACTIONS.stream()
+                .anyMatch(key -> ItemNBTEditor.hasNBTKey(item, key));
     }
 
     // items_uses : "<attribute>:<uses>;<attribute>:<uses>"

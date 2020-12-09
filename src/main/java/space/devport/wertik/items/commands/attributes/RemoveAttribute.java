@@ -4,14 +4,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.wertik.items.ItemsPlugin;
+import space.devport.wertik.items.util.ItemUtil;
 import space.devport.wertik.items.commands.CommandUtils;
 import space.devport.wertik.items.commands.ItemsSubCommand;
-import space.devport.wertik.items.system.AttributeManager;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.system.attribute.AttributeManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +32,7 @@ public class RemoveAttribute extends ItemsSubCommand {
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
 
         Player player = (Player) sender;
-        ItemStack item = Utils.getItemInHand(player);
+        ItemStack item = ItemUtil.getItemInHand(player);
 
         if (CommandUtils.checkAir(player, item)) return CommandResult.FAILURE;
 
@@ -48,13 +49,13 @@ public class RemoveAttribute extends ItemsSubCommand {
         String param = args[0].toLowerCase();
 
         if (attributeManager.getAttributes(item).containsKey(param)) {
-            Utils.setItem(player, EquipmentSlot.HAND, attributeManager.removeAction(item, param));
+            ItemUtil.setItem(player, EquipmentSlot.HAND, attributeManager.removeAction(item, param));
             language.getPrefixed("Attribute-Removed").replace("%attribute%", param).send(sender);
             return CommandResult.SUCCESS;
         }
 
         if (attributeManager.getAttributes(item).containsValue(param)) {
-            Utils.setItem(player, EquipmentSlot.HAND, attributeManager.removeAttribute(item, param));
+            ItemUtil.setItem(player, EquipmentSlot.HAND, attributeManager.removeAttribute(item, param));
             language.getPrefixed("Attribute-Removed").replace("%attribute%", param).send(sender);
             return CommandResult.SUCCESS;
         }
@@ -64,12 +65,12 @@ public class RemoveAttribute extends ItemsSubCommand {
     }
 
     @Override
-    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+    public @NotNull List<String> requestTabComplete(CommandSender sender, String[] args) {
         List<String> suggestions = new ArrayList<>();
 
         if (args.length == 0) {
             Player player = (Player) sender;
-            ItemStack item = Utils.getItemInHand(player);
+            ItemStack item = ItemUtil.getItemInHand(player);
 
             suggestions.addAll(attributeManager.getAttributes(item).keySet());
             suggestions.addAll(attributeManager.getAttributes(item).values());

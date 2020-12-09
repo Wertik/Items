@@ -1,38 +1,26 @@
 package space.devport.wertik.items;
 
 import lombok.Getter;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import space.devport.utils.DevportPlugin;
 import space.devport.utils.UsageFlag;
-import space.devport.wertik.items.commands.attributes.*;
-import space.devport.wertik.items.commands.items.*;
-import space.devport.wertik.items.commands.utility.SetName;
-import space.devport.wertik.items.commands.utility.SetType;
-import space.devport.wertik.items.commands.utility.enchants.AddEnchant;
-import space.devport.wertik.items.commands.utility.enchants.ClearEnchants;
-import space.devport.wertik.items.commands.utility.enchants.Enchants;
-import space.devport.wertik.items.commands.utility.enchants.RemoveEnchant;
-import space.devport.wertik.items.commands.utility.extra.ItemExtra;
-import space.devport.wertik.items.commands.utility.extra.UnCraft;
-import space.devport.wertik.items.commands.utility.extra.UnPlace;
-import space.devport.wertik.items.commands.utility.extra.UnStack;
-import space.devport.wertik.items.commands.utility.flags.AddFlag;
-import space.devport.wertik.items.commands.utility.flags.ClearFlags;
-import space.devport.wertik.items.commands.utility.flags.Flags;
-import space.devport.wertik.items.commands.utility.flags.RemoveFlag;
-import space.devport.wertik.items.commands.utility.lore.AddLore;
-import space.devport.wertik.items.commands.utility.lore.ClearLore;
-import space.devport.wertik.items.commands.utility.lore.Lore;
-import space.devport.wertik.items.commands.utility.lore.RemoveLore;
-import space.devport.wertik.items.commands.utility.nbt.AddNBT;
-import space.devport.wertik.items.commands.utility.nbt.ClearNBT;
-import space.devport.wertik.items.commands.utility.nbt.NBT;
-import space.devport.wertik.items.commands.utility.nbt.RemoveNBT;
+import space.devport.wertik.items.commands.attributes.AttributesCommand;
+import space.devport.wertik.items.commands.items.ItemsCommand;
+import space.devport.wertik.items.commands.utility.DetailCommand;
+import space.devport.wertik.items.commands.utility.SetNameCommand;
+import space.devport.wertik.items.commands.utility.SetTypeCommand;
+import space.devport.wertik.items.commands.utility.enchants.EnchantCommand;
+import space.devport.wertik.items.commands.utility.extra.ItemExtraCommand;
+import space.devport.wertik.items.commands.utility.flags.FlagCommand;
+import space.devport.wertik.items.commands.utility.lore.LoreCommand;
+import space.devport.wertik.items.commands.utility.nbt.NBTCommand;
 import space.devport.wertik.items.listeners.CraftListener;
 import space.devport.wertik.items.listeners.ItemListener;
-import space.devport.wertik.items.system.AttributeManager;
-import space.devport.wertik.items.system.CooldownManager;
-import space.devport.wertik.items.system.ItemManager;
+import space.devport.wertik.items.system.attribute.AttributeManager;
+import space.devport.wertik.items.system.cooldown.CooldownManager;
+import space.devport.wertik.items.system.item.ItemManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,8 +44,7 @@ public class ItemsPlugin extends DevportPlugin {
         return getPlugin(ItemsPlugin.class);
     }
 
-    @Getter
-    private final List<String> actionNames = new ArrayList<>(Arrays.asList("right_click", "left_click", "shift_left_click", "shift_right_click"));
+    public static final List<String> ACTIONS = new ArrayList<>(Arrays.asList("right_click", "left_click", "shift_left_click", "shift_right_click"));
 
     @Getter
     private ItemManager itemManager;
@@ -69,7 +56,8 @@ public class ItemsPlugin extends DevportPlugin {
     @Getter
     private Random random;
 
-    public boolean usePlaceholderAPI = false;
+    @Getter
+    private boolean usePlaceholderAPI = false;
 
     @Override
     public UsageFlag[] usageFlags() {
@@ -101,50 +89,19 @@ public class ItemsPlugin extends DevportPlugin {
         new ItemListener(this);
         new CraftListener(this);
 
-        addMainCommand(new ItemsCommand("items")
-                .addSubCommand(new Detail(this))
-                .addSubCommand(new DropItem(this))
-                .addSubCommand(new GiveItem(this))
-                .addSubCommand(new ListItems(this))
-                .addSubCommand(new LoadItem(this))
-                .addSubCommand(new Reload(this))
-                .addSubCommand(new RemoveItem(this))
-                .addSubCommand(new SaveItem(this)));
+        addMainCommand(new ItemsCommand(this));
 
-        addMainCommand(new AttributesCommand("attributes")
-                .addSubCommand(new AddAttribute(this))
-                .addSubCommand(new RemoveAttribute(this))
-                .addSubCommand(new ListAttributes(this))
-                .addSubCommand(new ClearAttributes(this)));
+        addMainCommand(new AttributesCommand(this));
 
-        addMainCommand(new Lore("lore")
-                .addSubCommand(new AddLore("add"))
-                .addSubCommand(new RemoveLore("remove"))
-                .addSubCommand(new ClearLore("clear")));
+        addMainCommand(new LoreCommand(this));
+        addMainCommand(new EnchantCommand(this));
+        addMainCommand(new FlagCommand(this));
+        addMainCommand(new NBTCommand());
+        addMainCommand(new ItemExtraCommand(this));
 
-        addMainCommand(new Flags("flags")
-                .addSubCommand(new AddFlag("add"))
-                .addSubCommand(new RemoveFlag("remove"))
-                .addSubCommand(new ClearFlags("clear")));
-
-        addMainCommand(new Enchants("enchants")
-                .addSubCommand(new AddEnchant("add"))
-                .addSubCommand(new RemoveEnchant("remove"))
-                .addSubCommand(new ClearEnchants("clear")));
-
-        addMainCommand(new ItemExtra("itemextra")
-                .addSubCommand(new UnPlace("unplace"))
-                .addSubCommand(new UnStack("unstack"))
-                .addSubCommand(new UnCraft("uncraft")));
-
-        addMainCommand(new NBT("nbt")
-                .addSubCommand(new AddNBT("add"))
-                .addSubCommand(new RemoveNBT("remove"))
-                .addSubCommand(new ClearNBT("clear")));
-
-        addMainCommand(new SetName("setname"));
-        addMainCommand(new SetType("settype"));
-        addMainCommand(new space.devport.wertik.items.commands.utility.Detail("detail"));
+        addMainCommand(new SetNameCommand());
+        addMainCommand(new SetTypeCommand());
+        addMainCommand(new DetailCommand());
     }
 
     @Override
@@ -173,5 +130,13 @@ public class ItemsPlugin extends DevportPlugin {
             this.usePlaceholderAPI = false;
             consoleOutput.info("Couldn't find PlaceholderAPI, disabling placeholder usage.");
         }
+    }
+
+    public static void executeConsoleCommand(String command) {
+        Bukkit.getScheduler().runTask(getInstance(), () -> Bukkit.dispatchCommand(getInstance().getServer().getConsoleSender(), command));
+    }
+
+    public static void executePlayerCommand(Player player, String command) {
+        Bukkit.getScheduler().runTask(getInstance(), () -> player.performCommand(command));
     }
 }

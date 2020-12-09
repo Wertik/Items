@@ -11,9 +11,9 @@ import space.devport.utils.DevportListener;
 import space.devport.utils.text.language.LanguageManager;
 import space.devport.utils.utility.reflection.ServerVersion;
 import space.devport.wertik.items.ItemsPlugin;
-import space.devport.wertik.items.objects.Attribute;
-import space.devport.wertik.items.objects.Reward;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.ItemUtil;
+import space.devport.wertik.items.system.attribute.struct.Attribute;
+import space.devport.wertik.items.system.attribute.struct.Reward;
 
 public class ItemListener extends DevportListener {
 
@@ -32,8 +32,7 @@ public class ItemListener extends DevportListener {
 
         ItemStack item = event.getItem();
 
-        if (item == null ||
-                item.getType() == Material.AIR) return;
+        if (item == null || item.getType() == Material.AIR) return;
 
         // Unplaceable check
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK &&
@@ -41,7 +40,8 @@ public class ItemListener extends DevportListener {
             event.setCancelled(true);
         }
 
-        if (!plugin.getAttributeManager().hasAttribute(item)) return;
+        if (!plugin.getAttributeManager().hasAttribute(item))
+            return;
 
         event.setCancelled(true);
 
@@ -54,7 +54,7 @@ public class ItemListener extends DevportListener {
 
         plugin.getConsoleOutput().debug("Action: " + action);
 
-        if (!plugin.getActionNames().contains(action))
+        if (!ItemsPlugin.ACTIONS.contains(action))
             return;
 
         Attribute attribute = plugin.getAttributeManager().getAttribute(item, action);
@@ -62,7 +62,7 @@ public class ItemListener extends DevportListener {
         if (attribute == null) return;
 
         // If the item is not usable, send a message and return
-        if (!plugin.getCooldownManager().isUsable(player, attribute.getName())) {
+        if (!plugin.getCooldownManager().triggerCooldown(player, attribute)) {
 
             double cooldownTime = plugin.getCooldownManager().getTimeRemaining(player, attribute.getName()) / 1000D;
 
@@ -72,7 +72,7 @@ public class ItemListener extends DevportListener {
             return;
         }
 
-        EquipmentSlot hand = ServerVersion.isBelowCurrent(ServerVersion.v1_8) ? null : event.getHand();
+        EquipmentSlot hand = ServerVersion.isCurrentBelow(ServerVersion.v1_8) ? null : event.getHand();
 
         int uses = plugin.getAttributeManager().getUses(item, attribute.getName());
 
@@ -81,9 +81,9 @@ public class ItemListener extends DevportListener {
             // Consume if above
             if ((uses + 1) >= attribute.getUseLimit()) {
                 plugin.getManager(LanguageManager.class).sendPrefixed(player, "Item-Use-Limit");
-                Utils.consumeItem(player, hand, item);
+                ItemUtil.consumeItem(player, hand, item);
             } else
-                Utils.setItem(player, hand, plugin.getAttributeManager().addUse(item, attribute.getName()));
+                ItemUtil.setItem(player, hand, plugin.getAttributeManager().addUse(item, attribute.getName()));
 
             uses++;
         }
@@ -99,7 +99,5 @@ public class ItemListener extends DevportListener {
                 .add("%cooldown%", String.valueOf(attribute.getCooldown() / 1000D));
 
         reward.give(event.getPlayer());
-
-        plugin.getCooldownManager().addCooldown(player, attribute);
     }
 }

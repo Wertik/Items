@@ -8,15 +8,21 @@ import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
 import space.devport.utils.text.message.Message;
 import space.devport.wertik.items.commands.CommandUtils;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.ItemUtil;
 
 import java.util.Map;
 
-public class NBT extends MainCommand {
+public class NBTCommand extends MainCommand {
 
-    public NBT(String name) {
-        super(name);
-        this.preconditions = new Preconditions().playerOnly().permissions("items.utility.nbt");
+    public NBTCommand() {
+        super("nbt");
+        this.preconditions = new Preconditions()
+                .permissions("items.utility.nbt")
+                .playerOnly();
+
+        addSubCommand(new AddNBT());
+        addSubCommand(new ClearNBT());
+        addSubCommand(new RemoveNBT());
     }
 
     @Override
@@ -28,7 +34,7 @@ public class NBT extends MainCommand {
 
         Player player = (Player) sender;
 
-        ItemBuilder builder = Utils.getBuilderInHand(player);
+        ItemBuilder builder = ItemUtil.getBuilderInHand(player);
 
         // NBT
         if (builder.getNBT().isEmpty()) {

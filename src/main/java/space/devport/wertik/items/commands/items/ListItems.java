@@ -1,14 +1,13 @@
 package space.devport.wertik.items.commands.items;
 
 import org.bukkit.command.CommandSender;
-import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.ItemsSubCommand;
-import space.devport.wertik.items.system.ItemManager;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.system.item.ItemManager;
+import space.devport.wertik.items.util.StringUtil;
 
 import java.util.ArrayList;
 
@@ -26,7 +25,7 @@ public class ListItems extends ItemsSubCommand {
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
         language.getPrefixed("Items-List")
                 .replace("%items%",
-                        Utils.listToString(new ArrayList<>(itemManager.getItems().keySet()),
+                        StringUtil.listToString(new ArrayList<>(itemManager.getItems().keySet()),
                                 language.get("List-Splitter").color().toString(),
                                 language.get("No-Items-Saved").color().toString()))
                 .send(sender);

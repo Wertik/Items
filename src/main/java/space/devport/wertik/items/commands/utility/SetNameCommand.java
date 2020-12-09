@@ -7,17 +7,16 @@ import space.devport.utils.commands.MainCommand;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
-import space.devport.utils.text.StringUtil;
 import space.devport.wertik.items.commands.CommandUtils;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.ItemUtil;
 
-public class SetName extends MainCommand {
+public class SetNameCommand extends MainCommand {
 
-    public SetName(String name) {
-        super(name);
+    public SetNameCommand() {
+        super("setname");
         this.preconditions = new Preconditions()
-                .playerOnly()
-                .permissions("items.utility.setname");
+                .permissions("items.utility.setname")
+                .playerOnly();
     }
 
     @Override
@@ -25,12 +24,12 @@ public class SetName extends MainCommand {
 
         Player player = (Player) sender;
 
-        if (CommandUtils.checkAir(player, Utils.getItemInHand(player))) return CommandResult.FAILURE;
+        if (CommandUtils.checkAir(player, ItemUtil.getItemInHand(player))) return CommandResult.FAILURE;
 
-        ItemBuilder builder = Utils.getBuilderInHand(player);
+        ItemBuilder builder = ItemUtil.getBuilderInHand(player);
 
-        builder.displayName(StringUtil.color(String.join(" ", args)));
-        Utils.setItem(player, EquipmentSlot.HAND, builder.build());
+        builder.displayName(space.devport.utils.text.StringUtil.color(String.join(" ", args)));
+        ItemUtil.setItem(player, EquipmentSlot.HAND, builder.build());
 
         language.sendPrefixed(sender, "Item-Renamed");
         return CommandResult.SUCCESS;

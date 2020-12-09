@@ -4,15 +4,21 @@ import org.bukkit.command.CommandSender;
 import space.devport.utils.commands.MainCommand;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
+import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
 
-public class ItemExtra extends MainCommand {
+public class ItemExtraCommand extends MainCommand {
 
-    public ItemExtra(String name) {
-        super(name);
+    public ItemExtraCommand(ItemsPlugin plugin) {
+        super("itemextra");
+
         this.preconditions = new Preconditions()
                 .playerOnly()
                 .permissions("items.utility.extra");
+
+        addSubCommand(new UnPlace(plugin));
+        addSubCommand(new UnStack(plugin));
+        addSubCommand(new UnCraft(plugin));
     }
 
     @Override

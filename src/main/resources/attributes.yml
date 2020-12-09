@@ -1,9 +1,10 @@
-# Attribute Configuration for ${project.name}
+# Attribute configuration for ${project.name}
 #
 # Version: ${project.version}
 
 # Attribute name
 attribute-one:
+
   # Commands to run when the item is used
   # p! - commands ran as player
   # op! - executed as player with OP
@@ -14,15 +15,20 @@ attribute-one:
     - 'random! p! me I say. Wooohoo!'
     - 'p! say Woooohooo! indeed.'
     - 'op! pl'
-  # Item cooldown in seconds
-  # No cooldown when not specified
+
+  # Attribute cooldown in seconds
+  # Delete to set no cooldown.
   cooldown: 5
+
   # How many times can this item be used before being consumed.
   # Unlimited when 0 or not specified
   use-limit: 1
+
 the-second-attribute:
+
   commands:
     - 'give %player% diamond 1'
+
   # Messages can be either one line, or multiple.
   # Sent to the player only.
   inform:
@@ -30,8 +36,10 @@ the-second-attribute:
     - '&7Left uses: &7%uses%&f/&e%use_limit%'
     - '&7Cooldown: &f%cooldown% &7seconds.'
     - ' '
+
   use-limit: 5
   cooldown: 10
+
   # Broadcasted to the server.
   broadcast:
     - '&8&m        &e Epic Item used'

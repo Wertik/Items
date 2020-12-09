@@ -8,13 +8,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import space.devport.utils.item.ItemBuilder;
-import space.devport.utils.text.StringUtil;
 import space.devport.utils.text.language.LanguageManager;
 import space.devport.wertik.items.ItemsPlugin;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.ItemUtil;
 
 @UtilityClass
 public class CommandUtils {
+
     public boolean checkAir(CommandSender sender, ItemStack item) {
         if (item.getType() == Material.AIR) {
             ItemsPlugin.getInstance().getManager(LanguageManager.class).sendPrefixed(sender, "Cannot-Help-With-Air");
@@ -23,7 +23,7 @@ public class CommandUtils {
     }
 
     public boolean checkAir(Player player) {
-        return checkAir(player, Utils.getItemInHand(player));
+        return checkAir(player, ItemUtil.getItemInHand(player));
     }
 
     public boolean checkAir(CommandSender sender) {
@@ -61,48 +61,44 @@ public class CommandUtils {
     }
 
     public void sendDetail(CommandSender sender) {
-        sendDetail(sender, Utils.getBuilderInHand((Player) sender));
+        sendDetail(sender, ItemUtil.getBuilderInHand((Player) sender));
     }
 
     public void sendDetail(CommandSender sender, ItemBuilder builder) {
-        sender.sendMessage(StringUtil.color("&eName: &f" + (builder.getDisplayName().isEmpty() ? builder.getMaterial().toString() : builder.getDisplayName().toString())));
-        sender.sendMessage(StringUtil.color("&eMaterial: &f" + builder.getMaterial().name()));
-        sender.sendMessage(StringUtil.color("&eAmount: &f" + builder.getAmount()));
+        sender.sendMessage(space.devport.utils.text.StringUtil.color("&eName: &f" + (builder.getDisplayName().isEmpty() ? builder.getMaterial().toString() : builder.getDisplayName().toString())));
+        sender.sendMessage(space.devport.utils.text.StringUtil.color("&eMaterial: &f" + builder.getMaterial().name()));
+        sender.sendMessage(space.devport.utils.text.StringUtil.color("&eAmount: &f" + builder.getAmount()));
 
         // Lore
         if (!builder.getLore().getMessage().isEmpty()) {
-            sender.sendMessage(StringUtil.color("&eLore:"));
+            sender.sendMessage(space.devport.utils.text.StringUtil.color("&eLore:"));
             int i = 0;
             for (String line : builder.getLore().getMessage()) {
-                sender.sendMessage(StringUtil.color("&f " + i + " &8- &r" + line));
+                sender.sendMessage(space.devport.utils.text.StringUtil.color("&f " + i + " &8- &r" + line));
                 i++;
             }
         }
 
         // Enchants
         if (!builder.getEnchants().isEmpty()) {
-            sender.sendMessage(StringUtil.color("&eEnchants:"));
-            builder.getEnchants().forEach((enchantment, level) -> sender.sendMessage(StringUtil.color(" &8- &7" + enchantment.name() + "&f;&7" + level)));
+            sender.sendMessage(space.devport.utils.text.StringUtil.color("&eEnchants:"));
+            builder.getEnchants().forEach((enchantment, level) -> sender.sendMessage(space.devport.utils.text.StringUtil.color(" &8- &7" + enchantment.name() + "&f;&7" + level)));
         }
 
         // Flags
         if (!builder.getFlags().isEmpty()) {
-            sender.sendMessage(StringUtil.color("&eFlags:"));
-            builder.getFlags().forEach(flag -> sender.sendMessage(StringUtil.color(" &8- &7" + flag.toString())));
+            sender.sendMessage(space.devport.utils.text.StringUtil.color("&eFlags:"));
+            builder.getFlags().forEach(flag -> sender.sendMessage(space.devport.utils.text.StringUtil.color(" &8- &7" + flag.toString())));
         }
 
         // NBT
         if (!builder.getNBT().isEmpty()) {
-            sender.sendMessage(StringUtil.color("&eNBT:"));
+            sender.sendMessage(space.devport.utils.text.StringUtil.color("&eNBT:"));
 
             for (String key : builder.getNBT().keySet()) {
                 if (!ItemBuilder.FILTERED_NBT.contains(key))
-                    sender.sendMessage(StringUtil.color(" &8- &7" + key + "&f:&7" + builder.getNBT().get(key).toString()));
+                    sender.sendMessage(space.devport.utils.text.StringUtil.color(" &8- &7" + key + "&f:&7" + builder.getNBT().get(key)));
             }
         }
-    }
-
-    public void sendDetail(CommandSender sender, ItemStack item) {
-        sendDetail(sender, new ItemBuilder(item));
     }
 }

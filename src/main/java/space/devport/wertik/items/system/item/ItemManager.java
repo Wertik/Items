@@ -1,4 +1,4 @@
-package space.devport.wertik.items.system;
+package space.devport.wertik.items.system.item;
 
 import com.google.common.base.Strings;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import space.devport.utils.configuration.Configuration;
 import space.devport.utils.item.ItemBuilder;
 import space.devport.utils.item.ItemNBTEditor;
 import space.devport.wertik.items.ItemsPlugin;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.StringUtil;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -93,9 +93,9 @@ public class ItemManager {
     public ItemBuilder prepareBuilder(String name, Player player) {
         ItemBuilder builder = getBuilder(name);
 
-        builder.getDisplayName().setMessage(Utils.parsePlaceholders(builder.getDisplayName().getOriginal(), player));
+        builder.getDisplayName().setMessage(StringUtil.parsePlaceholders(builder.getDisplayName().getOriginal(), player));
 
-        builder.getLore().setMessage(Utils.parsePlaceholders(builder.getLore().getMessage(), player));
+        builder.getLore().setMessage(StringUtil.parsePlaceholders(builder.getLore().getMessage(), player));
 
         if (builder.getNBT().containsKey("items_unstackable")) {
             builder.removeNBT("items_unstackable")

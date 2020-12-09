@@ -8,28 +8,29 @@ import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.ItemUtil;
 
 import java.util.List;
 
 public class AddLore extends SubCommand {
 
-    public AddLore(String name) {
-        super(name);
-        this.preconditions = new Preconditions().permissions("items.utility.lore.add");
+    public AddLore() {
+        super("add");
+        this.preconditions = new Preconditions()
+                .permissions("items.utility.lore.add");
     }
 
     @Override
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
         Player player = (Player) sender;
 
-        ItemBuilder builder = Utils.getBuilderInHand(player);
+        ItemBuilder builder = ItemUtil.getBuilderInHand(player);
 
         List<String> lore = builder.getLore().getMessage();
         lore.add(String.join(" ", args));
         builder.lore(lore);
 
-        Utils.setItem(player, EquipmentSlot.HAND, builder.build());
+        ItemUtil.setItem(player, EquipmentSlot.HAND, builder.build());
         language.sendPrefixed(sender, "Line-Added");
         return CommandResult.SUCCESS;
     }

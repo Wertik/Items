@@ -3,15 +3,17 @@ package space.devport.wertik.items.commands.attributes;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.text.message.Message;
 import space.devport.wertik.items.ItemsPlugin;
+import space.devport.wertik.items.util.ItemUtil;
 import space.devport.wertik.items.commands.CommandUtils;
 import space.devport.wertik.items.commands.ItemsSubCommand;
-import space.devport.wertik.items.system.AttributeManager;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.system.attribute.AttributeManager;
+import space.devport.wertik.items.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,7 +37,7 @@ public class ListAttributes extends ItemsSubCommand {
 
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("hand") || args[0].equalsIgnoreCase("h")) {
-                ItemStack item = Utils.getItemInHand(player);
+                ItemStack item = ItemUtil.getItemInHand(player);
 
                 if (CommandUtils.checkAir(player, item)) return CommandResult.FAILURE;
 
@@ -54,7 +56,7 @@ public class ListAttributes extends ItemsSubCommand {
 
         language.getPrefixed("Attributes")
                 .replace("%attributes%",
-                        Utils.listToString(new ArrayList<>(attributeManager.getAttributeCache().keySet()),
+                        StringUtil.listToString(new ArrayList<>(attributeManager.getAttributeCache().keySet()),
                                 language.get("List-Splitter").color().toString(),
                                 language.get("No-Attributes").color().toString()))
                 .send(sender);
@@ -62,7 +64,7 @@ public class ListAttributes extends ItemsSubCommand {
     }
 
     @Override
-    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+    public @NotNull List<String> requestTabComplete(CommandSender sender, String[] args) {
         return args.length == 0 ? Collections.singletonList("hand") : new ArrayList<>();
     }
 

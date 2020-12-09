@@ -1,6 +1,7 @@
 package space.devport.wertik.items.commands.items;
 
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
@@ -9,7 +10,7 @@ import space.devport.utils.text.StringUtil;
 import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
 import space.devport.wertik.items.commands.ItemsSubCommand;
-import space.devport.wertik.items.system.ItemManager;
+import space.devport.wertik.items.system.item.ItemManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,7 +74,7 @@ public class Detail extends ItemsSubCommand {
     }
 
     @Override
-    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+    public @NotNull List<String> requestTabComplete(CommandSender sender, String[] args) {
         List<String> suggestions = new ArrayList<>();
 
         if (args.length == 0) {

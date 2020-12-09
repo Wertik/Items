@@ -4,12 +4,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
+import org.jetbrains.annotations.NotNull;
 import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.ItemUtil;
+import space.devport.wertik.items.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,17 +51,18 @@ public class AddEnchant extends SubCommand {
             return CommandResult.FAILURE;
         }
 
-        ItemBuilder builder = Utils.getBuilderInHand((Player) sender);
+        ItemBuilder builder = ItemUtil.getBuilderInHand((Player) sender);
 
         builder.addEnchant(enchantment, level);
 
-        Utils.setItem((Player) sender, EquipmentSlot.HAND, builder.build());
+        ItemUtil.setItem((Player) sender, EquipmentSlot.HAND, builder.build());
         language.sendPrefixed(sender, "Enchant-Added");
         return CommandResult.SUCCESS;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+    public @NotNull List<String> requestTabComplete(CommandSender sender, String[] args) {
         List<String> suggestions = new ArrayList<>();
 
         if (args.length == 0) {

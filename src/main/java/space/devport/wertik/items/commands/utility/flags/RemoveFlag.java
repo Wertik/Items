@@ -4,12 +4,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
+import org.jetbrains.annotations.NotNull;
 import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.ItemUtil;
+import space.devport.wertik.items.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,9 +20,10 @@ import java.util.stream.Collectors;
 
 public class RemoveFlag extends SubCommand {
 
-    public RemoveFlag(String name) {
-        super(name);
-        this.preconditions = new Preconditions().permissions("items.utility.flags.remove");
+    public RemoveFlag() {
+        super("remove");
+        this.preconditions = new Preconditions()
+                .permissions("items.utility.flags.remove");
     }
 
     @Override
@@ -36,7 +39,7 @@ public class RemoveFlag extends SubCommand {
             return CommandResult.FAILURE;
         }
 
-        ItemBuilder builder = Utils.getBuilderInHand((Player) sender);
+        ItemBuilder builder = ItemUtil.getBuilderInHand((Player) sender);
 
         if (!builder.getFlags().contains(flag)) {
             language.sendPrefixed(sender, "No-Flag");
@@ -44,19 +47,19 @@ public class RemoveFlag extends SubCommand {
         }
 
         builder.addFlag(flag);
-        Utils.setItem((Player) sender, EquipmentSlot.HAND, builder.build());
+        ItemUtil.setItem((Player) sender, EquipmentSlot.HAND, builder.build());
 
         language.sendPrefixed(sender, "Flag-Removed");
         return CommandResult.SUCCESS;
     }
 
     @Override
-    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+    public @NotNull List<String> requestTabComplete(CommandSender sender, String[] args) {
         List<String> suggestions = new ArrayList<>();
 
         if (args.length == 0) {
             Player player = (Player) sender;
-            ItemBuilder item = Utils.getBuilderInHand(player);
+            ItemBuilder item = ItemUtil.getBuilderInHand(player);
 
             suggestions = item.getFlags().stream().map(ItemFlag::toString).collect(Collectors.toList());
         }

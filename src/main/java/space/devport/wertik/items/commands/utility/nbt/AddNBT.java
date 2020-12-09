@@ -9,20 +9,21 @@ import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemNBTEditor;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.ItemUtil;
 
 public class AddNBT extends SubCommand {
 
-    public AddNBT(String name) {
-        super(name);
-        this.preconditions = new Preconditions().permissions("items.utility.nbt.add");
+    public AddNBT() {
+        super("add");
+        this.preconditions = new Preconditions()
+                .permissions("items.utility.nbt.add");
     }
 
     @Override
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
 
         Player player = (Player) sender;
-        ItemStack item = Utils.getItemInHand(player);
+        ItemStack item = ItemUtil.getItemInHand(player);
 
         String key = args[0];
 
@@ -31,7 +32,7 @@ public class AddNBT extends SubCommand {
             value = args[1];
         }
 
-        Utils.setItem(player, EquipmentSlot.HAND, ItemNBTEditor.writeNBT(item, key, value));
+        ItemUtil.setItem(player, EquipmentSlot.HAND, ItemNBTEditor.writeNBT(item, key, value));
         language.getPrefixed("NBT-Added")
                 .replace("%key%", key)
                 .replace("%value%", "'" + value + "'")

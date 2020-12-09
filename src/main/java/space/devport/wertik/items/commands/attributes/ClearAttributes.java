@@ -8,10 +8,10 @@ import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.wertik.items.ItemsPlugin;
+import space.devport.wertik.items.util.ItemUtil;
 import space.devport.wertik.items.commands.CommandUtils;
 import space.devport.wertik.items.commands.ItemsSubCommand;
-import space.devport.wertik.items.system.AttributeManager;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.system.attribute.AttributeManager;
 
 public class ClearAttributes extends ItemsSubCommand {
 
@@ -27,11 +27,11 @@ public class ClearAttributes extends ItemsSubCommand {
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
 
         Player player = (Player) sender;
-        ItemStack item = Utils.getItemInHand(player);
+        ItemStack item = ItemUtil.getItemInHand(player);
 
         if (CommandUtils.checkAir(player, item)) return CommandResult.FAILURE;
 
-        Utils.setItem(player, EquipmentSlot.HAND, attributeManager.clearAttributes(item));
+        ItemUtil.setItem(player, EquipmentSlot.HAND, attributeManager.clearAttributes(item));
         language.sendPrefixed(sender, "Attributes-Cleared");
         return CommandResult.SUCCESS;
     }

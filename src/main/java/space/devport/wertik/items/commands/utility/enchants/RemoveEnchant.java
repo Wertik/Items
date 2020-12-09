@@ -4,13 +4,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
+import org.jetbrains.annotations.NotNull;
 import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
 import space.devport.utils.xseries.XEnchantment;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.ItemUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +25,7 @@ public class RemoveEnchant extends SubCommand {
         this.preconditions = new Preconditions().permissions("items.utility.enchants.remove");
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
         Enchantment enchantment;
@@ -39,21 +41,21 @@ public class RemoveEnchant extends SubCommand {
             return CommandResult.FAILURE;
         }
 
-        ItemBuilder builder = Utils.getBuilderInHand((Player) sender);
+        ItemBuilder builder = ItemUtil.getBuilderInHand((Player) sender);
 
         builder.removeEnchant(enchantment);
 
-        Utils.setItem((Player) sender, EquipmentSlot.HAND, builder.build());
+        ItemUtil.setItem((Player) sender, EquipmentSlot.HAND, builder.build());
         language.sendPrefixed(sender, "Enchant-Removed");
         return CommandResult.SUCCESS;
     }
 
     @Override
-    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+    public @NotNull List<String> requestTabComplete(CommandSender sender, String[] args) {
         List<String> suggestions = new ArrayList<>();
 
         if (args.length == 0) {
-            ItemBuilder builder = Utils.getBuilderInHand((Player) sender);
+            ItemBuilder builder = ItemUtil.getBuilderInHand((Player) sender);
             suggestions = builder.getEnchants().keySet().stream().map(XEnchantment::name).collect(Collectors.toList());
         }
 

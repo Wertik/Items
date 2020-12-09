@@ -4,12 +4,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.wertik.items.ItemsPlugin;
-import space.devport.wertik.items.system.ItemManager;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.ItemUtil;
+import space.devport.wertik.items.system.item.ItemManager;
+import space.devport.wertik.items.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,22 +22,22 @@ public class UnStack extends SubCommand {
 
     private final ItemManager itemManager;
 
-    public UnStack(String name) {
-        super(name);
-        itemManager = ItemsPlugin.getInstance().getItemManager();
+    public UnStack(ItemsPlugin plugin) {
+        super("unstack");
+        this.itemManager = plugin.getItemManager();
     }
 
     @Override
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
         Player player = (Player) sender;
 
-        ItemStack item = Utils.getItemInHand(player);
+        ItemStack item = ItemUtil.getItemInHand(player);
 
         boolean unStack = args.length > 0 ?
                 Boolean.parseBoolean(args[0]) :
                 !itemManager.hasExtra(item, "unstackable");
 
-        Utils.setItem(player, EquipmentSlot.HAND, unStack ?
+        ItemUtil.setItem(player, EquipmentSlot.HAND, unStack ?
                 itemManager.setExtra(item, "unstackable", UUID.randomUUID().toString()) :
                 itemManager.removeExtra(item, "unstackable"));
 
@@ -46,7 +48,7 @@ public class UnStack extends SubCommand {
     }
 
     @Override
-    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+    public @NotNull List<String> requestTabComplete(CommandSender sender, String[] args) {
         return args.length == 0 ? Arrays.asList("true", "false") : new ArrayList<>();
     }
 

@@ -10,19 +10,20 @@ import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
 import space.devport.utils.item.ItemNBTEditor;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.ItemUtil;
 
 public class ClearNBT extends SubCommand {
 
-    public ClearNBT(String name) {
-        super(name);
-        this.preconditions = new Preconditions().permissions("items.utility.nbt.clear");
+    public ClearNBT() {
+        super("clear");
+        this.preconditions = new Preconditions()
+                .permissions("items.utility.nbt.clear");
     }
 
     @Override
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
         Player player = (Player) sender;
-        ItemStack item = Utils.getItemInHand(player);
+        ItemStack item = ItemUtil.getItemInHand(player);
 
         if (!ItemNBTEditor.hasNBT(item)) {
             language.sendPrefixed(sender, "No-NBT");
@@ -34,7 +35,7 @@ public class ClearNBT extends SubCommand {
                 item = ItemNBTEditor.removeNBT(item, key);
         }
 
-        Utils.setItem(player, EquipmentSlot.HAND, item);
+        ItemUtil.setItem(player, EquipmentSlot.HAND, item);
         language.sendPrefixed(sender, "NBT-Cleared");
         return CommandResult.SUCCESS;
     }

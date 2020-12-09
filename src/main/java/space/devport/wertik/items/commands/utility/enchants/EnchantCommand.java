@@ -8,16 +8,24 @@ import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
 import space.devport.utils.text.message.Message;
 import space.devport.utils.xseries.XEnchantment;
+import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.ItemUtil;
 
 import java.util.Map;
 
-public class Enchants extends MainCommand {
+public class EnchantCommand extends MainCommand {
 
-    public Enchants(String name) {
-        super(name);
-        this.preconditions = new Preconditions().playerOnly().permissions("items.utility.enchants");
+    public EnchantCommand(ItemsPlugin plugin) {
+        super("enchants");
+
+        this.preconditions = new Preconditions()
+                .permissions("items.utility.enchants")
+                .playerOnly();
+
+        addSubCommand(new AddEnchant("add"));
+        addSubCommand(new RemoveEnchant("remove"));
+        addSubCommand(new ClearEnchants("clear"));
     }
 
     @Override
@@ -27,7 +35,7 @@ public class Enchants extends MainCommand {
 
         if (args.length > 0) return super.perform(sender, label, args);
 
-        ItemBuilder builder = Utils.getBuilderInHand((Player) sender);
+        ItemBuilder builder = ItemUtil.getBuilderInHand((Player) sender);
 
         if (builder.getEnchants().isEmpty()) {
             language.sendPrefixed(sender, "No-Enchants");

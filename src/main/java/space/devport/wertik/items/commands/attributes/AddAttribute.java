@@ -4,14 +4,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.wertik.items.ItemsPlugin;
+import space.devport.wertik.items.util.ItemUtil;
 import space.devport.wertik.items.commands.CommandUtils;
 import space.devport.wertik.items.commands.ItemsSubCommand;
-import space.devport.wertik.items.system.AttributeManager;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.system.attribute.AttributeManager;
+import space.devport.wertik.items.util.ItemUtil;
+import space.devport.wertik.items.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +34,7 @@ public class AddAttribute extends ItemsSubCommand {
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
 
         Player player = (Player) sender;
-        ItemStack item = Utils.getItemInHand(player);
+        ItemStack item = ItemUtil.getItemInHand(player);
 
         if (CommandUtils.checkAir(player, item)) {
             return CommandResult.FAILURE;
@@ -41,7 +44,7 @@ public class AddAttribute extends ItemsSubCommand {
             language.getPrefixed("Attribute-Invalid")
                     .replace("%attribute%", args[0])
                     .replace("%valid%",
-                            Utils.listToString(new ArrayList<>(attributeManager.getAttributeCache().keySet()),
+                            StringUtil.listToString(new ArrayList<>(attributeManager.getAttributeCache().keySet()),
                                     language.get("List-Splitter").color().toString(),
                                     language.get("No-Attributes").color().toString()))
                     .send(sender);
@@ -50,15 +53,15 @@ public class AddAttribute extends ItemsSubCommand {
 
         String action = args[1].toLowerCase();
 
-        if (!ItemsPlugin.getInstance().getActionNames().contains(action)) {
+        if (!ItemsPlugin.ACTIONS.contains(action)) {
             language.getPrefixed("Click-Type-Invalid")
                     .replace("%action%", args[1])
-                    .replace("%valid%", String.join(", ", ItemsPlugin.getInstance().getActionNames()))
+                    .replace("%valid%", String.join(", ", ItemsPlugin.ACTIONS))
                     .send(sender);
             return CommandResult.FAILURE;
         }
 
-        Utils.setItem(player, EquipmentSlot.HAND, attributeManager.setAttribute(item, args[1], args[0]));
+        ItemUtil.setItem(player, EquipmentSlot.HAND, attributeManager.setAttribute(item, args[1], args[0]));
 
         language.getPrefixed("Attribute-Added")
                 .replace("%attribute%", args[0])
@@ -67,14 +70,14 @@ public class AddAttribute extends ItemsSubCommand {
     }
 
     @Override
-    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+    public @NotNull List<String> requestTabComplete(CommandSender sender, String[] args) {
         List<String> suggestions = new ArrayList<>();
 
         if (args.length == 0) {
             if (!attributeManager.getAttributeCache().isEmpty())
                 suggestions.addAll(new ArrayList<>(attributeManager.getAttributeCache().keySet()));
         } else if (args.length == 1) {
-            suggestions.addAll(ItemsPlugin.getInstance().getActionNames());
+            suggestions.addAll(ItemsPlugin.ACTIONS);
         }
 
         Collections.sort(suggestions);

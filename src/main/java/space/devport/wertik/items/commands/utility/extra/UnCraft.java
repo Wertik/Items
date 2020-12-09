@@ -4,12 +4,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.wertik.items.ItemsPlugin;
-import space.devport.wertik.items.system.ItemManager;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.ItemUtil;
+import space.devport.wertik.items.system.item.ItemManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,22 +20,22 @@ public class UnCraft extends SubCommand {
 
     private final ItemManager itemManager;
 
-    public UnCraft(String name) {
-        super(name);
-        itemManager = ItemsPlugin.getInstance().getItemManager();
+    public UnCraft(ItemsPlugin plugin) {
+        super("uncraft");
+        this.itemManager = plugin.getItemManager();
     }
 
     @Override
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
         Player player = (Player) sender;
 
-        ItemStack item = Utils.getItemInHand(player);
+        ItemStack item = ItemUtil.getItemInHand(player);
 
         boolean unCraft = args.length > 0 ?
                 Boolean.parseBoolean(args[0]) :
                 !itemManager.hasExtra(item, "uncraftable");
 
-        Utils.setItem(player, EquipmentSlot.HAND, unCraft ?
+        ItemUtil.setItem(player, EquipmentSlot.HAND, unCraft ?
                 itemManager.setExtra(item, "uncraftable") :
                 itemManager.removeExtra(item, "uncraftable"));
 
@@ -45,7 +46,7 @@ public class UnCraft extends SubCommand {
     }
 
     @Override
-    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+    public @NotNull List<String> requestTabComplete(CommandSender sender, String[] args) {
         return args.length == 0 ? Arrays.asList("true", "false") : new ArrayList<>();
     }
 

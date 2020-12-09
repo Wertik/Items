@@ -8,7 +8,8 @@ import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.ItemUtil;
+import space.devport.wertik.items.util.StringUtil;
 
 public class ClearEnchants extends SubCommand {
 
@@ -20,11 +21,11 @@ public class ClearEnchants extends SubCommand {
     @Override
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
         Player player = (Player) sender;
-        ItemBuilder builder = Utils.getBuilderInHand(player);
+        ItemBuilder builder = ItemUtil.getBuilderInHand(player);
 
         builder.clearEnchants();
 
-        Utils.setItem(player, EquipmentSlot.HAND, builder.build());
+        ItemUtil.setItem(player, EquipmentSlot.HAND, builder.build());
         language.sendPrefixed(sender, "Enchants-Cleared");
         return CommandResult.SUCCESS;
     }

@@ -8,21 +8,27 @@ import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.ItemUtil;
+import space.devport.wertik.items.util.StringUtil;
 
 public class ClearFlags extends SubCommand {
 
-    public ClearFlags(String name) {
-        super(name);
-        this.preconditions = new Preconditions().permissions("items.utility.flags.clear");
+    public ClearFlags() {
+        super("clear");
+        this.preconditions = new Preconditions()
+                .permissions("items.utility.flags.clear");
     }
 
     @Override
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
         Player player = (Player) sender;
-        ItemBuilder builder = Utils.getBuilderInHand(player);
+
+        ItemBuilder builder = ItemUtil.getBuilderInHand(player);
+
         builder.clearFlags();
-        Utils.setItem(player, EquipmentSlot.HAND, builder.build());
+
+        ItemUtil.setItem(player, EquipmentSlot.HAND, builder.build());
+
         language.sendPrefixed(sender, "Flags-Cleared");
         return CommandResult.SUCCESS;
     }

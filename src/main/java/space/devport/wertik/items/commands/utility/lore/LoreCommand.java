@@ -7,16 +7,22 @@ import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
 import space.devport.utils.text.message.Message;
+import space.devport.wertik.items.ItemsPlugin;
 import space.devport.wertik.items.commands.CommandUtils;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.ItemUtil;
 
-public class Lore extends MainCommand {
+public class LoreCommand extends MainCommand {
 
-    public Lore(String name) {
-        super(name);
+    public LoreCommand(ItemsPlugin plugin) {
+        super("lore");
+
         this.preconditions = new Preconditions()
                 .playerOnly()
                 .permissions("items.utility.lore");
+
+        addSubCommand(new AddLore());
+        addSubCommand(new RemoveLore());
+        addSubCommand(new ClearLore());
     }
 
     @Override
@@ -26,7 +32,7 @@ public class Lore extends MainCommand {
 
         if (args.length > 0) return super.perform(sender, label, args);
 
-        ItemBuilder builder = Utils.getBuilderInHand((Player) sender);
+        ItemBuilder builder = ItemUtil.getBuilderInHand((Player) sender);
 
         if (builder.getLore().getMessage().isEmpty()) {
             language.sendPrefixed(sender, "No-Lore");

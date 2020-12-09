@@ -1,4 +1,4 @@
-package space.devport.wertik.items.objects;
+package space.devport.wertik.items.system.attribute.struct;
 
 import lombok.Data;
 
@@ -12,7 +12,7 @@ public class Attribute {
     private Reward reward;
 
     // Cooldown on this attribute
-    private Long cooldown;
+    private long cooldown;
 
     // How many times items can be used until consumed
     private int useLimit;

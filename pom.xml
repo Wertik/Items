@@ -10,6 +10,10 @@
 
     <name>Items</name>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <build>
         <finalName>${project.name}-${project.version}</finalName>
         <resources>
@@ -32,12 +36,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.2.4</version>
                 <configuration>
                     <relocations>
                         <relocation>
                             <pattern>space.devport.utils</pattern>
-                            <shadedPattern>space.devport.wertik.items.utils</shadedPattern>
+                            <shadedPattern>space.devport.wertik.items.util</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -59,8 +63,8 @@
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
         <repository>
-            <id>devportutils</id>
-            <url>http://play.pvpcraft.cz:8081/repository/devportutils/</url>
+            <id>devport</id>
+            <url>https://nexus.pvpcraft.cz/repository/devport/</url>
         </repository>
         <repository>
             <id>placeholderapi</id>
@@ -72,20 +76,20 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.16.2-R0.1-SNAPSHOT</version>
+            <version>1.16.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>18.0.0</version>
+            <version>19.0.0</version>
             <scope>compile</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.10</version>
+            <version>1.18.16</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -97,7 +101,7 @@
         <dependency>
             <groupId>space.devport.utils</groupId>
             <artifactId>DevportUtils</artifactId>
-            <version>LATEST</version>
+            <version>3.6.1</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

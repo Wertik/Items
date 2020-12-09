@@ -4,12 +4,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
+import org.jetbrains.annotations.NotNull;
 import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.ItemUtil;
+import space.devport.wertik.items.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,9 +21,10 @@ import java.util.stream.Collectors;
 
 public class AddFlag extends SubCommand {
 
-    public AddFlag(String name) {
-        super(name);
-        this.preconditions = new Preconditions().permissions("items.utility.flags.add");
+    public AddFlag() {
+        super("add");
+        this.preconditions = new Preconditions()
+                .permissions("items.utility.flags.add");
     }
 
     @Override
@@ -29,7 +32,7 @@ public class AddFlag extends SubCommand {
 
         Player player = (Player) sender;
 
-        ItemBuilder builder = Utils.getBuilderInHand(player);
+        ItemBuilder builder = ItemUtil.getBuilderInHand(player);
 
         ItemFlag flag;
 
@@ -43,13 +46,13 @@ public class AddFlag extends SubCommand {
         }
 
         builder.addFlag(flag);
-        Utils.setItem(player, EquipmentSlot.HAND, builder.build());
+        ItemUtil.setItem(player, EquipmentSlot.HAND, builder.build());
         language.sendPrefixed(sender, "Flag-Added");
         return CommandResult.SUCCESS;
     }
 
     @Override
-    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+    public @NotNull List<String> requestTabComplete(CommandSender sender, String[] args) {
         List<String> suggestions = new ArrayList<>();
 
         if (args.length == 0) {

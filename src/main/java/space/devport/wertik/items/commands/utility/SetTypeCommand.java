@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
+import org.jetbrains.annotations.NotNull;
 import space.devport.utils.commands.MainCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
@@ -11,15 +12,15 @@ import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
 import space.devport.utils.xseries.XMaterial;
 import space.devport.wertik.items.commands.CommandUtils;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.ItemUtil;
 
-public class SetType extends MainCommand {
+public class SetTypeCommand extends MainCommand {
 
-    public SetType(String name) {
-        super(name);
+    public SetTypeCommand() {
+        super("settype");
         this.preconditions = new Preconditions()
-                .playerOnly()
-                .permissions("items.utility.settype");
+                .permissions("items.utility.settype")
+                .playerOnly();
     }
 
     @Override
@@ -47,11 +48,11 @@ public class SetType extends MainCommand {
             return CommandResult.FAILURE;
         }
 
-        ItemBuilder builder = Utils.getBuilderInHand(player);
+        ItemBuilder builder = ItemUtil.getBuilderInHand(player);
 
         builder.type(material);
 
-        Utils.setItem(player, EquipmentSlot.HAND, builder.build());
+        ItemUtil.setItem(player, EquipmentSlot.HAND, builder.build());
         language.getPrefixed("Material-Changed")
                 .replace("%material%", builder.getMaterial())
                 .send(sender);
@@ -69,7 +70,7 @@ public class SetType extends MainCommand {
     }
 
     @Override
-    public ArgumentRange getRange() {
+    public @NotNull ArgumentRange getRange() {
         return new ArgumentRange(1);
     }
 }

@@ -3,12 +3,13 @@ package space.devport.wertik.items.commands.utility.lore;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
+import org.jetbrains.annotations.NotNull;
 import space.devport.utils.commands.SubCommand;
 import space.devport.utils.commands.struct.ArgumentRange;
 import space.devport.utils.commands.struct.CommandResult;
 import space.devport.utils.commands.struct.Preconditions;
 import space.devport.utils.item.ItemBuilder;
-import space.devport.wertik.items.utils.Utils;
+import space.devport.wertik.items.util.ItemUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,16 +17,17 @@ import java.util.List;
 
 public class RemoveLore extends SubCommand {
 
-    public RemoveLore(String name) {
-        super(name);
-        this.preconditions = new Preconditions().permissions("items.utility.lore.remove");
+    public RemoveLore() {
+        super("remove");
+        this.preconditions = new Preconditions()
+                .permissions("items.utility.lore.remove");
     }
 
     @Override
     protected CommandResult perform(CommandSender sender, String label, String[] args) {
         Player player = (Player) sender;
 
-        ItemBuilder builder = Utils.getBuilderInHand(player);
+        ItemBuilder builder = ItemUtil.getBuilderInHand(player);
 
         int index;
         try {
@@ -55,18 +57,18 @@ public class RemoveLore extends SubCommand {
         workLore.remove(index);
         builder.getLore().set(workLore);
 
-        Utils.setItem(player, EquipmentSlot.HAND, builder.build());
+        ItemUtil.setItem(player, EquipmentSlot.HAND, builder.build());
         language.sendPrefixed(sender, "Line-Removed");
         return CommandResult.SUCCESS;
     }
 
     @Override
-    public List<String> requestTabComplete(CommandSender sender, String[] args) {
+    public @NotNull List<String> requestTabComplete(CommandSender sender, String[] args) {
         List<String> suggestions = new ArrayList<>();
 
         if (args.length == 0) {
             Player player = (Player) sender;
-            ItemBuilder builder = Utils.getBuilderInHand(player);
+            ItemBuilder builder = ItemUtil.getBuilderInHand(player);
             for (int i = 0; i < builder.getLore().getOriginal().size(); i++) suggestions.add(String.valueOf(i));
         }
 

@@ -3,13 +3,21 @@ package space.devport.wertik.items.commands.items;
 import org.bukkit.command.CommandSender;
 import space.devport.utils.commands.MainCommand;
 import space.devport.utils.commands.struct.CommandResult;
-import space.devport.utils.commands.struct.Preconditions;
+import space.devport.wertik.items.ItemsPlugin;
 
 public class ItemsCommand extends MainCommand {
 
-    public ItemsCommand(String name) {
-        super(name);
-        this.preconditions = new Preconditions().permissions("items.manage");
+    public ItemsCommand(ItemsPlugin plugin) {
+        super("items");
+        setPermissions("items.manage");
+        addSubCommand(new Detail(plugin));
+        addSubCommand(new DropItem(plugin));
+        addSubCommand(new GiveItem(plugin));
+        addSubCommand(new ListItems(plugin));
+        addSubCommand(new LoadItem(plugin));
+        addSubCommand(new Reload(plugin));
+        addSubCommand(new RemoveItem(plugin));
+        addSubCommand(new SaveItem(plugin));
     }
 
     @Override
